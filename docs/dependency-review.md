@@ -40,3 +40,9 @@ The browser, framework, and existing test packages do not provide equivalent sem
 Phase 3 adds no package. Public Sheet retrieval uses Node 22 `fetch`, CSV parsing is repository-owned, source hashing uses `node:crypto`, registry records use TypeScript, and validation uses the existing Vitest installation. The Google API client, CSV libraries, schema libraries, databases and graph packages are not justified for the approved public GViz V1 workflow.
 
 This adds no browser bundle, Production service, credential, paid cost or runtime dependency. Credentialed Google Sheets API access remains deferred until public access is removed or stronger metadata becomes a demonstrated requirement.
+
+## Phase 4 dependency decision
+
+The Repository Knowledge Layer adds no package. Typed repository records, selectors and validation use TypeScript, Node.js and the existing Vitest installation. A graph library, database, ORM, schema framework, search service or external API would add cost and maintenance without solving a demonstrated V1 constraint.
+
+Phase 4 adds no client dependency, Production service, credential or paid operating cost.

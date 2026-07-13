@@ -34,6 +34,8 @@ jobs:
         run: npm run typecheck
       - name: Validate utility registry
         run: npm run registry:validate
+      - name: Validate repository knowledge layer
+        run: npm run knowledge:validate
       - name: Run unit tests
         run: npm run test
       - name: Build
