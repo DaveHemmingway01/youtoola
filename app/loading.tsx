@@ -1,7 +1,5 @@
+import { LoadingState } from "@/components/ui";
+
 export default function Loading() {
-  return (
-    <main className="foundation-shell" aria-busy="true" aria-live="polite">
-      <p>Loading Youtoola…</p>
-    </main>
-  );
+  return <LoadingState label="Loading Youtoola…" />;
 }

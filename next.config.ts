@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 
+import { getDesignSystemReviewRewrites } from "./lib/design-system-review";
 import { isIndexingAllowed } from "./lib/environment";
 
 const indexingAllowed = isIndexingAllowed();
@@ -27,6 +28,13 @@ const nextConfig: NextConfig = {
         headers: securityHeaders,
       },
     ];
+  },
+  async rewrites() {
+    return {
+      beforeFiles: getDesignSystemReviewRewrites(),
+      afterFiles: [],
+      fallback: [],
+    };
   },
 };
 

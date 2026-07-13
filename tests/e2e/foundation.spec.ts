@@ -22,6 +22,10 @@ test("renders the Youtoola foundation with safe Preview metadata", async ({
     "href",
     "https://www.youtoola.com",
   );
+  await expect(page.locator('link[rel="icon"][href="/brand/favicon.ico"]')).toHaveCount(1);
+  await expect(
+    page.locator('link[rel="apple-touch-icon"][href="/brand/apple-touch-icon.png"]'),
+  ).toHaveAttribute("sizes", "180x180");
 });
 
 test("returns the custom not-found page with a 404 status", async ({ page }) => {
