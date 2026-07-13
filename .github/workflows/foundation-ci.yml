@@ -32,6 +32,8 @@ jobs:
         run: npm run lint
       - name: Type-check
         run: npm run typecheck
+      - name: Validate utility registry
+        run: npm run registry:validate
       - name: Run unit tests
         run: npm run test
       - name: Build

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "spreadsheetId": "1BJtHQKH6MxAySfQ0C-mGrCgXdAD1efM2vIf5iDwqzpU",
+    "spreadsheetTitle": "Youtoola Utility Opportunity Map",
+    "tabName": "Travel & Mobility",
+    "worksheetIdentifier": 818425885,
+    "visibleRow": 5,
+    "sourceUrl": "https://docs.google.com/spreadsheets/d/1BJtHQKH6MxAySfQ0C-mGrCgXdAD1efM2vIf5iDwqzpU/edit?gid=818425885#gid=818425885"
+  },
+  "rawFields": {
+    "ID": "21",
+    "Utility idea": "Fuel Trip Calculator",
+    "Core use": "Calculate fuel, tolls, return journeys and cost per passenger.",
+    "Monetisation": "Fuel, rental car and travel affiliates",
+    "Priority": "Tier 1"
+  },
+  "normalized": {
+    "sourceUtilityId": "21",
+    "utilityName": "Fuel Trip Calculator",
+    "coreUse": "Calculate fuel, tolls, return journeys and cost per passenger.",
+    "monetisationRoute": "Fuel, rental car and travel affiliates",
+    "priority": "Tier 1"
+  },
+  "unknownFields": {},
+  "missingFields": [
+    "category",
+    "searchIntent",
+    "premiumOpportunity",
+    "complexity"
+  ],
+  "warnings": [
+    {
+      "code": "PUBLIC_SOURCE",
+      "message": "The V1 workflow depends on the source Sheet remaining publicly readable."
+    },
+    {
+      "code": "GVIZ_LIMITATION",
+      "message": "GViz and CSV expose displayed values but cannot reliably detect merged cells."
+    },
+    {
+      "code": "CATEGORY_FROM_TAB_CONTEXT",
+      "message": "Category is not a row field; Travel & Mobility maps to travel-mobility by owner decision."
+    }
+  ],
+  "retrieval": {
+    "retrievedAt": "2026-07-13T19:49:48.000Z",
+    "transport": "gviz"
+  },
+  "sourceContentHash": "sha256:88b614a6c8ca091012fc4b996389fd6aff3f2f8769d3e2567ec17bf4aba6d0de"
+}
