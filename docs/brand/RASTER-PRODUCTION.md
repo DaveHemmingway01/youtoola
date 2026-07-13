@@ -1,6 +1,24 @@
 # Approved Raster Brand Assets
 
-Status: Owner-approved on 2026-07-13.
+Status: **Youtoola Brand Foundation v1, Frozen** on 2026-07-13.
+
+## Freeze policy
+
+This package is the approved minimum production brand foundation for Phase 2. It supports the website header and footer, mobile navigation, browser favicon, Apple touch icon, Android/PWA icon use, and basic social-profile and document use.
+
+Preserve every production file and immutable hash recorded below. Do not redesign, regenerate, resize, recolour, optimise or replace an approved asset without a separate owner-approved brand-change process.
+
+The following secondary assets and integrations are intentionally deferred and do not block the design system or platform shell:
+
+- SVG logo masters
+- wordmark-only asset
+- monochrome variants
+- default Open Graph image
+- full colour guide
+- typography guide
+- final brand guide
+- manifest integration
+- application metadata integration
 
 ## Production assets
 
