@@ -17,3 +17,7 @@ All notable Youtoola platform and utility changes will be recorded here.
 - Approved single-maintainer GitHub review policy and explicit AI crawler policy.
 - Environment-aware `robots.txt` rules that allow ordinary search and `OAI-SearchBot` while blocking `GPTBot` in Production.
 - A minimal canonical-homepage sitemap with Local and Preview crawler protection tests.
+- Owner-approved transparent sRGB PNG logo and symbol families, with deterministic validation and immutable release hashes.
+- Owner-approved 16, 32, 48 and 64-pixel favicon PNGs plus a deterministic four-entry ICO derived directly from the approved symbol master.
+- Owner-approved Apple touch and 192/512-pixel application icons on the approved `#000A3F` background, with deterministic generation, validation and immutable release hashes.
+- Youtoola Brand Foundation v1 frozen as the minimum approved package required for the Phase 2 design system and platform shell.

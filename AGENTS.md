@@ -762,11 +762,13 @@ Do not use artificial countdowns, dark patterns or misleading urgency.
 
 ## 10. Brand and interface direction
 
-Use official Youtoola logo assets only.
+Use owner-approved Youtoola logo assets only.
 
-Do not redraw, reinterpret or regenerate the logo.
+Use the owner-approved JPG references as the visual production source of truth. Production logo and symbol assets use pixel-faithful transparent PNG processing; SVG tracing and artwork reconstruction are prohibited unless the owner later reverses this decision. Do not redraw, reinterpret, simplify, modernise or invent missing geometry.
 
-If official logo files are missing, stop and request them.
+Before processing a logo or symbol, inspect `docs/brand/references/`. If the exact approved reference is missing or insufficient, stop and request it. Every processed asset requires rendered comparison, technical validation and explicit owner approval before commit.
+
+Assets under `public/brand/` are judged as production assets in their intended contexts: website, navigation, browser tab, mobile, social profiles and presentations. Review renders and reconstruction measurements are diagnostic only. Visual quality at actual use sizes takes precedence over mathematical similarity to a source JPG. Never regenerate an approved asset without explicit owner instruction.
 
 Visual direction:
 
@@ -1421,4 +1423,4 @@ When the sheet changes after a utility is released:
 - do not silently change the live utility
 - compare the new row with the saved utility specification
 - produce a change impact plan
-- require approval before modifying 
+- require approval before modifying

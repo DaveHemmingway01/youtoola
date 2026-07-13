@@ -6,6 +6,8 @@ Canonical production host: `https://www.youtoola.com`
 Product promise: **Useful tools. No account. No nonsense.**  
 Commercial model: **The utility attracts the user. The traffic is monetised.**
 
+Binding release principle: **No public utility launches without measurement, indexing controls and conversion tracking.**
+
 ## 1. Purpose and decision framework
 
 This roadmap defines the implementation order for building Youtoola as one fast, trustworthy and compounding utility platform containing many practical utilities at canonical root paths such as `/fuel-trip-calculator`.
@@ -24,6 +26,18 @@ Every phase must improve or protect at least one of these outcomes without mater
 8. low operating cost and maintainable portfolio growth
 
 Technical sophistication is not an outcome. Youtoola will remain one repository, one product, one visual system and one primary deployment unless measured requirements justify expansion.
+
+### Mandatory milestone sequence
+
+1. Brand Foundation v1 merged
+2. Phase 2, Design System
+3. Registry and Google Sheet integration
+4. Homepage, categories and search
+5. Utility framework
+6. Growth Infrastructure
+7. Utility #1 plan, build, review and ship
+
+The repository knowledge graph, SEO and AI-discoverability architecture, analytics contracts, testing gates and delivery controls remain required supporting work within this sequence. They are not optional phases and are not removed by this milestone summary.
 
 ## 2. Architectural principles
 
@@ -70,7 +84,7 @@ This separation makes the repository a production-intelligence system without re
 | Accessibility | axe integrated with Playwright plus manual checks | Automates common violations while retaining keyboard and screen-reader review. |
 | Quality | ESLint, TypeScript, formatting and production build checks | Creates repeatable merge gates. |
 | Hosting | One Vercel project connected to GitHub | Provides Preview and Production environments with minimal operational burden. |
-| Analytics | Provider-neutral event adapter; privacy-reviewed provider configured by environment | Prevents sensitive payloads and avoids hard vendor coupling. |
+| Analytics | GA4 as the initial Production provider behind a provider-neutral event adapter; Local and Preview disabled | Measures acquisition, completion and conversion without hard vendor coupling or non-production data pollution. Microsoft Clarity remains optional and disabled unless separately approved after privacy review. |
 | Error reporting | Structured, redacted application errors first | Avoids a paid observability service until traffic or failure cost justifies one. |
 
 Vercel's commercial plan becomes a justified operating cost when production monetisation begins. No other paid service is assumed by this roadmap.
@@ -179,7 +193,7 @@ Early decisions about canonical URLs, environments, registry ownership and relea
 
 - Owner approval of this roadmap
 - Access to the GitHub repository and intended Vercel account
-- Official Youtoola logo and brand assets, or an explicit asset blocker
+- Authoritative owner-approved Youtoola visual references, reproduction rights, and an approved asset-factory plan
 
 **Estimated complexity:** Low
 
@@ -188,11 +202,11 @@ Early decisions about canonical URLs, environments, registry ownership and relea
 **Implementation work**
 
 1. Create `docs/VISION.md` as an owner-reviewed doctrine covering utility-led traffic monetisation, **Useful tools. No account. No nonsense.**, the Swiss Army knife platform concept, user value before monetisation, organic and AI-search acquisition, one connected platform, knowledge relationships, commercial journeys, continuous learning, privacy, trust, speed, accuracy and low-cost global scale.
-2. Record decisions for the canonical `www` host, Next.js stack, package manager, analytics provider, GPTBot policy and Vercel plan.
+2. Record decisions for the canonical `www` host, Next.js stack, package manager, GA4 as the initial Production analytics provider behind the provider-neutral adapter, GPTBot policy and Vercel plan. Require Local and Preview analytics to remain disabled, and prohibit sensitive inputs or personal data from analytics payloads.
 3. Define PLAN, BUILD, REVIEW and SHIP checklists as repository documentation and PR controls.
 4. Establish definitions for utility start, completion, share, related-tool click and revenue events.
 5. Define commercial scorecard ownership and minimum evidence for `BUILD NOW`.
-6. Confirm that official logo assets exist before interface work.
+6. Produce and owner-approve the minimum production logo package from authoritative references before interface work.
 7. Plan removal of the empty root `ROADMAP.md` after owner approval, leaving `docs/ROADMAP.md` as the sole roadmap. Do not delete it as part of this revision.
 
 **Exit criteria**
@@ -252,7 +266,7 @@ Consistent controls and page structure improve trust and completion while avoidi
 **Dependencies**
 
 - Phase 1 foundation
-- Official logo and brand assets
+- Completed and owner-approved minimum production brand package
 
 **Estimated complexity:** Medium
 
@@ -382,7 +396,7 @@ Utilities acquire landing traffic, but the platform compounds value through navi
 7. Implement lightweight client-side search over names, aliases, concepts, category, journey and user intent; avoid a search service or database in V1.
 8. Normalize queries, support keyboard navigation and show useful zero-result recovery.
 9. Mark internal search result URLs `noindex` and keep query URLs out of sitemaps.
-10. Track search usage and result selection without storing sensitive free text beyond an approved privacy policy.
+10. Track search usage and result selection only in Production. Local and Preview analytics remain disabled, and raw sensitive queries must not be sent; use only approved normalized or categorized query representations where measurement is justified.
 11. Define featured and popular ordering as explicit registry data or measured rules, not opaque personalisation.
 
 **Exit criteria**
@@ -424,7 +438,8 @@ The utility interaction is the product. A fast, accessible and predictable flow 
 7. Require each calculation engine to be a pure function with explicit inputs, outputs, units and error cases.
 8. Define utility risk profiles: standard, data-dependent and regulated/high-consequence.
 9. Add reusable methodology, source, disclaimer, FAQ and related-tool components.
-10. Add scaffold generation only after the reference implementation proves the file contract.
+10. Define provider-neutral instrumentation contracts for `tool_view`, `tool_start`, `tool_validation_error`, `tool_complete`, `result_share`, `result_export`, `related_tool_click`, `affiliate_click`, `premium_click`, `lead_start` and `lead_submit` without coupling the utility framework to GA4.
+11. Add scaffold generation only after the reference implementation proves the file contract.
 
 **Exit criteria**
 
@@ -456,9 +471,9 @@ Organic and AI-search discovery are Youtoola's primary acquisition engines. Corr
 
 **Implementation work**
 
-1. Generate unique titles, descriptions, canonical URLs, Open Graph metadata and breadcrumbs from reviewed utility definitions.
-2. Generate the production sitemap exclusively from indexable registry entries and stable platform routes.
-3. Create environment-aware robots rules: Production crawlable; Local and Preview `noindex, nofollow`.
+1. Own generation of unique titles, descriptions, canonical URLs, default Open Graph and social metadata and breadcrumbs from reviewed utility definitions.
+2. Own generation of the production sitemap exclusively from indexable registry entries and stable platform routes.
+3. Own environment-aware crawl and indexing controls: Production crawlable; Local and Preview `noindex, nofollow`.
 4. Allow `OAI-SearchBot`; record the separate owner decision for `GPTBot`.
 5. Render core text, methodology, assumptions, definitions, worked examples, source dates and genuine FAQs as semantic HTML.
 6. Provide Organization and WebSite structured data globally; select WebApplication, SoftwareApplication, BreadcrumbList, FAQPage, HowTo or Dataset only when visible content supports it.
@@ -468,6 +483,7 @@ Organic and AI-search discovery are Youtoola's primary acquisition engines. Corr
 10. Create About Youtoola, methodology, editorial/review and privacy pages that establish stable entity identity and trust.
 11. Define required live SERP and competitor research artifacts before a utility can enter BUILD.
 12. Treat `llms.txt` as an optional owner-approved experiment, not a ranking mechanism or V1 dependency.
+13. Keep canonical, structured-data, sitemap, social-metadata and crawl-control generation in this phase; operational Production verification belongs to Growth Infrastructure.
 
 **Exit criteria**
 
@@ -483,7 +499,7 @@ Organic and AI-search discovery are Youtoola's primary acquisition engines. Corr
 
 **Objective**
 
-Measure the complete acquisition-to-value-to-revenue journey and provide controlled commercial placements that never block core utility use.
+Define the provider-neutral contracts for measuring the complete acquisition-to-value-to-revenue journey and for controlled commercial placements that never block core utility use.
 
 **Why it matters**
 
@@ -501,22 +517,23 @@ Youtoola cannot improve or monetise responsibly without knowing where users arri
 
 **Implementation work**
 
-1. Create a typed provider-neutral analytics adapter.
+1. Create a typed provider-neutral analytics adapter with a GA4 provider contract, while deferring external provider configuration and Production verification to Growth Infrastructure.
 2. Support standard events: `tool_view`, `tool_start`, `tool_validation_error`, `tool_complete`, result actions, related-tool clicks, affiliate clicks, premium clicks and lead lifecycle.
 3. Permit only non-sensitive dimensions such as utility slug, category, locale, device class and non-sensitive result type.
 4. Block names, emails, file contents and exact financial, medical or personal inputs from analytics payloads.
-5. Disable production analytics in Local and Preview environments.
+5. Require analytics to operate only in Production and remain disabled in Local and Preview environments.
 6. Build labelled, feature-flagged `AdSlot`, `AffiliateRecommendation`, `LeadOpportunity` and `PremiumUpsell` contracts.
 7. Reserve ad dimensions to avoid layout shift and prohibit ads between final input and primary action.
 8. Define commercial eligibility per utility in the registry instead of activating global offers blindly.
 9. Define experiment guardrails: no test may degrade calculation accuracy, accessibility, Core Web Vitals or privacy.
-10. Establish a KPI dashboard specification covering search, completion, continuation, revenue and operating cost.
+10. Establish a baseline dashboard specification covering acquisition, search, completion, continuation, revenue and operating cost; operational dashboard setup belongs to Growth Infrastructure.
 11. Define privacy-safe evidence exports or manual reporting inputs for Search Console, Bing, affiliate, lead and premium performance; do not build a warehouse in V1.
+12. Keep Microsoft Clarity optional and disabled unless a separate privacy review and owner approval authorise it.
 
 **Exit criteria**
 
 - Event payload tests prove sensitive values cannot be sent.
-- Utility completion can be measured from start to result.
+- Contract and integration tests prove utility completion can be measured from start to result when a Production provider is configured.
 - Commercial components remain hidden when unconfigured.
 - The free result precedes every monetisation action.
 
@@ -551,6 +568,10 @@ Incorrect results, inaccessible controls, slow pages or exposed data destroy tru
 9. Test metadata, canonical URL, structured data, sitemap membership and robots headers.
 10. Add dependency auditing, input sanitisation, safe headers, secret scanning and file-tool threat controls.
 11. Prefer local file processing; when upload is unavoidable, document retention, size, type, deletion and logging rules.
+12. Test environment-specific analytics behaviour, including Production enablement, Local and Preview disablement and the absence of analytics requests from Preview.
+13. Test consent states, event-payload allowlists and rejection of sensitive or personal values.
+14. Test canonical, structured-data, sitemap, Open Graph, robots and visible-content consistency.
+15. Test representative 404 responses and permanent and temporary redirect behaviour.
 
 **Exit criteria**
 
@@ -588,9 +609,12 @@ Reliable delivery protects production traffic and revenue while allowing rapid i
 5. Protect `main` with pull requests, passing checks and resolved review comments; require non-author approval when staffing allows.
 6. Connect one GitHub repository to one Vercel project.
 7. Separate Local, Preview and Production variables and integrations.
-8. Verify every Preview response has `noindex`; exclude previews from sitemaps and production analytics.
+8. Keep analytics provider configuration Production-only. Verify every Preview response has `noindex`, exclude previews from sitemaps and prove Local and Preview cannot emit Production analytics.
 9. Deploy Production only from approved `main`; do not use manual production CLI deployment by default.
-10. Record PR, commit, preview URL, production URL, deployment, rollback target and release notes.
+10. Isolate analytics-provider failures so the utility and its result remain available.
+11. Require the Growth Infrastructure Production evidence record before Utility #1 can receive `APPROVE SHIP`.
+12. Record PR, commit, preview URL, production URL, deployment, Growth Infrastructure evidence, rollback target and release notes.
+13. Document rollback and failure procedures for analytics, consent, indexing and metadata configuration.
 
 **Exit criteria**
 
@@ -599,11 +623,96 @@ Reliable delivery protects production traffic and revenue while allowing rapid i
 - A merge to `main` produces the only automatic Production deployment.
 - Failed checks cannot be bypassed through the normal workflow.
 
-### Phase 11 — Reference utility pilot and factory validation
+### Phase 11 — Growth Infrastructure
 
 **Objective**
 
-Build one approved, low-to-medium-risk utility through the full PLAN, BUILD, REVIEW and SHIP process before scaling the portfolio.
+Establish and verify the minimum measurement, indexing, metadata, consent and monitoring infrastructure required before any public utility launch.
+
+**Why it matters**
+
+Without reliable acquisition, completion and conversion evidence, Youtoola cannot determine whether a utility attracts useful traffic, helps users or creates commercial value. Indexing and metadata controls protect organic acquisition, while privacy controls protect trust.
+
+**Dependencies**
+
+- Brand Foundation v1 merged
+- Phases 2 through 10 complete
+- Provider-neutral analytics adapter and event contracts
+- Production domain and Vercel environment
+- Working sitemap, canonical and structured-data systems
+- Owner access to GA4, Google Search Console and Bing Webmaster Tools
+- Approved consent and privacy policy
+- Approved default social image
+
+**Estimated complexity:** High
+
+**Expected business value:** Very High — makes acquisition, completion and monetisation measurable before portfolio investment begins.
+
+**Implementation work**
+
+1. Connect GA4 as the initial Production provider behind the provider-neutral analytics adapter.
+2. Enable analytics only in Production and prove Local and Preview generate no analytics traffic.
+3. Implement and document the approved event taxonomy: `tool_view`, `tool_start`, `tool_validation_error`, `tool_complete`, `result_share`, `result_export`, `related_tool_click`, `affiliate_click`, `premium_click`, `lead_start` and `lead_submit`.
+4. Enforce event-payload allowlists and prohibit sensitive user inputs or personal data from analytics.
+5. Configure consent and cookie handling appropriate to the approved launch jurisdictions.
+6. Add and verify the canonical domain in Google Search Console.
+7. Verify or import the site in Bing Webmaster Tools.
+8. Submit the Production sitemap, record acceptance and establish indexing checks for platform routes and later utility URLs.
+9. Establish Core Web Vitals monitoring using free first-party sources initially.
+10. Validate canonical URLs across Production and Preview.
+11. Validate structured data against visible content.
+12. Provide approved default Open Graph and social metadata.
+13. Establish 404 and redirect monitoring with an assigned response owner.
+14. Keep Microsoft Clarity disabled unless privacy review and owner approval permit it.
+15. Create a baseline dashboard covering acquisition, views, starts, validation failures, completions, shares, exports, related-tool clicks, affiliate clicks, premium clicks and lead events.
+16. Create the Utility #1 launch checklist covering measurement, indexing controls and conversion tracking.
+17. Document analytics, consent, indexing and metadata failure handling and rollback.
+18. Schedule post-launch reviews at 24 hours, 7 days, 28 days, monthly and quarterly.
+
+**Exit criteria**
+
+- GA4 receives approved, non-sensitive Production events through the provider-neutral adapter.
+- Local and Preview analytics are demonstrably disabled.
+- Event-payload protections pass positive and negative tests.
+- Consent behaviour matches the approved jurisdiction policy.
+- Google Search Console and Bing ownership are verified.
+- The Production sitemap is submitted and accepted.
+- Canonicals, robots, structured data and default social metadata validate.
+- Core Web Vitals have a recorded baseline and monitoring owner.
+- 404 and redirect checks have an operational procedure.
+- The baseline dashboard is accessible to the owner.
+- The launch checklist and rollback procedure are approved.
+- Post-launch reviews have named owners and dates.
+- Growth Infrastructure has a Production evidence record.
+
+**Explicit blockers**
+
+- Missing GA4 property, web stream or required access
+- Missing Google Search Console or Bing Webmaster Tools access
+- Unresolved consent or launch-jurisdiction policy
+- Missing approved default Open Graph asset
+- Failed sitemap, canonical, robots or structured-data validation
+- Analytics leakage from Local or Preview
+- Sensitive or personal values present in analytics payloads
+- No dashboard owner, monitoring procedure or rollback path
+
+**Owner decisions required**
+
+1. Confirm GA4 property, web-stream ownership and data-retention settings.
+2. Confirm launch jurisdictions and the corresponding consent and default-denial policy.
+3. Confirm Google Search Console verification ownership and Bing verification or import method.
+4. Approve the default Open Graph asset.
+5. Choose native provider dashboards or a free consolidated dashboard such as Looker Studio.
+6. Confirm Core Web Vitals sources, monitoring thresholds and owners.
+7. Confirm the 404 and redirect monitoring method and response owner.
+8. Decide whether Microsoft Clarity remains disabled or receives a separate privacy review.
+9. Approve rollback thresholds, final event parameters and the review cadence.
+
+### Phase 12 — Reference utility pilot and factory validation
+
+**Objective**
+
+Build one approved, low-to-medium-risk utility through PLAN, BUILD and REVIEW, obtain `APPROVE SHIP`, and hand the approved release candidate to the Production launch phase before scaling the portfolio.
 
 **Why it matters**
 
@@ -611,7 +720,7 @@ The first real utility will expose missing contracts and unnecessary abstraction
 
 **Dependencies**
 
-- Phases 0 through 10
+- Phases 0 through 11, including Growth Infrastructure complete and verified in Production
 - Approved utility selected from an exact live Sheet row
 - Completed search research and commercial scorecard
 
@@ -622,23 +731,23 @@ The first real utility will expose missing contracts and unnecessary abstraction
 **Implementation work**
 
 1. Select a utility with clear intent, stable logic and limited regulatory exposure.
-2. Complete the mandatory utility plan and owner approval.
+2. Confirm the Growth Infrastructure Production evidence record before beginning the mandatory utility plan and owner approval.
 3. Save the specification at `docs/utilities/<canonical-slug>.md`.
 4. Implement the smallest superior V1 using only shared platform contracts.
 5. Add calculation, validation, integration, end-to-end, accessibility, performance and SEO tests.
-6. Validate analytics and inactive monetisation placements.
+6. Validate the complete approved event taxonomy, consent behaviour and inactive monetisation placements without sensitive payloads.
 7. Complete Preview review at all required viewports.
-8. Ship only after explicit approval and record the full release evidence.
+8. Obtain `APPROVE SHIP` only after the Growth Infrastructure gate and all utility review criteria pass; perform the Production merge, deployment and live verification in Phase 13.
 9. Hold a factory retrospective and modify shared abstractions only where the real implementation proves a need.
 
 **Exit criteria**
 
 - The utility is accurate, accessible, fast, crawlable and measurable.
 - The registry drives every discovery surface correctly.
-- The complete release and rollback process has been exercised.
+- The approved release candidate, release record and rollback plan are ready for Phase 13.
 - Factory lessons are recorded before selecting the next utility.
 
-### Phase 12 — Production launch, search-engine onboarding and measurement
+### Phase 13 — Utility #1 Production launch and post-launch verification
 
 **Objective**
 
@@ -650,7 +759,8 @@ Publishing code is not acquisition. Search systems need valid signals, and the b
 
 **Dependencies**
 
-- Phase 11 approved release candidate
+- Phase 12 approved release candidate
+- Phase 11 Growth Infrastructure complete and verified in Production
 - Production domain and Vercel environment
 - Owner access to Google Search Console and Bing Webmaster Tools
 
@@ -660,24 +770,24 @@ Publishing code is not acquisition. Search systems need valid signals, and the b
 
 **Implementation work**
 
-1. Verify the canonical `www` host and permanent apex redirect.
-2. Verify live canonical tags, robots, sitemap, schema, metadata and internal links.
+1. Reconfirm the canonical `www` host and permanent apex redirect after deployment.
+2. Verify the live Utility #1 canonical tag, robots eligibility, sitemap membership, schema, default social metadata and internal links.
 3. Verify Preview remains `noindex` and Production is crawlable.
-4. Add and verify the Google Search Console domain property; submit the root sitemap and inspect launch URLs.
-5. Import or verify the site in Bing Webmaster Tools; submit the same sitemap.
+4. Confirm the previously verified Google Search Console property accepts the updated sitemap and inspect the Utility #1 URL.
+5. Confirm the previously verified Bing property accepts the updated sitemap and can inspect the Utility #1 URL.
 6. Confirm `OAI-SearchBot` access and the approved GPTBot policy.
-7. Confirm production analytics events without sensitive payloads.
-8. Record initial performance, page size, indexability and release evidence.
-9. Schedule reviews at 24 hours, 7 days and 28 days, then use a recurring monthly portfolio review.
+7. Smoke-test Utility #1 Production analytics and conversion events without sensitive payloads; invoke the approved failure or rollback procedure if measurement is broken.
+8. Record initial performance, Core Web Vitals, page size, indexability, event integrity and release evidence.
+9. Begin the approved 24-hour, 7-day, 28-day, monthly and quarterly review cadence.
 
 **Exit criteria**
 
 - Production is accessible, indexable and verified on the canonical host.
-- Search platforms have accepted the property and sitemap submission.
+- Search platforms retain verified ownership and accept the updated sitemap submission.
 - Baseline product and commercial metrics are recorded.
 - A rollback deployment is identified and tested operationally.
 
-### Phase 13 — Commercial intelligence feedback loop
+### Phase 14 — Commercial intelligence feedback loop
 
 **Objective**
 
@@ -690,7 +800,7 @@ Youtoola becomes progressively smarter only when product, search and commercial 
 **Dependencies**
 
 - Phase 8 analytics contracts
-- Phase 12 verified Production launch and search-platform access
+- Phase 13 verified Production launch and search-platform access
 - Approved privacy and evidence-retention rules
 
 **Estimated complexity:** Medium
@@ -737,7 +847,7 @@ Google Sheet opportunity
 - Lessons can change future commercial scoring and factory standards without automatically changing Production.
 - V1 operates without a database, warehouse or customer-level tracking system.
 
-### Phase 14 — Controlled portfolio rollout and internal-link network
+### Phase 15 — Controlled portfolio rollout and internal-link network
 
 **Objective**
 
@@ -749,8 +859,8 @@ Portfolio value compounds when utilities address adjacent user journeys and pass
 
 **Dependencies**
 
-- Phase 12 measurement baseline
-- Phase 13 commercial intelligence loop
+- Phase 13 measurement baseline
+- Phase 14 commercial intelligence loop
 - Proven factory and release process
 - Approved utility plans and scorecards
 
@@ -778,7 +888,7 @@ Portfolio value compounds when utilities address adjacent user journeys and pass
 - Portfolio growth does not degrade performance budgets or quality gates.
 - Releases are prioritized by measured opportunity rather than Sheet tier alone.
 
-### Phase 15 — Continuous optimisation, retention and commercial activation
+### Phase 16 — Continuous optimisation, retention and commercial activation
 
 **Objective**
 
@@ -792,7 +902,7 @@ The highest-value improvements may be better inputs, clearer assumptions, strong
 
 - Meaningful production traffic and conversion volume
 - Phase 8 measurement architecture
-- Phase 13 commercial intelligence records
+- Phase 14 commercial intelligence records
 - Stable platform quality baseline
 
 **Estimated complexity:** Medium per experiment
@@ -811,7 +921,7 @@ The highest-value improvements may be better inputs, clearer assumptions, strong
 8. Run experiments with predeclared success metrics and guardrails for SEO, performance, accessibility and trust.
 9. Use Search Console and Bing queries to improve genuine content gaps rather than create near-duplicate pages.
 10. Route findings through bug fixes, UX changes, content changes, internal-link changes, monetisation changes, source updates, retirement reviews or new opportunity proposals.
-11. Keep the 24-hour, 7-day, 28-day, monthly and quarterly review cadence defined in Phase 13.
+11. Keep the 24-hour, 7-day, 28-day, monthly and quarterly review cadence defined in Phase 14.
 
 **Exit criteria**
 
@@ -820,7 +930,7 @@ The highest-value improvements may be better inputs, clearer assumptions, strong
 - Losing experiments are removed and findings are documented.
 - Stale or commercially negative utilities receive an explicit improve, maintain, consolidate or retire decision.
 
-### Phase 16 — Evidence-triggered capabilities and future scaling
+### Phase 17 — Evidence-triggered capabilities and future scaling
 
 **Objective**
 
@@ -892,6 +1002,16 @@ This is a later-stage, evidence-triggered capability. A generic chatbot is not t
 
 No phase or utility is complete unless the relevant controls below are satisfied.
 
+### Growth Infrastructure release gate
+
+**No public utility launches without measurement, indexing controls and conversion tracking.**
+
+**Utility #1 cannot receive `APPROVE SHIP` until Growth Infrastructure is complete and verified in Production.**
+
+- Platform-level GA4 delivery, consent behaviour, search-platform ownership, sitemap acceptance, canonical behaviour, structured data, default social metadata, Core Web Vitals monitoring, 404 and redirect monitoring, dashboard access and rollback procedures must have Production evidence before Utility #1 planning begins.
+- Utility-specific analytics, conversion events, metadata and sitemap membership must pass automated tests and Preview review before `APPROVE SHIP`.
+- Because a private Preview URL cannot prove live utility indexing or Production event delivery, Utility #1 receives an immediate post-deployment smoke test. A measurement, indexing or conversion-tracking failure invokes the approved containment or rollback procedure.
+
 ### Acquisition
 
 - Primary and secondary search intent researched live and dated.
@@ -946,7 +1066,9 @@ The repository should maintain:
 - `docs/architecture/`: durable system explanations
 - `docs/decisions/`: concise approved architecture decisions
 - `docs/intelligence/<utility-slug>/`: dated baselines, review snapshots, lessons and approved actions
-- `docs/operations/`: deployment, rollback, indexing and incident procedures
+- `docs/operations/`: deployment, indexing, incident and Growth Infrastructure procedures, including the growth-infrastructure runbook, launch checklist and rollback procedure
+- `docs/architecture/analytics-event-taxonomy.md`: approved event names, parameters, payload allowlists, prohibited data and environment behaviour
+- Growth Infrastructure evidence: dashboard definition, Production verification record and dated launch evidence stored in the appropriate `docs/operations/` or `docs/intelligence/` record
 - `docs/research/`: dated portfolio, search and competitor evidence
 - `docs/utilities/<slug>.md`: approved specification and commercial hypothesis for each utility
 - `CHANGELOG.md`: platform and utility releases
@@ -963,25 +1085,30 @@ At the end of each implementation phase:
 4. review impact on acquisition, completion, trust, monetisation and maintenance
 5. update this roadmap only through an approved pull request
 6. obtain approval before beginning the next phase when it changes production architecture or paid services
+7. prohibit Utility #1 `APPROVE SHIP` until the Phase 11 Production evidence record proves measurement, indexing controls and conversion tracking are operational
 
 The roadmap should be revised when evidence changes priorities, but the mandatory utility gates and quality standards remain in force. The currently empty root `ROADMAP.md` should be removed only through an owner-approved cleanup, after which `docs/ROADMAP.md` remains the sole roadmap.
 
-## 9. Approval decisions before Phase 1
+## 9. Owner decisions required for remaining phases
 
-1. Approve this implementation roadmap.
-2. Approve creation and owner review of `docs/VISION.md` during Phase 0.
-3. Approve later deletion of the empty root `ROADMAP.md`, leaving only `docs/ROADMAP.md`; no deletion occurs in this revision.
-4. Confirm Next.js App Router and strict TypeScript as the platform foundation.
-5. Confirm npm as the initial package manager, unless the owner prefers another locked workflow.
-6. Approve the repository-driven entity, relationship and commercial-journey model, with no graph database in V1.
-7. Approve the commercial-intelligence metrics, prohibited data list, review cadence and `docs/intelligence/` storage convention.
-8. Provide official Youtoola logo and brand assets.
-9. Confirm the canonical `www` host and apex redirect policy.
-10. Confirm the Vercel team/project ownership and commercial plan timing.
-11. Choose the analytics provider or approve the provider-neutral adapter with deferred provider selection.
-12. Decide whether `GPTBot` is allowed; `OAI-SearchBot` remains allowed.
-13. Confirm the GitHub approval policy if the repository initially has only one maintainer.
-14. Confirm that utility-specific AI assistance remains deferred until a separate evidence-based approval satisfies Phase 16 conditions.
-15. Approve the first reference utility only through a separate `YOUTOOLA PLAN` request using an exact live tab and visible row.
+Previously approved foundation, canonical-host, crawler, brand and release-authority decisions remain in force unless the owner changes them through the normal approval process. Growth Infrastructure requires these remaining decisions before Phase 11 can exit:
+
+1. Confirm the GA4 account, property, web stream, responsible owner and data-retention settings.
+2. Confirm launch jurisdictions and the corresponding consent, cookie and default-denial policy.
+3. Confirm Google Search Console ownership and verification method.
+4. Confirm Bing Webmaster Tools verification or Google Search Console import method.
+5. Approve the default Open Graph and social asset.
+6. Choose native provider dashboards or a free consolidated dashboard such as Looker Studio, and assign its owner.
+7. Confirm Core Web Vitals data sources, thresholds and monitoring owner.
+8. Confirm the 404 and redirect monitoring method and response owner.
+9. Decide whether Microsoft Clarity remains disabled or proceeds to a separate privacy review and owner approval.
+10. Approve analytics, consent, indexing and metadata rollback or containment thresholds.
+11. Approve final event parameters for tool, result, related-tool, affiliate, premium and lead events.
+12. Confirm the 24-hour, 7-day, 28-day, monthly and quarterly review cadence and owners.
+13. Confirm the Vercel commercial plan timing when monetised Production traffic justifies it.
+14. Preserve the approved crawler policy: allow `OAI-SearchBot` and disallow `GPTBot` until the owner changes it.
+15. Preserve the approved single-maintainer GitHub review policy until staffing changes.
+16. Confirm that utility-specific AI assistance remains deferred until a separate evidence-based approval satisfies Phase 17 conditions.
+17. Approve the first reference utility only through a separate `YOUTOOLA PLAN` request using an exact live tab and visible row after Phase 11 completes.
 
 No utility implementation begins as part of this roadmap.
