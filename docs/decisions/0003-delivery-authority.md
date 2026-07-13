@@ -1,0 +1,23 @@
+# ADR 0003: Delivery and release authority
+
+- Status: Accepted
+- Date: 2026-07-13
+
+## Decision
+
+GitHub owns source control, review, and merge authority. Vercel owns Preview and Production deployment execution through the connected repository.
+
+- Feature branches and pull requests create Preview deployments.
+- The protected `main` branch is the only automatic Production source.
+- Production requires the repository's PLAN, BUILD, REVIEW, and SHIP approvals.
+- Manual `vercel --prod` delivery is prohibited without explicit owner approval.
+
+## Rationale
+
+The split provides an auditable path from approved intent to a verified deployment while preventing unreviewed or environment-specific changes from reaching Production.
+
+## Consequences
+
+- This foundation branch opens a pull request and is not merged by Codex.
+- Vercel project linking and Production configuration remain owner-controlled.
+- A documented rollback target is required before a Production release.
