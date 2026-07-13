@@ -1,12 +1,13 @@
 # ADR 0004: AI crawler and brand-asset policy
 
-- Status: Partially accepted; owner decision pending
+- Status: Accepted; brand-asset blocker remains
 - Date: 2026-07-13
 
 ## Decision
 
-- Production will allow `OAI-SearchBot` when robots rules are implemented.
-- The `GPTBot` training policy remains owner-pending.
+- Production will explicitly allow `OAI-SearchBot` when robots rules are implemented.
+- Production will explicitly disallow `GPTBot` when robots rules are implemented.
+- `OAI-SearchBot` and `GPTBot` remain separate rules; allowing search discovery does not grant model-training access.
 - Youtoola will use only official logo and brand assets.
 - Missing official assets block logo-dependent Phase 2 design work, but not the Phase 1 technical foundation.
 
@@ -14,7 +15,6 @@
 
 Search discovery and model-training access are separate decisions. Official assets protect brand consistency and avoid accidental logo recreation.
 
-## Owner decisions required
+## Remaining owner input
 
-1. Allow or block `GPTBot`.
-2. Supply and approve official logo formats, colour variants, usage rules, and ownership confirmation before Phase 2.
+Supply and approve official logo formats, colour variants, usage rules, and ownership confirmation before Phase 2.

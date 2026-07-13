@@ -5,7 +5,7 @@
 
 ## Decision
 
-Use `https://www.youtoola.com` as the canonical production origin. Configure the apex domain to redirect permanently to `www` when domain delivery is implemented.
+Use `https://www.youtoola.com` as the canonical production origin. Attach both `www.youtoola.com` and `youtoola.com` to the Youtoola Vercel project. Permanently redirect the apex domain to `https://www.youtoola.com` with HTTP 308. Do not redirect `www` to the apex.
 
 Maintain three environments: Local, Vercel Preview, and Vercel Production. Only Production may enable public indexing or approved production integrations.
 
@@ -17,5 +17,7 @@ One canonical host consolidates search signals. Explicit environments prevent te
 
 - Preview and Local responses send `noindex, nofollow`.
 - Preview URLs are excluded from production sitemaps.
+- Canonical metadata uses `https://www.youtoola.com` in every environment.
+- Vercel controls the authoritative DNS and domain redirect for both hosts.
 - Production secrets are never required locally or exposed through public variables.
 - `NODE_ENV` is not used to grant Production authority.

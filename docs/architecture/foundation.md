@@ -27,7 +27,7 @@ This document describes roadmap Phases 0 and 1 only. Phase 2 design-system work 
 
 ## Canonical-host policy
 
-The canonical origin is `https://www.youtoola.com`. The apex domain will permanently redirect to the `www` host when domain configuration is implemented. Preview hosts never become canonical.
+The canonical origin is `https://www.youtoola.com`. Both `www.youtoola.com` and `youtoola.com` are attached to the Youtoola Vercel project. Vercel permanently redirects the apex host to `www` with HTTP 308. Preview hosts never become canonical.
 
 Canonical metadata is intentionally not environment-configurable. Local and Preview pages use the future Production URL while remaining protected by `noindex, nofollow`.
 
@@ -39,7 +39,7 @@ A content security policy will be introduced only after the script, asset, analy
 
 ## Merge checks
 
-GitHub Actions runs a `Quality` check covering install, lint, type-check, unit tests, and Production build, plus an `End-to-end` browser check. Protected `main` also requires the connected Vercel check.
+GitHub Actions runs a `Quality` check covering install, lint, type-check, unit tests, and Production build, plus an `End-to-end` browser check. Protected `main` also requires the connected Vercel check, pull requests, and resolved conversations. While the repository has one maintainer, zero independent approvals are required. Force-pushes and branch deletion are disabled.
 
 ## Deferred systems
 

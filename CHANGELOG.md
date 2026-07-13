@@ -13,3 +13,5 @@ All notable Youtoola platform and utility changes will be recorded here.
 - Baseline security headers and route-level loading, error, and not-found handling.
 - GitHub Actions quality and end-to-end checks for protected-main readiness.
 - Canonical-origin and environment-precedence hardening.
+- Vercel `www` canonical-domain attachment and permanent apex-to-`www` redirect.
+- Approved single-maintainer GitHub review policy and explicit AI crawler policy.
