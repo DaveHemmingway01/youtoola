@@ -179,7 +179,7 @@ Early decisions about canonical URLs, environments, registry ownership and relea
 
 - Owner approval of this roadmap
 - Access to the GitHub repository and intended Vercel account
-- Official Youtoola logo and brand assets, or an explicit asset blocker
+- Authoritative owner-approved Youtoola visual references, reproduction rights, and an approved asset-factory plan
 
 **Estimated complexity:** Low
 
@@ -192,7 +192,7 @@ Early decisions about canonical URLs, environments, registry ownership and relea
 3. Define PLAN, BUILD, REVIEW and SHIP checklists as repository documentation and PR controls.
 4. Establish definitions for utility start, completion, share, related-tool click and revenue events.
 5. Define commercial scorecard ownership and minimum evidence for `BUILD NOW`.
-6. Confirm that official logo assets exist before interface work.
+6. Produce and owner-approve the minimum production logo package from authoritative references before interface work.
 7. Plan removal of the empty root `ROADMAP.md` after owner approval, leaving `docs/ROADMAP.md` as the sole roadmap. Do not delete it as part of this revision.
 
 **Exit criteria**
@@ -252,7 +252,7 @@ Consistent controls and page structure improve trust and completion while avoidi
 **Dependencies**
 
 - Phase 1 foundation
-- Official logo and brand assets
+- Completed and owner-approved minimum production brand package
 
 **Estimated complexity:** Medium
 
@@ -975,7 +975,7 @@ The roadmap should be revised when evidence changes priorities, but the mandator
 5. Confirm npm as the initial package manager, unless the owner prefers another locked workflow.
 6. Approve the repository-driven entity, relationship and commercial-journey model, with no graph database in V1.
 7. Approve the commercial-intelligence metrics, prohibited data list, review cadence and `docs/intelligence/` storage convention.
-8. Provide official Youtoola logo and brand assets.
+8. Provide authoritative logo references and reproduction rights, then approve each factory-produced asset and the completed minimum package.
 9. Confirm the canonical `www` host and apex redirect policy.
 10. Confirm the Vercel team/project ownership and commercial plan timing.
 11. Choose the analytics provider or approve the provider-neutral adapter with deferred provider selection.

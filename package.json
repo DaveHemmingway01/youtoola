@@ -14,6 +14,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "brand:generate": "node scripts/brand/generate-raster-candidates.mjs",
+    "brand:preview": "node scripts/brand/render-preview.mjs",
+    "brand:validate": "node scripts/brand/validate-assets.mjs",
     "check": "npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {

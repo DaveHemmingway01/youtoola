@@ -10,6 +10,9 @@
 /playwright-report
 /test-results
 
+# Temporary brand review renders
+/docs/brand/reviews/
+
 # Local environment files
 .env
 .env.local

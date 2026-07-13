@@ -17,3 +17,4 @@ All notable Youtoola platform and utility changes will be recorded here.
 - Approved single-maintainer GitHub review policy and explicit AI crawler policy.
 - Environment-aware `robots.txt` rules that allow ordinary search and `OAI-SearchBot` while blocking `GPTBot` in Production.
 - A minimal canonical-homepage sitemap with Local and Preview crawler protection tests.
+- Owner-approved transparent sRGB PNG logo and symbol families, with deterministic validation and immutable release hashes.
