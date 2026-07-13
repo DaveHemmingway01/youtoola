@@ -39,6 +39,14 @@ test("returns the custom not-found page with a 404 status", async ({ page }) => 
     "href",
     "/",
   );
+  const recoveryLinkSize = await page
+    .getByRole("link", { name: "Go to the homepage" })
+    .evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return { height: rect.height, width: rect.width };
+    });
+  expect(recoveryLinkSize.height).toBeGreaterThanOrEqual(44);
+  expect(recoveryLinkSize.width).toBeGreaterThanOrEqual(44);
 });
 
 test("serves non-production crawler controls and the minimal sitemap", async ({

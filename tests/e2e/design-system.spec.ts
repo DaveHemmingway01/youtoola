@@ -67,6 +67,42 @@ test("form errors are associated and the summary receives focus", async ({ page 
   await expect(page.getByText(/125 km ready for calculation/)).toBeVisible();
 });
 
+test("interactive targets meet the 44 CSS-pixel minimum", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/design-system-review");
+
+  const undersizedTargets = await page.evaluate(() => {
+    const selector = [
+      "a",
+      "button",
+      'input[type="text"]',
+      'input[type="number"]',
+      "select",
+      "label.choice",
+      "label.toggle",
+      "summary",
+    ].join(",");
+
+    return [...document.querySelectorAll<HTMLElement>(selector)]
+      .filter((element) => {
+        const rect = element.getBoundingClientRect();
+        const style = getComputedStyle(element);
+        return rect.width > 0 && rect.height > 0 && style.visibility !== "hidden";
+      })
+      .map((element) => {
+        const rect = element.getBoundingClientRect();
+        return {
+          height: rect.height,
+          label: element.getAttribute("aria-label") ?? element.textContent?.trim(),
+          width: rect.width,
+        };
+      })
+      .filter(({ height, width }) => height < 44 || width < 44);
+  });
+
+  expect(undersizedTargets).toEqual([]);
+});
+
 for (const size of sizes) {
   test(`has no horizontal overflow at ${size.width}x${size.height}`, async ({ page }) => {
     await page.setViewportSize(size);

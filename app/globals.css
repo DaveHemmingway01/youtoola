@@ -242,6 +242,14 @@ h3 {
   color: #718096;
 }
 
+.breadcrumbs a,
+.breadcrumbs span {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
 .eyebrow {
   margin: 0 0 var(--space-3);
   color: var(--color-interaction);
