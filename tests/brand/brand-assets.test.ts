@@ -1,5 +1,4 @@
 import { readFileSync } from "node:fs";
-import { spawnSync } from "node:child_process";
 
 import { describe, expect, it } from "vitest";
 
@@ -25,15 +24,5 @@ describe("Asset 01 and Asset 03 raster brand factory", () => {
       expect(png[25]).toBe(6);
       expect(png.includes(Buffer.from("sRGB"))).toBe(true);
     }
-  });
-
-  it("passes the complete package-free validator", () => {
-    const result = spawnSync("node", ["scripts/brand/validate-assets.mjs"], {
-      encoding: "utf8",
-    });
-
-    expect(result.stderr).toBe("");
-    expect(result.status, result.stdout).toBe(0);
-    expect(result.stdout).toContain("Result: **PASS**");
   });
 });

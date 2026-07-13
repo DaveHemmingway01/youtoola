@@ -53,5 +53,7 @@ jobs:
         run: npm ci
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
+      - name: Validate brand assets
+        run: npm run brand:validate
       - name: Run end-to-end tests
         run: npm run test:e2e
