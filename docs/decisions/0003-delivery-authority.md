@@ -9,6 +9,7 @@ GitHub owns source control, review, and merge authority. Vercel owns Preview and
 
 - Feature branches and pull requests create Preview deployments.
 - The protected `main` branch is the only automatic Production source.
+- Pull requests must pass the repository `Quality`, `End-to-end`, and Vercel checks.
 - Production requires the repository's PLAN, BUILD, REVIEW, and SHIP approvals.
 - Manual `vercel --prod` delivery is prohibited without explicit owner approval.
 

@@ -36,17 +36,8 @@ export function resolveRuntimeEnvironment(
   return "local";
 }
 
-export function getCanonicalOrigin(
-  source: EnvironmentSource = process.env,
-): URL {
-  const configuredOrigin = source.YOUTOOLA_CANONICAL_URL || CANONICAL_ORIGIN;
-  const origin = new URL(configuredOrigin);
-
-  if (origin.protocol !== "https:") {
-    throw new Error("YOUTOOLA_CANONICAL_URL must use HTTPS.");
-  }
-
-  return origin;
+export function getCanonicalOrigin(): URL {
+  return new URL(CANONICAL_ORIGIN);
 }
 
 export function isIndexingAllowed(

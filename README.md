@@ -51,6 +51,7 @@ npx playwright install chromium
 - CSS only for the Phase 1 foundation; the shared design system begins in Phase 2
 - Local, Preview, and Production policies resolved through `lib/environment.ts`
 - Canonical production host: `https://www.youtoola.com`
+- Canonical metadata is fixed to the approved `www` origin in every environment
 - Preview and local responses receive `X-Robots-Tag: noindex, nofollow`
 - No database, authentication, CMS, analytics provider, UI framework, graph database, or AI service
 
@@ -59,5 +60,7 @@ See [`docs/architecture/foundation.md`](docs/architecture/foundation.md) and [`d
 ## Delivery
 
 Feature work uses an isolated branch and pull request. GitHub controls review and merge authority; the connected Vercel project creates Preview deployments for non-production branches and Production deployments only from approved `main` commits.
+
+Pull requests run the `Quality` and `End-to-end` GitHub Actions checks. Protected `main` also requires the Vercel deployment check. The owner must still review and approve the SHIP gate before merge.
 
 Never place secrets in tracked files. `.env.example` documents names and purposes only.

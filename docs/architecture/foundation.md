@@ -29,11 +29,17 @@ This document describes roadmap Phases 0 and 1 only. Phase 2 design-system work 
 
 The canonical origin is `https://www.youtoola.com`. The apex domain will permanently redirect to the `www` host when domain configuration is implemented. Preview hosts never become canonical.
 
+Canonical metadata is intentionally not environment-configurable. Local and Preview pages use the future Production URL while remaining protected by `noindex, nofollow`.
+
 ## Security baseline
 
 The application removes the framework signature and sends baseline referrer, content-type, frame, and permissions headers. Local and Preview responses also send `X-Robots-Tag: noindex, nofollow`.
 
 A content security policy will be introduced only after the script, asset, analytics, and monetisation requirements are known well enough to avoid a misleading or broken policy.
+
+## Merge checks
+
+GitHub Actions runs a `Quality` check covering install, lint, type-check, unit tests, and Production build, plus an `End-to-end` browser check. Protected `main` also requires the connected Vercel check.
 
 ## Deferred systems
 

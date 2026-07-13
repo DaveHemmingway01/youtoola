@@ -11,3 +11,5 @@ All notable Youtoola platform and utility changes will be recorded here.
 - Deterministic lint, type-check, unit-test, end-to-end-test, and build commands.
 - Local, Preview, and Production environment policies.
 - Baseline security headers and route-level loading, error, and not-found handling.
+- GitHub Actions quality and end-to-end checks for protected-main readiness.
+- Canonical-origin and environment-precedence hardening.

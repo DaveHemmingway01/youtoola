@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
-const isProduction =
-  process.env.VERCEL_ENV === "production" ||
-  process.env.YOUTOOLA_ENV === "production";
+import { isIndexingAllowed } from "./lib/environment";
+
+const indexingAllowed = isIndexingAllowed();
 
 const securityHeaders = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
@@ -12,7 +12,7 @@ const securityHeaders = [
     key: "Permissions-Policy",
     value: "camera=(), geolocation=(), microphone=()",
   },
-  ...(!isProduction
+  ...(!indexingAllowed
     ? [{ key: "X-Robots-Tag", value: "noindex, nofollow" }]
     : []),
 ];

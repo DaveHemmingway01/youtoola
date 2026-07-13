@@ -28,6 +28,15 @@ describe("resolveRuntimeEnvironment", () => {
     );
   });
 
+  it("gives the explicit override precedence over Vercel", () => {
+    expect(
+      resolveRuntimeEnvironment({
+        VERCEL_ENV: "production",
+        YOUTOOLA_ENV: "preview",
+      }),
+    ).toBe("preview");
+  });
+
   it("rejects invalid explicit overrides", () => {
     expect(() => resolveRuntimeEnvironment({ YOUTOOLA_ENV: "staging" })).toThrow(
       "Invalid YOUTOOLA_ENV",
@@ -36,14 +45,8 @@ describe("resolveRuntimeEnvironment", () => {
 });
 
 describe("environment policies", () => {
-  it("uses the approved canonical www origin by default", () => {
-    expect(getCanonicalOrigin({}).origin).toBe(CANONICAL_ORIGIN);
-  });
-
-  it("rejects non-HTTPS canonical origins", () => {
-    expect(() =>
-      getCanonicalOrigin({ YOUTOOLA_CANONICAL_URL: "http://example.com" }),
-    ).toThrow("must use HTTPS");
+  it("always uses the approved canonical www origin", () => {
+    expect(getCanonicalOrigin().origin).toBe(CANONICAL_ORIGIN);
   });
 
   it("allows indexing only in production", () => {
