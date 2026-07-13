@@ -34,3 +34,9 @@ Verified against the npm registry on 2026-07-13. All four packages are pinned de
 | `@axe-core/playwright@4.12.1` | MPL-2.0 | Automated accessibility scanning | Blocks serious and critical accessibility regressions on the rendered review route. |
 
 The browser, framework, and existing test packages do not provide equivalent semantic component testing or automated accessibility rules. These focused packages are replaceable, have no paid or runtime service cost, and passed `npm audit` at installation.
+
+## Phase 3 dependency decision
+
+Phase 3 adds no package. Public Sheet retrieval uses Node 22 `fetch`, CSV parsing is repository-owned, source hashing uses `node:crypto`, registry records use TypeScript, and validation uses the existing Vitest installation. The Google API client, CSV libraries, schema libraries, databases and graph packages are not justified for the approved public GViz V1 workflow.
+
+This adds no browser bundle, Production service, credential, paid cost or runtime dependency. Credentialed Google Sheets API access remains deferred until public access is removed or stronger metadata becomes a demonstrated requirement.

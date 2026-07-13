@@ -24,3 +24,5 @@ All notable Youtoola platform and utility changes will be recorded here.
 - Phase 2 shared design tokens, responsive platform shell, accessible controls, form and result patterns, inert commercial placeholders, and Local/Preview-only review route.
 - Approved favicon and Apple touch metadata references without a manifest or changes to frozen brand assets.
 - Component accessibility tests and axe-enabled responsive browser coverage.
+- Public GViz-first retrieval of an exact Google Sheet tab and literal visible row, with an explicit CSV-export fallback and deterministic source hashing.
+- A typed Git-controlled utility registry containing the approved Fuel Trip Calculator `idea` record, category mapping, governed status transitions, safe selectors and offline validation.
