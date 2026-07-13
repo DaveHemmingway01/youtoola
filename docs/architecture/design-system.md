@@ -15,7 +15,7 @@ Provide the smallest coherent reusable presentation system for the Youtoola shel
 | Light brand blue | `#40A3FE` | Decorative gradient reference only |
 | Interaction blue | `#064FD6` | Links, primary controls and interactive state |
 | Interaction hover | `#003FAE` | Hover state |
-| Focus | `#FFBF47` | High-visibility focus outline |
+| Focus | `#006A8E` plus white inner ring | Two-colour focus indicator |
 | Body text | `#10233F` | Primary text |
 | Muted text | `#40536F` | Supporting text |
 | Soft surface | `#F7F9FC` | Page background |
@@ -23,7 +23,7 @@ Provide the smallest coherent reusable presentation system for the Youtoola shel
 
 The font stack is `system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`. No external font request is allowed.
 
-Measured contrast includes 18.83:1 for brand navy on white, 6.78:1 for interaction blue on white, 7.82:1 for muted text on white and 7.42:1 for muted text on the soft surface. The lighter brand colours are not small-text colours.
+Measured contrast includes 18.83:1 for brand navy on white, 6.78:1 for interaction blue on white, 7.82:1 for muted text on white and 7.42:1 for muted text on the soft surface. The outer focus ring is 6.08:1 against white and 3.10:1 against navy; its white inner ring is 6.78:1 against interaction blue. The lighter brand colours are not small-text colours.
 
 ## Architecture
 

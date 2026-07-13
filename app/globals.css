@@ -5,7 +5,8 @@
   --color-brand-blue-light: #40a3fe;
   --color-interaction: #064fd6;
   --color-interaction-hover: #003fae;
-  --color-focus: #ffbf47;
+  --color-focus: #006a8e;
+  --color-focus-inner: #ffffff;
   --color-text: #10233f;
   --color-text-muted: #40536f;
   --color-surface: #ffffff;
@@ -77,6 +78,7 @@ a:hover {
 :where(a, button, input, select, summary):focus-visible {
   outline: 3px solid var(--color-focus);
   outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--color-focus-inner);
 }
 
 img {
@@ -507,6 +509,7 @@ select {
 .toggle input:focus-visible + .toggle__track {
   outline: 3px solid var(--color-focus);
   outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--color-focus-inner);
 }
 
 .result-panel {
@@ -587,6 +590,7 @@ select {
 .error-summary:focus {
   outline: 3px solid var(--color-focus);
   outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--color-focus-inner);
 }
 
 @keyframes spin {
