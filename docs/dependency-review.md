@@ -21,3 +21,16 @@ Before adding a runtime, development, or paid dependency:
 | `@playwright/test` | Browser tests | Required for the approved end-to-end command and local-start verification. |
 
 No runtime service, UI library, database, authentication, CMS, analytics, graph, or AI dependency is approved in Phase 1.
+
+## Phase 2 testing dependency decision
+
+Verified against the npm registry on 2026-07-13. All four packages are pinned development dependencies and add no Production client code.
+
+| Dependency | Licence | Role | Why required now |
+| --- | --- | --- | --- |
+| `@testing-library/react@16.3.2` | MIT | Component rendering and semantic queries | Verifies reusable controls through the roles and labels users experience. |
+| `@testing-library/user-event@14.6.1` | MIT | Realistic keyboard and pointer interaction | Verifies disclosure focus return and future form interaction without implementation-specific tests. |
+| `jsdom@29.1.1` | MIT | DOM environment for Vitest | Runs component accessibility contracts without launching a browser for every unit test. |
+| `@axe-core/playwright@4.12.1` | MPL-2.0 | Automated accessibility scanning | Blocks serious and critical accessibility regressions on the rendered review route. |
+
+The browser, framework, and existing test packages do not provide equivalent semantic component testing or automated accessibility rules. These focused packages are replaceable, have no paid or runtime service cost, and passed `npm audit` at installation.
