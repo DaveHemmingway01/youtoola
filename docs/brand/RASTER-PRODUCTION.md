@@ -65,3 +65,17 @@ No crop, cascading resize, redraw, simplification, thickening, repositioning, ga
 ## Known usage constraint
 
 The primary wordmark is dark navy and is intended for white, soft off-white and suitable neutral surfaces. Use a future owner-approved light monochrome variant on dark surfaces; do not modify these approved files in place.
+
+## Asset Group 06 application icons
+
+Owner-approved on 2026-07-13.
+
+| Asset | Dimensions | SHA-256 |
+| --- | ---: | --- |
+| `public/brand/apple-touch-icon.png` | 180×180 | `b35a8289133f77051383eaabaead44b5900f17f2c7db2a5e35d48fb930e8f56a` |
+| `public/brand/icon-192.png` | 192×192 | `730e8b61a33ed09ec469d96f3d8a5447ac1b513c63ef2921328326ef5a1e3ba5` |
+| `public/brand/icon-512.png` | 512×512 | `05fe32cf751b617f7b9e88781c3e07bf36a37083312f9c5e2279c173ccaedb63` |
+
+Each size is generated directly from the approved 2048×2048 symbol master using Chromium/Skia high-quality alpha-aware resampling. The symbol geometry, gradient, dot, proportions and optical centring remain unchanged. The output is 8-bit RGBA with explicit standard sRGB, approved opaque corner pixels and no unnecessary metadata.
+
+No rounded corners, circular or squircle mask, transparent variation, SVG, shadow, outline, glow, texture, bevel, recolouring, maskable-specific artwork, adaptive-icon layers or monochrome version is included. Manifest declarations and application metadata integration are explicitly deferred. Preserve these three files byte-for-byte until the owner explicitly authorises replacement.

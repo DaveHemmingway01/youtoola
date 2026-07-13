@@ -31,6 +31,9 @@ npm run brand:preview
 npm run brand:favicon:generate
 npm run brand:favicon:validate
 npm run brand:favicon:preview
+npm run brand:application-icons:generate
+npm run brand:application-icons:validate
+npm run brand:application-icons:preview
 ```
 
 `brand:generate` can rebuild the Asset 01 logo PNG family and Asset 03 symbol PNG family from the approved JPGs. It creates the largest transparent master first and derives smaller sizes from that master. It does not generate later asset groups.
@@ -40,6 +43,10 @@ The current Asset 01 and Asset 03 PNGs are approved. Do not run `brand:generate`
 Asset Group 05 derives the approved 16, 32, 48 and 64-pixel favicon PNGs independently from the complete approved 2048×2048 symbol master. It preserves the existing canvas, optical centring, transparent padding, geometry, gradient and dot relationship. The four PNGs are embedded byte-for-byte in deterministic size order inside `favicon.ico`. No micro-symbol, cascade resizing, sharpening, recolouring, background or outline is permitted.
 
 Favicon review material remains under the ignored `docs/brand/reviews/favicon/` directory. Native-size browser-tab, bookmark, shortcut and compact-navigation presentation controls visual approval; magnified output is diagnostic only. The five approved favicon files are immutable until the owner explicitly authorises replacement. Do not run `brand:favicon:generate` against them for routine validation; use `brand:favicon:validate`.
+
+Asset Group 06 derives the Apple touch icon and 192/512-pixel application-icon candidates independently from the complete approved symbol master. Each candidate places the unchanged gradient symbol on an opaque `#000A3F` canvas: 75% scale for Apple and 71.875% for Android/PWA. The square files contain no baked platform mask; manifest, metadata, maskable, adaptive and monochrome integration is deferred.
+
+Application-icon review material remains under the ignored `docs/brand/reviews/application-icons/` directory. Home-screen, install-prompt, bookmark, launcher and common-mask previews control visual approval. Safe-area overlays are diagnostic only. The three approved application-icon files are immutable until the owner explicitly authorises replacement. Do not run `brand:application-icons:generate` against them for routine validation; use `brand:application-icons:validate`.
 
 ## Asset 01 and Asset 03 references
 

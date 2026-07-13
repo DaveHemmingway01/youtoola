@@ -57,5 +57,7 @@ jobs:
         run: npm run brand:validate
       - name: Validate favicon assets
         run: npm run brand:favicon:validate
+      - name: Validate application icon assets
+        run: npm run brand:application-icons:validate
       - name: Run end-to-end tests
         run: npm run test:e2e
