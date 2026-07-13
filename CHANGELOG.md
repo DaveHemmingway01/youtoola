@@ -15,3 +15,5 @@ All notable Youtoola platform and utility changes will be recorded here.
 - Canonical-origin and environment-precedence hardening.
 - Vercel `www` canonical-domain attachment and permanent apex-to-`www` redirect.
 - Approved single-maintainer GitHub review policy and explicit AI crawler policy.
+- Environment-aware `robots.txt` rules that allow ordinary search and `OAI-SearchBot` while blocking `GPTBot` in Production.
+- A minimal canonical-homepage sitemap with Local and Preview crawler protection tests.

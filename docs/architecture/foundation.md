@@ -37,6 +37,12 @@ The application removes the framework signature and sends baseline referrer, con
 
 A content security policy will be introduced only after the script, asset, analytics, and monetisation requirements are known well enough to avoid a misleading or broken policy.
 
+## Crawler foundation
+
+Production `robots.txt` allows ordinary crawlers and `OAI-SearchBot`, explicitly disallows `GPTBot`, and references `https://www.youtoola.com/sitemap.xml`. Local and Preview `robots.txt` disallow every crawler in addition to the response-level `noindex, nofollow` protection.
+
+The initial sitemap contains only the canonical homepage. Registry-driven sitemap generation, structured data, and the wider SEO system remain deferred to their roadmap phases.
+
 ## Merge checks
 
 GitHub Actions runs a `Quality` check covering install, lint, type-check, unit tests, and Production build, plus an `End-to-end` browser check. Protected `main` also requires the connected Vercel check, pull requests, and resolved conversations. While the repository has one maintainer, zero independent approvals are required. Force-pushes and branch deletion are disabled.
