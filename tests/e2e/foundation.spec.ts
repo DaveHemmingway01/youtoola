@@ -36,3 +36,28 @@ test("returns the custom not-found page with a 404 status", async ({ page }) => 
     "/",
   );
 });
+
+test("serves non-production crawler controls and the minimal sitemap", async ({
+  request,
+}) => {
+  const robotsResponse = await request.get("/robots.txt");
+
+  expect(robotsResponse.status()).toBe(200);
+  expect(robotsResponse.headers()["content-type"]).toContain("text/plain");
+  expect(robotsResponse.headers()["x-robots-tag"]).toBe("noindex, nofollow");
+  expect(await robotsResponse.text()).toBe("User-Agent: *\nDisallow: /\n\n");
+
+  const sitemapResponse = await request.get("/sitemap.xml");
+
+  expect(sitemapResponse.status()).toBe(200);
+  expect(sitemapResponse.headers()["content-type"]).toContain("application/xml");
+  expect(sitemapResponse.headers()["x-robots-tag"]).toBe("noindex, nofollow");
+  expect(await sitemapResponse.text()).toBe(
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+      "<url>\n" +
+      "<loc>https://www.youtoola.com</loc>\n" +
+      "</url>\n" +
+      "</urlset>\n",
+  );
+});
