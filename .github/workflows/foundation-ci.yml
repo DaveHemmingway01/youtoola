@@ -55,5 +55,7 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Validate brand assets
         run: npm run brand:validate
+      - name: Validate favicon assets
+        run: npm run brand:favicon:validate
       - name: Run end-to-end tests
         run: npm run test:e2e

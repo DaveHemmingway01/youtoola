@@ -46,6 +46,22 @@ Validation checks dimensions, PNG structure, 8-bit RGBA encoding, explicit sRGB 
 
 At approval all six assets passed validation, lint, strict type-checking, unit tests, end-to-end tests and the production build. No package dependency was added for raster processing.
 
+## Asset Group 05 favicon assets
+
+Owner-approved on 2026-07-13.
+
+| Asset | Dimensions or entries | SHA-256 |
+| --- | --- | --- |
+| `public/brand/favicon-16x16.png` | 16×16 | `df7ed4cc45542d7ee90ac1ae2e7bef4a3f333561778858e527206b929c657d2e` |
+| `public/brand/favicon-32x32.png` | 32×32 | `ab5fe330d3c3a5706ede6192603918bfa3e6145646340d691502ce8ad79a39f3` |
+| `public/brand/favicon-48x48.png` | 48×48 | `60312cc13c13225738614924a29fbf064c4e7e1589abe98f0659fd628b911c12` |
+| `public/brand/favicon-64x64.png` | 64×64 | `747ce1971551489a6fc9cf06ed111613e69d9c4e0abe00ff945636311924fd20` |
+| `public/brand/favicon.ico` | PNG entries at 16, 32, 48 and 64 pixels | `81a006e16159b950c3172b31fd33306945d5b8ae113516a28b7c00db937c3b01` |
+
+Each PNG was resampled independently from the complete approved `youtoola-symbol.png` canvas using Chromium/Skia high-quality alpha-aware interpolation. The ICO embeds bytes identical to the four approved PNGs in ascending size order.
+
+No crop, cascading resize, redraw, simplification, thickening, repositioning, gap change, recolouring, sharpening, background, outline, monochrome artwork, SVG or generated artwork is permitted. Preserve these five files byte-for-byte until the owner explicitly authorises replacement. Application metadata integration remains a separate later implementation step.
+
 ## Known usage constraint
 
 The primary wordmark is dark navy and is intended for white, soft off-white and suitable neutral surfaces. Use a future owner-approved light monochrome variant on dark surfaces; do not modify these approved files in place.

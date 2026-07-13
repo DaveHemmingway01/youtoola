@@ -17,6 +17,9 @@
     "brand:generate": "node scripts/brand/generate-raster-candidates.mjs",
     "brand:preview": "node scripts/brand/render-preview.mjs",
     "brand:validate": "node scripts/brand/validate-assets.mjs",
+    "brand:favicon:generate": "node scripts/brand/generate-favicon-candidates.mjs",
+    "brand:favicon:preview": "node scripts/brand/render-favicon-preview.mjs",
+    "brand:favicon:validate": "node scripts/brand/validate-favicon-assets.mjs --write-report",
     "check": "npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {
