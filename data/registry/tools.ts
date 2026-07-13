@@ -1,7 +1,9 @@
 import type { UtilityRegistryEntry } from "@/lib/registry/types";
+import { KNOWLEDGE_SCHEMA_VERSION } from "@/lib/knowledge/schema-version";
 
 export const tools: readonly UtilityRegistryEntry[] = [
   {
+    knowledgeSchemaVersion: KNOWLEDGE_SCHEMA_VERSION,
     utilityId: "fuel-trip-calculator",
     entityId: "utility:fuel-trip-calculator",
     name: "Fuel Trip Calculator",
@@ -13,7 +15,18 @@ export const tools: readonly UtilityRegistryEntry[] = [
     status: "idea",
     priority: "Tier 1",
     monetisationTypes: ["affiliate"],
-    relationships: [],
+    conceptIds: [
+      "concept:distance",
+      "concept:fuel-consumption",
+      "concept:fuel-price",
+      "concept:passenger-count",
+      "concept:return-journey",
+      "concept:toll-cost",
+      "concept:total-trip-cost",
+    ],
+    formulaFamilyIds: ["formula-family:trip-cost"],
+    intentClusterIds: ["intent:trip-cost"],
+    sourceEntityIds: ["source:google-sheet-youtoola-map"],
     source: {
       spreadsheetId: "1BJtHQKH6MxAySfQ0C-mGrCgXdAD1efM2vIf5iDwqzpU",
       tabName: "Travel & Mobility",

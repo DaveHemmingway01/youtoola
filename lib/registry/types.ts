@@ -1,3 +1,16 @@
+import type { KnowledgeSchemaVersion } from "@/lib/knowledge/schema-version";
+import type {
+  CategoryEntityId,
+  ConceptEntityId,
+  FormulaFamilyEntityId,
+  IntentEntityId,
+  JourneyEntity,
+  NonUtilityEntityStatus,
+  SourceEntityId,
+  UnitEntityId,
+  UtilityEntityId,
+} from "@/lib/knowledge/types";
+
 export type RegistryStatus =
   | "idea"
   | "research"
@@ -9,49 +22,26 @@ export type RegistryStatus =
   | "paused"
   | "retired";
 
-export type RelationshipType =
-  | "related"
-  | "previous-step"
-  | "next-step"
-  | "alternative"
-  | "comparison"
-  | "prerequisite"
-  | "input-provider"
-  | "output-consumer"
-  | "same-journey"
-  | "same-formula-family"
-  | "same-intent-cluster";
-
-export interface UtilityRelationship {
-  type: RelationshipType;
-  targetUtilityId: string;
-  reason: string;
-  displayOrder?: number;
-}
-
 export interface CategoryRecord {
+  knowledgeSchemaVersion: KnowledgeSchemaVersion;
   id: string;
+  entityId: CategoryEntityId;
   name: string;
   aliases: readonly string[];
   description: string;
+  userIntent: string;
   displayOrder: number;
-  active: boolean;
+  status: NonUtilityEntityStatus;
   reviewedDate: string;
+  sourceIds: readonly SourceEntityId[];
 }
 
-export interface JourneyRecord {
-  id: string;
-  name: string;
-  aliases: readonly string[];
-  description: string;
-  displayOrder: number;
-  active: boolean;
-  reviewedDate: string;
-}
+export type JourneyRecord = JourneyEntity;
 
 export interface UtilityRegistryEntry {
+  knowledgeSchemaVersion: KnowledgeSchemaVersion;
   utilityId: string;
-  entityId: string;
+  entityId: UtilityEntityId;
   name: string;
   aliases: readonly string[];
   slug: string;
@@ -68,12 +58,11 @@ export interface UtilityRegistryEntry {
   riskProfile?: string;
   monetisationTypes?: readonly string[];
   premiumOpportunity?: string;
-  concepts?: readonly string[];
-  units?: readonly string[];
-  formulaFamily?: string;
-  journeyIds?: readonly string[];
-  intentClusters?: readonly string[];
-  relationships: readonly UtilityRelationship[];
+  conceptIds?: readonly ConceptEntityId[];
+  unitIds?: readonly UnitEntityId[];
+  formulaFamilyIds?: readonly FormulaFamilyEntityId[];
+  intentClusterIds?: readonly IntentEntityId[];
+  sourceEntityIds?: readonly SourceEntityId[];
   source: {
     spreadsheetId: string;
     tabName: string;

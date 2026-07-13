@@ -1,6 +1,7 @@
 import { categories } from "@/data/registry/categories";
 import { journeys } from "@/data/registry/journeys";
 import { tools } from "@/data/registry/tools";
+import { utilityRelationships } from "@/data/relationships/utility-relationships";
 import type { UtilityRegistryEntry } from "./types";
 
 export function getAllTools(): readonly UtilityRegistryEntry[] {
@@ -22,10 +23,23 @@ export function getToolsByCategory(categoryId: string) {
 export function getRelatedTools(utilityId: string, releasedOnly = false) {
   const tool = getToolById(utilityId);
   if (!tool) return [];
-  const targetIds = new Set(tool.relationships.map((relationship) => relationship.targetUtilityId));
+  const targetEntityIds = new Set(
+    utilityRelationships
+      .filter(
+        (relationship) =>
+          relationship.type === "related" &&
+          (relationship.sourceEntityId === tool.entityId ||
+            relationship.targetEntityId === tool.entityId),
+      )
+      .map((relationship) =>
+        relationship.sourceEntityId === tool.entityId
+          ? relationship.targetEntityId
+          : relationship.sourceEntityId,
+      ),
+  );
   return tools.filter(
     (candidate) =>
-      targetIds.has(candidate.utilityId) && (!releasedOnly || candidate.status === "released"),
+      targetEntityIds.has(candidate.entityId) && (!releasedOnly || candidate.status === "released"),
   );
 }
 
