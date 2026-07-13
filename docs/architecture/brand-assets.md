@@ -14,6 +14,6 @@ Approval is based on the production files in `public/brand/` as they appear in i
 
 The frozen v1 package contains the approved primary logo family, standalone symbol family, browser favicon family, Apple touch icon and Android/PWA application icons. It is sufficient for the website header and footer, mobile navigation, browser tabs and bookmarks, mobile shortcuts, basic social use and documents.
 
-The Phase 2 brand dependency is satisfied when PR #3 merges. SVG masters, a wordmark-only asset, monochrome variants, a default Open Graph image, expanded colour and typography documentation, the final brand guide, manifest declarations and application metadata integration are deferred. They do not block the design system or platform shell.
+The Phase 2 brand dependency is satisfied. SVG masters, a wordmark-only asset, monochrome variants, a default Open Graph image, expanded colour and typography documentation, the final brand guide and manifest declarations are deferred. They do not block the design system or platform shell. Phase 2 integrates only the approved favicon and Apple touch metadata; it does not add a manifest.
 
 Approved production files must not be redesigned, regenerated, optimised or replaced without a separate owner-approved brand-change process.

@@ -4,7 +4,7 @@ Youtoola is one connected platform for practical online utilities.
 
 > Useful tools. No account. No nonsense.
 
-This branch implements only the approved platform governance and application foundation from Phases 0 and 1 of [`docs/ROADMAP.md`](docs/ROADMAP.md). It does not contain a production utility or the Phase 2 design system.
+The repository contains the approved platform foundation and the Phase 2 shared design-system work under review. It does not contain a production utility.
 
 ## Requirements
 
@@ -48,7 +48,8 @@ npx playwright install chromium
 - Next.js App Router with Server Components by default
 - Strict TypeScript
 - Static-first public pages
-- CSS only for the Phase 1 foundation; the shared design system begins in Phase 2
+- A small CSS-token design system with Server Components by default
+- One focused Client Component boundary for the compact mobile navigation
 - Local, Preview, and Production policies resolved through `lib/environment.ts`
 - Canonical production host: `https://www.youtoola.com`
 - Canonical metadata is fixed to the approved `www` origin in every environment
@@ -56,6 +57,8 @@ npx playwright install chromium
 - No database, authentication, CMS, analytics provider, UI framework, graph database, or AI service
 
 See [`docs/architecture/foundation.md`](docs/architecture/foundation.md) and [`docs/decisions/`](docs/decisions/) for the approved decisions.
+
+The component and brand-usage rules are documented in [`docs/architecture/design-system.md`](docs/architecture/design-system.md) and [`docs/brand/USAGE.md`](docs/brand/USAGE.md). The `/design-system-review` route is available only in Local and Preview, is explicitly `noindex, nofollow`, and returns 404 in Production.
 
 ## Delivery
 
