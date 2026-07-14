@@ -45,8 +45,10 @@ test("mobile disclosure closes with Escape and restores focus", async ({ page })
 
   const trigger = page.getByRole("button", { name: "Menu" });
   await trigger.click();
-  await expect(page.getByRole("navigation", { name: "Mobile navigation" })).toBeVisible();
+  const navigation = page.getByRole("navigation", { name: "Mobile navigation" });
+  await expect(navigation).toBeVisible();
   await page.keyboard.press("Escape");
+  await expect(navigation).toBeHidden();
   await expect(trigger).toBeFocused();
 });
 
