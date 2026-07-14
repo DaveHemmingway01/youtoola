@@ -4,6 +4,7 @@ import { RELEASE_GATES, type ReleaseRecord } from "@/lib/release/contracts";
 import {
   requiredEvidenceForRiskTags,
   validateGoldenVectorDocument,
+  validateReleaseProvenanceHistory,
   validateReleaseRecord,
 } from "@/lib/release/validation";
 
@@ -17,7 +18,7 @@ function candidate(tags: ReleaseRecord["riskTags"] = ["platform-architecture"]):
     status: id.includes("approval") || id.includes("review") ? "approved" as const : "passed" as const,
   }));
   return {
-    recordVersion: 1,
+    recordVersion: 2,
     recordId: "2026-07-14-phase-9",
     status: "candidate",
     phaseOrUtility: "Phase 9",
@@ -25,7 +26,16 @@ function candidate(tags: ReleaseRecord["riskTags"] = ["platform-architecture"]):
     riskTags: tags,
     planApproval: { approvedDate: "2026-07-14", approver: "Youtoola owner", reference: "owner-approved-phase-9-plan" },
     pullRequest: "pending",
-    candidateCommit: "pending-review",
+    provenance: {
+      pullRequest: "pending",
+      reviewedHeadCommit: "pending-review",
+      reviewedHeadRef: "platform/release-gates",
+      reviewedDate: "2026-07-14",
+      mergeMethod: null,
+      mergeCommit: null,
+      durableReleaseCommit: null,
+      mergedAt: null,
+    },
     evidence,
     exceptions: [],
     rollbackPlan: { method: "Restore the previous Ready deployment and revert main.", owner: "Youtoola owner", target: "current-production" },
@@ -34,10 +44,47 @@ function candidate(tags: ReleaseRecord["riskTags"] = ["platform-architecture"]):
       evidence: gate === "plan" ? ["owner-approved-phase-9-plan"] : [],
       status: gate === "plan" ? "approved" : "pending",
     }])) as unknown as ReleaseRecord["gateEvidence"],
-    versions: { analyticsSchema: 1, releaseSchema: 1 },
+    versions: { analyticsSchema: 1, releaseSchema: 2 },
     production: null,
     followUpDates: { immediate: null, "24-hours": null, "7-days": null, "28-days": null, monthly: null, quarterly: null },
   };
+}
+
+function completed(): ReleaseRecord {
+  const record = candidate();
+  const durableCommit = "a".repeat(40);
+  record.status = "completed";
+  record.pullRequest = "https://github.com/DaveHemmingway01/youtoola/pull/11";
+  record.provenance = {
+    pullRequest: record.pullRequest,
+    reviewedHeadCommit: "b".repeat(40),
+    reviewedHeadRef: "platform/release-gates",
+    reviewedDate: "2026-07-14",
+    mergeMethod: "squash",
+    mergeCommit: durableCommit,
+    durableReleaseCommit: durableCommit,
+    mergedAt: "2026-07-14T10:00:00.000Z",
+  };
+  record.production = {
+    mergeCommit: durableCommit,
+    deploymentId: "dpl_example",
+    deploymentCommit: durableCommit,
+    deployedAt: "2026-07-14T10:05:00.000Z",
+    liveUrls: ["https://www.youtoola.com"],
+    smokeResults: ["Homepage returned HTTP 200."],
+    rollbackDeployment: "dpl_previous",
+    releaseDate: "2026-07-14",
+  };
+  record.followUpDates = { ...record.followUpDates, immediate: "2026-07-14" };
+  record.gateEvidence = {
+    ...record.gateEvidence,
+    plan: { approver: "Youtoola owner", evidence: ["approved"], status: "approved" },
+    build: { approver: null, evidence: ["complete"], status: "complete" },
+    review: { approver: "Youtoola owner", evidence: ["approved"], status: "approved" },
+    ship: { approver: "Youtoola owner", evidence: ["approved"], status: "approved" },
+    "post-deployment": { approver: null, evidence: ["smoke"], status: "complete" },
+  };
+  return record;
 }
 
 function goldenVectors() {
@@ -120,7 +167,7 @@ describe("release record validation", () => {
       "methodology:version",
       "record:independent-review",
     ]));
-    record.versions = { releaseSchema: 1, calculation: 2, methodology: 3 };
+    record.versions = { releaseSchema: 2, calculation: 2, methodology: 3 };
     record.independentReview = { reviewer: "Qualified reviewer", scope: "Formula and sources", reviewedDate: "2026-07-14", evidence: "review:123", qualified: true };
     expect(validateReleaseRecord(record, today)).toEqual([]);
   });
@@ -129,30 +176,81 @@ describe("release record validation", () => {
     const record = candidate();
     record.status = "completed";
     expect(validateReleaseRecord(record, today)).toContain("record:production-evidence");
-    record.production = {
-      mergeCommit: "a".repeat(40),
-      deploymentId: "dpl_example",
-      deploymentCommit: "b".repeat(40),
-      liveUrls: ["https://www.youtoola.com"],
-      smokeResults: ["Homepage returned HTTP 200."],
-      rollbackDeployment: "dpl_previous",
-      releaseDate: "2026-07-14",
-    };
-    expect(validateReleaseRecord(record, today)).toEqual(expect.arrayContaining([
-      "production:commit-mismatch",
-      "record:immediate-follow-up",
-    ]));
-    record.production.deploymentCommit = record.production.mergeCommit;
-    record.followUpDates = { ...record.followUpDates, immediate: "2026-07-14" };
-    record.gateEvidence = {
-      ...record.gateEvidence,
-      plan: { approver: "Youtoola owner", evidence: ["approved"], status: "approved" },
-      build: { approver: null, evidence: ["complete"], status: "complete" },
-      review: { approver: "Youtoola owner", evidence: ["approved"], status: "approved" },
-      ship: { approver: "Youtoola owner", evidence: ["approved"], status: "approved" },
-      "post-deployment": { approver: null, evidence: ["smoke"], status: "complete" },
-    };
+    expect(validateReleaseRecord(completed(), today)).toEqual([]);
+  });
+
+  it("keeps the reviewed head separate from a squash merge and durable release commit", () => {
+    const record = completed();
+    expect(record.provenance.reviewedHeadCommit).not.toBe(record.provenance.mergeCommit);
+    expect(record.provenance.mergeCommit).toBe(record.provenance.durableReleaseCommit);
+    expect(record.production?.deploymentCommit).toBe(record.provenance.durableReleaseCommit);
     expect(validateReleaseRecord(record, today)).toEqual([]);
+  });
+
+  it("fails closed for missing or unrelated provenance commits", () => {
+    const missingReviewedHead = completed();
+    missingReviewedHead.provenance.reviewedHeadCommit = "";
+    expect(validateReleaseRecord(missingReviewedHead, today)).toContain("provenance:reviewed-head");
+
+    const missingMerge = completed();
+    missingMerge.provenance.mergeCommit = null;
+    expect(validateReleaseRecord(missingMerge, today)).toContain("provenance:merge-commit");
+
+    const unrelatedDurable = completed();
+    unrelatedDurable.provenance.durableReleaseCommit = "c".repeat(40);
+    expect(validateReleaseRecord(unrelatedDurable, today)).toEqual(expect.arrayContaining([
+      "provenance:durable-commit-mismatch",
+      "production:provenance-mismatch",
+    ]));
+  });
+
+  it("fails closed for a mismatched pull request and impossible chronology", () => {
+    const mismatchedPullRequest = completed();
+    mismatchedPullRequest.provenance.pullRequest = "https://github.com/DaveHemmingway01/youtoola/pull/12";
+    expect(validateReleaseRecord(mismatchedPullRequest, today)).toContain("provenance:pull-request-mismatch");
+
+    const impossibleChronology = completed();
+    impossibleChronology.provenance.mergedAt = "2026-07-14T11:00:00.000Z";
+    impossibleChronology.production!.deployedAt = "2026-07-14T10:00:00.000Z";
+    expect(validateReleaseRecord(impossibleChronology, today)).toContain("provenance:chronology");
+  });
+
+  it("fails closed for fabricated deployment evidence and incomplete completed records", () => {
+    const fabricated = completed();
+    fabricated.production!.deploymentId = "invented";
+    fabricated.production!.deploymentCommit = "d".repeat(40);
+    expect(validateReleaseRecord(fabricated, today)).toEqual(expect.arrayContaining([
+      "production:deployment-evidence",
+      "production:commit-mismatch",
+      "production:provenance-mismatch",
+    ]));
+
+    const incomplete = completed();
+    incomplete.production = null;
+    expect(validateReleaseRecord(incomplete, today)).toContain("record:production-evidence");
+  });
+
+  it("validates reviewed and durable commits against separate Git histories", () => {
+    const record = completed();
+    const validProbe = {
+      commitExists: () => true,
+      isAncestor: (commit: string, ref: string) =>
+        (commit === record.provenance.reviewedHeadCommit && ref === `refs/remotes/origin/${record.provenance.reviewedHeadRef}`) ||
+        (commit === record.provenance.durableReleaseCommit && ref === "HEAD"),
+      refExists: () => true,
+    };
+    expect(validateReleaseProvenanceHistory(record, validProbe)).toEqual([]);
+    expect(validProbe.isAncestor(record.provenance.reviewedHeadCommit, "HEAD")).toBe(false);
+
+    expect(validateReleaseProvenanceHistory(record, { ...validProbe, commitExists: () => false })).toEqual(expect.arrayContaining([
+      "provenance:reviewed-head-not-found",
+      "provenance:durable-release-commit-not-in-main-history",
+    ]));
+    expect(validateReleaseProvenanceHistory(record, { ...validProbe, refExists: () => false })).toContain("provenance:reviewed-head-ref-not-found");
+    expect(validateReleaseProvenanceHistory(record, { ...validProbe, isAncestor: () => false })).toEqual(expect.arrayContaining([
+      "provenance:reviewed-head-ref-mismatch",
+      "provenance:durable-release-commit-not-in-main-history",
+    ]));
   });
 
   it("rejects invalid follow-up dates and invalid deployment URLs", () => {

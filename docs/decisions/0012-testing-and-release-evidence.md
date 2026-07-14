@@ -10,6 +10,8 @@ Chromium remains the normal CI browser. Cross-browser review is targeted by risk
 
 The canonical release record is `docs/releases/<date>-<phase-or-slug>.json`. A candidate record exists before merge. A small documentation-only follow-up PR completes Production deployment and scheduled-review fields after release. Automation validates and reports but cannot approve or advance gates.
 
+Schema version 2 records the reviewed branch head and source ref separately from the resulting merge commit and durable `main` release commit. Squash merges do not create a Git ancestor relationship between those commits, so completed records verify each against its own retained history boundary rather than replacing one identity with the other.
+
 ## Rationale
 
 The repository already has strong tests. The missing control is consistent selection and durable evidence. Risk unions prevent a cross-cutting change from escaping a specialist gate, while proportional review avoids imposing a utility launch checklist on internal prose.

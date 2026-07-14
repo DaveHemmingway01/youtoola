@@ -12,6 +12,7 @@ export {
   SEVERITY_POLICY,
   canAdvanceGate,
   compareGoldenValue,
+  validateReleaseProvenanceHistory,
 } from "./validation";
 
 export type {
@@ -26,6 +27,8 @@ export type {
   IndependentReview,
   PerformanceBudget,
   ProductionEvidence,
+  ProvenanceHistoryProbe,
+  ReleaseProvenance,
   ReleaseException,
   ReleaseGate,
   ReleaseRecord,

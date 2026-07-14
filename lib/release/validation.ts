@@ -1,4 +1,4 @@
-export const RELEASE_SCHEMA_VERSION = 1 as const;
+export const RELEASE_SCHEMA_VERSION = 2 as const;
 
 export const RELEASE_GATES = [
   "plan",
@@ -217,6 +217,7 @@ export interface GateEvidence {
 }
 
 export interface ProductionEvidence {
+  deployedAt: string;
   deploymentCommit: string;
   deploymentId: string;
   liveUrls: readonly string[];
@@ -226,8 +227,24 @@ export interface ProductionEvidence {
   smokeResults: readonly string[];
 }
 
+export interface ReleaseProvenance {
+  durableReleaseCommit: string | null;
+  mergeCommit: string | null;
+  mergedAt: string | null;
+  mergeMethod: "merge" | "rebase" | "squash" | null;
+  pullRequest: string;
+  reviewedDate: string;
+  reviewedHeadCommit: string;
+  reviewedHeadRef: string;
+}
+
+export interface ProvenanceHistoryProbe {
+  commitExists(commit: string): boolean;
+  isAncestor(commit: string, ref: string): boolean;
+  refExists(ref: string): boolean;
+}
+
 export interface ReleaseRecord {
-  candidateCommit: string;
   evidence: readonly EvidenceItem[];
   exceptions: readonly ReleaseException[];
   followUpDates: Readonly<Record<"immediate" | "24-hours" | "7-days" | "28-days" | "monthly" | "quarterly", string | null>>;
@@ -236,6 +253,7 @@ export interface ReleaseRecord {
   phaseOrUtility: string;
   planApproval: { approvedDate: string; approver: "Youtoola owner"; reference: string };
   production: ProductionEvidence | null;
+  provenance: ReleaseProvenance;
   pullRequest: string;
   recordId: string;
   recordVersion: typeof RELEASE_SCHEMA_VERSION;
@@ -302,6 +320,12 @@ function validDate(value: unknown): value is string {
   return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
 }
 
+function validTimestamp(value: unknown): value is string {
+  if (typeof value !== "string") return false;
+  const parsed = new Date(value);
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString() === value;
+}
+
 function reviewIsFresh(value: string, riskTags: readonly RiskTag[], now: Date) {
   const age = now.getTime() - Date.parse(`${value}T00:00:00Z`);
   const maximumDays = riskTags.some((tag) => tag === "high-consequence" || tag === "security-privacy" || tag === "analytics-consent" || tag === "commercial-activation") ? 90 : 365;
@@ -345,14 +369,23 @@ export function requiredEvidenceForRiskTags(input: unknown): { issues: string[];
 export function validateReleaseRecord(input: unknown, now = new Date()): string[] {
   const issues: string[] = [];
   if (!isRecord(input)) return ["record:invalid"];
-  exactKeys(input, ["recordVersion", "recordId", "status", "phaseOrUtility", "summary", "riskTags", "planApproval", "pullRequest", "candidateCommit", "evidence", "exceptions", "rollbackPlan", "gateEvidence", "versions", "production", "followUpDates", "independentReview"], issues, "record");
+  exactKeys(input, ["recordVersion", "recordId", "status", "phaseOrUtility", "summary", "riskTags", "planApproval", "pullRequest", "provenance", "evidence", "exceptions", "rollbackPlan", "gateEvidence", "versions", "production", "followUpDates", "independentReview"], issues, "record");
   if (input.recordVersion !== RELEASE_SCHEMA_VERSION) issues.push("record:version");
   if (!nonEmptyString(input.recordId) || !/^[a-z0-9-]+$/.test(input.recordId)) issues.push("record:id");
   if (!nonEmptyString(input.phaseOrUtility)) issues.push("record:phase-or-utility");
   if (!nonEmptyString(input.summary)) issues.push("record:summary");
   if (!(RELEASE_STATUSES as readonly unknown[]).includes(input.status)) issues.push("record:status");
-  if (!sha(input.candidateCommit)) issues.push("record:candidate-commit");
   if (!pullRequestUrl(input.pullRequest)) issues.push("record:pull-request");
+
+  const provenance = isRecord(input.provenance) ? input.provenance : null;
+  if (!provenance) issues.push("record:provenance");
+  else {
+    exactKeys(provenance, ["pullRequest", "reviewedHeadCommit", "reviewedHeadRef", "reviewedDate", "mergeMethod", "mergeCommit", "durableReleaseCommit", "mergedAt"], issues, "provenance");
+    if (!pullRequestUrl(provenance.pullRequest) || provenance.pullRequest !== input.pullRequest) issues.push("provenance:pull-request-mismatch");
+    if (!sha(provenance.reviewedHeadCommit)) issues.push("provenance:reviewed-head");
+    if (!nonEmptyString(provenance.reviewedHeadRef) || !/^[a-z0-9](?:[a-z0-9._/-]*[a-z0-9])?$/.test(provenance.reviewedHeadRef) || /(?:\.\.|\/\/|@\{)/.test(provenance.reviewedHeadRef)) issues.push("provenance:reviewed-head-ref");
+    if (!validDate(provenance.reviewedDate)) issues.push("provenance:reviewed-date");
+  }
 
   const selection = requiredEvidenceForRiskTags(input.riskTags);
   issues.push(...selection.issues);
@@ -430,17 +463,31 @@ export function validateReleaseRecord(input: unknown, now = new Date()): string[
 
   if (input.status === "candidate") {
     if (input.production !== null) issues.push("record:candidate-production-contradiction");
+    if (provenance && (provenance.mergeMethod !== null || provenance.mergeCommit !== null || provenance.durableReleaseCommit !== null || provenance.mergedAt !== null)) issues.push("provenance:candidate-merge-contradiction");
   } else if (input.status === "completed") {
+    if (provenance) {
+      if (!(provenance.mergeMethod === "merge" || provenance.mergeMethod === "rebase" || provenance.mergeMethod === "squash")) issues.push("provenance:merge-method");
+      if (!sha(provenance.reviewedHeadCommit) || provenance.reviewedHeadCommit === "pending-review") issues.push("provenance:reviewed-head");
+      if (!sha(provenance.mergeCommit) || provenance.mergeCommit === "pending-review") issues.push("provenance:merge-commit");
+      if (!sha(provenance.durableReleaseCommit) || provenance.durableReleaseCommit === "pending-review") issues.push("provenance:durable-release-commit");
+      if (provenance.mergeCommit !== provenance.durableReleaseCommit) issues.push("provenance:durable-commit-mismatch");
+      if (!validTimestamp(provenance.mergedAt)) issues.push("provenance:merged-at");
+      if (validDate(provenance.reviewedDate) && validTimestamp(provenance.mergedAt) && Date.parse(`${provenance.reviewedDate}T00:00:00Z`) > Date.parse(provenance.mergedAt)) issues.push("provenance:chronology");
+    }
     if (!isRecord(input.production)) issues.push("record:production-evidence");
     else {
-      exactKeys(input.production, ["mergeCommit", "deploymentId", "deploymentCommit", "liveUrls", "smokeResults", "rollbackDeployment", "releaseDate"], issues, "production");
+      exactKeys(input.production, ["mergeCommit", "deploymentId", "deploymentCommit", "deployedAt", "liveUrls", "smokeResults", "rollbackDeployment", "releaseDate"], issues, "production");
       if (!sha(input.production.mergeCommit) || input.production.mergeCommit === "pending-review") issues.push("production:merge-commit");
       if (!sha(input.production.deploymentCommit) || input.production.deploymentCommit === "pending-review") issues.push("production:deployment-commit");
       if (input.production.mergeCommit !== input.production.deploymentCommit) issues.push("production:commit-mismatch");
+      if (provenance && (input.production.mergeCommit !== provenance.mergeCommit || input.production.deploymentCommit !== provenance.durableReleaseCommit)) issues.push("production:provenance-mismatch");
       if (typeof input.production.deploymentId !== "string" || !/^dpl_[A-Za-z0-9]+$/.test(input.production.deploymentId) || typeof input.production.rollbackDeployment !== "string" || !/^dpl_[A-Za-z0-9]+$/.test(input.production.rollbackDeployment)) issues.push("production:deployment-evidence");
       if (!Array.isArray(input.production.liveUrls) || input.production.liveUrls.length === 0 || input.production.liveUrls.some((url) => !productionUrl(url))) issues.push("production:live-urls");
       if (!Array.isArray(input.production.smokeResults) || input.production.smokeResults.length === 0 || input.production.smokeResults.some((result) => !nonEmptyString(result))) issues.push("production:smoke-results");
       if (!validDate(input.production.releaseDate)) issues.push("production:release-date");
+      if (!validTimestamp(input.production.deployedAt)) issues.push("production:deployed-at");
+      if (provenance && validTimestamp(provenance.mergedAt) && validTimestamp(input.production.deployedAt) && Date.parse(provenance.mergedAt) > Date.parse(input.production.deployedAt)) issues.push("provenance:chronology");
+      if (validDate(input.production.releaseDate) && validTimestamp(input.production.deployedAt) && input.production.releaseDate !== input.production.deployedAt.slice(0, 10)) issues.push("production:release-date-mismatch");
     }
     if (isRecord(input.followUpDates) && !validDate(input.followUpDates.immediate)) issues.push("record:immediate-follow-up");
     if (isRecord(input.gateEvidence)) {
@@ -449,6 +496,27 @@ export function validateReleaseRecord(input: unknown, now = new Date()): string[
     }
   }
   return [...new Set(issues)].sort();
+}
+
+export function validateReleaseProvenanceHistory(input: unknown, probe: ProvenanceHistoryProbe): string[] {
+  if (!isRecord(input) || !isRecord(input.provenance)) return [];
+  const issues: string[] = [];
+  const provenance = input.provenance;
+  const reviewedHead = provenance.reviewedHeadCommit;
+  if (typeof reviewedHead === "string" && reviewedHead !== "pending-review") {
+    if (!probe.commitExists(reviewedHead)) issues.push("provenance:reviewed-head-not-found");
+    if (input.status === "candidate" && !probe.isAncestor(reviewedHead, "HEAD")) issues.push("provenance:reviewed-head-not-in-candidate-history");
+    if (input.status === "completed" && typeof provenance.reviewedHeadRef === "string") {
+      const remoteRef = `refs/remotes/origin/${provenance.reviewedHeadRef}`;
+      if (!probe.refExists(remoteRef)) issues.push("provenance:reviewed-head-ref-not-found");
+      else if (!probe.isAncestor(reviewedHead, remoteRef)) issues.push("provenance:reviewed-head-ref-mismatch");
+    }
+  }
+  if (input.status === "completed" && typeof provenance.durableReleaseCommit === "string") {
+    const durable = provenance.durableReleaseCommit;
+    if (!probe.commitExists(durable) || !probe.isAncestor(durable, "HEAD")) issues.push("provenance:durable-release-commit-not-in-main-history");
+  }
+  return issues;
 }
 
 function finiteRecord(value: unknown) {

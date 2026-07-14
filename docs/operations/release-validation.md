@@ -15,9 +15,9 @@
 
 BUILD creates a `candidate` record containing everything known before deployment. Candidate records have `production: null`; Production fields cannot be fabricated or marked complete. PLAN is owner-approved; later gates remain pending until their approval occurs.
 
-Before merge, REVIEW updates the evidence references and candidate commit. SHIP verifies the exact head, checks and rollback plan. After automatic deployment, the immediate ship report is temporary operational evidence. A documentation-only follow-up PR changes the record to `completed` and supplies matching merge/deployment commits, deployment ID, live URLs, smoke results, rollback deployment, release date and immediate follow-up date.
+Before merge, REVIEW records the reviewed branch head, retained source ref and evidence references. SHIP verifies that exact head, checks and rollback plan. After automatic deployment, the immediate ship report is temporary operational evidence. A documentation-only follow-up PR changes the record to `completed` and supplies the merge method, resulting merge commit, durable `main` release commit, matching deployment commit, deployment ID, timestamps, live URLs, smoke results, rollback deployment, release date and immediate follow-up date.
 
-Completed records fail when Production or rollback evidence is missing, deployment and merge commits differ, live URLs are invalid or immediate smoke evidence is absent.
+For a candidate record, the reviewed head must exist in the candidate history. For a completed squash merge, the reviewed head must exist in the retained source ref but is not required to be an ancestor of `main`. The durable release commit must exist in `main` history and match the merge and Production deployment commits. Completed records fail when the pull request, reviewed head, source ref, merge commit, durable commit, chronology, Production or rollback evidence is missing or inconsistent; live URLs are invalid; or immediate smoke evidence is absent.
 
 ## Preview evidence
 

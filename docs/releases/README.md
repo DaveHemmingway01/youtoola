@@ -2,9 +2,11 @@
 
 Release records are canonical JSON files named `docs/releases/<date>-<phase-or-slug>.json`. `CHANGELOG.md` remains the concise narrative summary.
 
-Records use schema version `1` and are validated by `npm run validate:release`. Risk tags are additive; evidence is the union of every selected tag. Evidence entries require an ID, `passed` or `approved` status, a durable reference and a fresh review date.
+Records use schema version `2` and are validated by `npm run validate:release`. Risk tags are additive; evidence is the union of every selected tag. Evidence entries require an ID, `passed` or `approved` status, a durable reference and a fresh review date.
 
-Candidate records contain all evidence known before merge and use `production: null`. They may use `pending` for the PR before it exists and `pending-review` for the final reviewed commit. PLAN approval and a usable rollback plan are never pending.
+Candidate records contain all evidence known before merge and use `production: null`. They may use `pending` for the PR before it exists and `pending-review` for the reviewed head before it is known. PLAN approval and a usable rollback plan are never pending.
+
+Provenance records the pull request, reviewed branch head, retained source ref and review date independently from the later merge method, merge commit, durable release commit and merge timestamp. Squash merges intentionally do not require the reviewed head to be an ancestor of `main`. Completed records instead prove that the reviewed head belongs to the retained source history and that the durable commit belongs to `main`, matches the merge result and matches the Production deployment.
 
 Completed records require:
 

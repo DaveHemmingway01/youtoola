@@ -1,5 +1,5 @@
 {
-  "recordVersion": 1,
+  "recordVersion": 2,
   "recordId": "2026-07-14-phase-9",
   "status": "completed",
   "phaseOrUtility": "Phase 9",
@@ -14,7 +14,16 @@
     "reference": "APPROVE PLAN: Youtoola Phase 9"
   },
   "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/11",
-  "candidateCommit": "52783bf36b0d5bcb737195ebe8c87d9743d9c377",
+  "provenance": {
+    "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/11",
+    "reviewedHeadCommit": "cc9fa609b7be3a7d760d706b053e1fd2ae573c22",
+    "reviewedHeadRef": "platform/release-gates",
+    "reviewedDate": "2026-07-14",
+    "mergeMethod": "squash",
+    "mergeCommit": "52783bf36b0d5bcb737195ebe8c87d9743d9c377",
+    "durableReleaseCommit": "52783bf36b0d5bcb737195ebe8c87d9743d9c377",
+    "mergedAt": "2026-07-14T21:39:39.000Z"
+  },
   "evidence": [
     {
       "id": "clean-diff",
@@ -208,13 +217,14 @@
     }
   },
   "versions": {
-    "releaseSchema": 1,
+    "releaseSchema": 2,
     "analyticsSchema": 1
   },
   "production": {
     "mergeCommit": "52783bf36b0d5bcb737195ebe8c87d9743d9c377",
     "deploymentId": "dpl_AwsJGmzxizSta9YX5tDR57LDVoYe",
     "deploymentCommit": "52783bf36b0d5bcb737195ebe8c87d9743d9c377",
+    "deployedAt": "2026-07-14T21:40:05.734Z",
     "liveUrls": [
       "https://www.youtoola.com",
       "https://www.youtoola.com/tools"
