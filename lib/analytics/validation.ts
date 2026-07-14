@@ -1,11 +1,12 @@
 import { PUBLIC_CANDIDATE_RELATIONSHIP_TYPES } from "@/lib/knowledge/relationship-semantics";
 
 import {
-  ANALYTICS_COMMON_FIELDS,
+  ANALYTICS_CALLER_COMMON_FIELDS,
   ANALYTICS_EVENT_NAMES,
   analyticsSchemaVersion,
   EVENT_FIELD_ALLOWLISTS,
   PROHIBITED_ANALYTICS_FIELDS,
+  UTILITY_ANALYTICS_ELIGIBILITY_FIELDS,
   type AnalyticsConsentState,
   type AnalyticsErrorCountBucket,
   type AnalyticsEventEnvelope,
@@ -15,6 +16,7 @@ import {
   type AnalyticsResultClassification,
   type AnalyticsTimeToResultBucket,
   type AnalyticsValidationResult,
+  type CanonicalAnalyticsContext,
   type UtilityAnalyticsEligibility,
 } from "./contracts";
 
@@ -26,8 +28,9 @@ const RELEASE_PATTERN = /^[a-f0-9]{7,64}$/;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
 const eventNames = new Set<string>(ANALYTICS_EVENT_NAMES);
-const commonFields = new Set<string>(ANALYTICS_COMMON_FIELDS);
+const commonFields = new Set<string>(ANALYTICS_CALLER_COMMON_FIELDS);
 const prohibitedFields = new Set<string>(PROHIBITED_ANALYTICS_FIELDS);
+const eligibilityFields = new Set<string>(UTILITY_ANALYTICS_ELIGIBILITY_FIELDS);
 const pageTypes = new Set<AnalyticsPageType>(["platform", "directory", "utility", "trust", "review"]);
 const consentStates = new Set<AnalyticsConsentState>([
   "unknown",
@@ -151,6 +154,9 @@ function validateEligibility(
 export function validateUtilityAnalyticsEligibility(input: unknown) {
   const issues: string[] = [];
   if (!isPlainRecord(input)) return Object.freeze(["invalid-eligibility"]);
+  if (Object.keys(input).some((field) => !eligibilityFields.has(field))) {
+    return Object.freeze(["invalid-eligibility"]);
+  }
   const arrayFields = [
     "allowedEvents",
     "allowedInteractionSources",
@@ -182,6 +188,7 @@ export function validateUtilityAnalyticsEligibility(input: unknown) {
 export function validateAnalyticsEvent(
   payload: unknown,
   eligibility: UtilityAnalyticsEligibility,
+  canonicalContext: CanonicalAnalyticsContext,
 ): AnalyticsValidationResult {
   if (validateUtilityAnalyticsEligibility(eligibility).length > 0) return rejected("ineligible-category");
   if (!isPlainRecord(payload)) return rejected("invalid-prototype");
@@ -205,15 +212,18 @@ export function validateAnalyticsEvent(
 
   const safe: Record<string, unknown> = {
     analyticsSchemaVersion,
+    categoryId: canonicalContext.categoryId,
     consentState: payload.consentState,
     environment: payload.environment,
     eventName,
     locale: payload.locale,
     pageType: payload.pageType,
+    utilityId: canonicalContext.utilityId,
+    utilitySlug: canonicalContext.utilitySlug,
   };
 
   for (const key of ["categoryId", "utilityId", "utilitySlug"] as const) {
-    if (!assignString(payload, safe, key) || safe[key] === undefined) return rejected("invalid-value");
+    if (!isIdentifier(canonicalContext[key])) return rejected("invalid-value");
   }
   for (const key of [
     "capabilityId",
@@ -227,8 +237,11 @@ export function validateAnalyticsEvent(
   ] as const) {
     if (!assignString(payload, safe, key)) return rejected("invalid-value");
   }
-  if (!assignString(payload, safe, "releaseReference", (value): value is string =>
-    isBoundedString(value) && RELEASE_PATTERN.test(value))) return rejected("invalid-value");
+  if (canonicalContext.releaseReference !== undefined) {
+    if (!isBoundedString(canonicalContext.releaseReference) ||
+      !RELEASE_PATTERN.test(canonicalContext.releaseReference)) return rejected("invalid-value");
+    safe.releaseReference = canonicalContext.releaseReference;
+  }
 
   if (payload.resultClassification !== undefined) {
     if (!resultClassifications.has(payload.resultClassification as AnalyticsResultClassification)) {
@@ -251,6 +264,11 @@ export function validateAnalyticsEvent(
   if (payload.relationshipType !== undefined) {
     if (!PUBLIC_CANDIDATE_RELATIONSHIP_TYPES.has(payload.relationshipType as never)) return rejected("invalid-value");
     safe.relationshipType = payload.relationshipType;
+  }
+
+  if (safe.targetUtilityId !== undefined &&
+    !canonicalContext.releasedTargetUtilityIds.includes(safe.targetUtilityId as string)) {
+    return rejected("ineligible-category");
   }
 
   if (!hasRequiredFields(eventName, safe)) return rejected("invalid-field");

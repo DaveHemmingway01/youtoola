@@ -50,6 +50,14 @@ export interface UtilityAnalyticsEligibility {
   ownerApprovalReference: string;
 }
 
+export interface CanonicalAnalyticsContext {
+  categoryId: string;
+  releasedTargetUtilityIds: readonly string[];
+  releaseReference?: string;
+  utilityId: string;
+  utilitySlug: string;
+}
+
 export interface AnalyticsEventEnvelope {
   analyticsSchemaVersion: typeof analyticsSchemaVersion;
   categoryId: string;
@@ -77,6 +85,32 @@ export interface AnalyticsEventEnvelope {
 }
 
 export type AnalyticsDataClassification = "public" | "operational" | "sensitive" | "prohibited";
+
+export const ANALYTICS_FIELD_CLASSIFICATIONS = Object.freeze({
+  analyticsSchemaVersion: "operational",
+  capabilityId: "operational",
+  categoryId: "public",
+  consentState: "operational",
+  destinationCategory: "operational",
+  environment: "operational",
+  errorCode: "operational",
+  errorCountBucket: "operational",
+  eventName: "operational",
+  fieldId: "operational",
+  interactionSource: "operational",
+  locale: "public",
+  nonSensitiveResultType: "operational",
+  pageType: "public",
+  placementId: "operational",
+  placementType: "operational",
+  relationshipType: "public",
+  releaseReference: "operational",
+  resultClassification: "operational",
+  targetUtilityId: "public",
+  timeToResultBucket: "operational",
+  utilityId: "public",
+  utilitySlug: "public",
+} satisfies Readonly<Record<keyof AnalyticsEventEnvelope, Extract<AnalyticsDataClassification, "public" | "operational">>>);
 
 export type AnalyticsValidationReason =
   | "accepted"
@@ -136,17 +170,25 @@ export const EVENT_FIELD_ALLOWLISTS = Object.freeze({
   lead_submit: Object.freeze(["capabilityId", "placementId", "placementType"]),
 } satisfies Record<AnalyticsEventName, readonly string[]>);
 
-export const ANALYTICS_COMMON_FIELDS = Object.freeze([
+export const ANALYTICS_CALLER_COMMON_FIELDS = Object.freeze([
   "analyticsSchemaVersion",
-  "categoryId",
   "consentState",
   "environment",
   "eventName",
   "locale",
   "pageType",
-  "releaseReference",
-  "utilityId",
-  "utilitySlug",
+] as const);
+
+export const UTILITY_ANALYTICS_ELIGIBILITY_FIELDS = Object.freeze([
+  "allowResultClassification",
+  "allowedCommercialCapabilityIds",
+  "allowedErrorCodes",
+  "allowedEvents",
+  "allowedFieldIds",
+  "allowedInteractionSources",
+  "allowedResultTypes",
+  "ownerApprovalReference",
+  "reviewedDate",
 ] as const);
 
 export const PROHIBITED_ANALYTICS_FIELDS = Object.freeze([

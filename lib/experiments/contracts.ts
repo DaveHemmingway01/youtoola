@@ -1,10 +1,20 @@
 export const EXPERIMENT_STATUSES = Object.freeze(["draft", "approved-disabled", "active", "stopped"] as const);
 export type ExperimentStatus = (typeof EXPERIMENT_STATUSES)[number];
 
+export const EXPERIMENT_SUBJECTS = Object.freeze([
+  "copy",
+  "layout",
+  "related-tool-ordering",
+  "discovery-wording",
+  "commercial-placement-wording",
+  "non-critical-default-presentation",
+] as const);
+export type ExperimentSubject = (typeof EXPERIMENT_SUBJECTS)[number];
+
 export interface ExperimentDefinition {
   id: `experiment:${string}`;
   hypothesis: string;
-  subject: "discovery" | "utility-completion" | "commercial-placement";
+  subject: ExperimentSubject;
   primaryMetric: string;
   guardrailMetrics: readonly string[];
   owner: "Youtoola owner";
@@ -69,7 +79,7 @@ const fields = new Set([
   "variants",
 ]);
 const statuses = new Set<string>(EXPERIMENT_STATUSES);
-const subjects = new Set<string>(["discovery", "utility-completion", "commercial-placement"]);
+const subjects = new Set<string>(EXPERIMENT_SUBJECTS);
 export const REQUIRED_EXPERIMENT_STOP_CONDITIONS = Object.freeze([
   "calculation-discrepancy",
   "sensitive-data-exposure",
@@ -77,8 +87,8 @@ export const REQUIRED_EXPERIMENT_STOP_CONDITIONS = Object.freeze([
   "consent-failure",
   "security-regression",
   "broken-free-result",
-  "serious-accessibility-defect",
-  "seo-inconsistency",
+  "serious-or-critical-accessibility-defect",
+  "canonical-robots-sitemap-schema-inconsistency",
   "material-third-party-failure",
   "material-performance-failure",
 ] as const);

@@ -107,14 +107,14 @@ test("keeps the Phase 8 inspector local, ephemeral, and provider-free", async ({
     session: JSON.stringify(sessionStorage),
   }));
 
-  await page.getByRole("button", { name: "Inspect valid event" }).click();
-  await expect(page.getByText(/Valid event: accepted/)).toBeVisible();
-  await page.getByRole("button", { name: "Inspect sensitive payload" }).click();
-  await expect(page.getByText(/Sensitive payload: dropped: prohibited-field/)).toBeVisible();
-  await page.getByRole("button", { name: "Inspect unknown parameter" }).click();
-  await expect(page.getByText(/Unknown parameter: dropped: unknown-field/)).toBeVisible();
-  await page.getByRole("button", { name: "Clear in-memory list" }).click();
-  await expect(page.getByText("No inspection results.")).toBeVisible();
+  await page.getByRole("button", { name: "Valid event" }).click();
+  await expect(page.getByText(/Valid: accepted/)).toBeVisible();
+  await page.getByRole("button", { name: "Sensitive" }).click();
+  await expect(page.getByText(/Sensitive: dropped: prohibited-field/)).toBeVisible();
+  await page.getByRole("button", { name: "Unknown field" }).click();
+  await expect(page.getByText(/Unknown: dropped: unknown-field/)).toBeVisible();
+  await page.getByRole("button", { name: "Clear" }).click();
+  await expect(page.getByText("No results.")).toBeVisible();
 
   await expect(page.getByRole("link", { name: /commission/i })).toHaveCount(0);
   await expect(page.locator("form").filter({ hasText: "Optional lead position" })).toHaveCount(0);

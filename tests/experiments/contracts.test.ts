@@ -21,7 +21,7 @@ const experiment: ExperimentDefinition = {
   startCriteria: ["Owner approval and all baseline checks passed."],
   status: "approved-disabled",
   stopConditions: REQUIRED_EXPERIMENT_STOP_CONDITIONS,
-  subject: "discovery",
+  subject: "copy",
   variants: [{ allocationPercent: 50, id: "control" }, { allocationPercent: 50, id: "clearer-copy" }],
 };
 
@@ -33,6 +33,17 @@ describe("experiment governance validation", () => {
   it("rejects forbidden subjects and calculation or SEO mutation fields", () => {
     expect(validateExperimentDefinition({ ...experiment, subject: "formula", formulaVersion: 2 })).toEqual(expect.arrayContaining(["invalid-subject", "unknown-field"]));
     expect(validateExperimentDefinition({ ...experiment, canonicalUrl: "https://example.com" })).toContain("unknown-field");
+  });
+
+  it.each([
+    "copy",
+    "layout",
+    "related-tool-ordering",
+    "discovery-wording",
+    "commercial-placement-wording",
+    "non-critical-default-presentation",
+  ] as const)("accepts the approved %s subject", (subject) => {
+    expect(validateExperimentDefinition({ ...experiment, subject })).toEqual([]);
   });
 
   it("requires guardrails, approval, rollback, allocation, metrics and stop conditions", () => {

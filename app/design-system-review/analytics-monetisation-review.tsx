@@ -3,78 +3,76 @@
 import { useState } from "react";
 
 import { Button } from "@/components/ui";
-import { analyticsSchemaVersion, type AnalyticsEventName, type UtilityAnalyticsEligibility } from "@/lib/analytics/contracts";
-import { isAnalyticsConsentGranted, isAnalyticsEnvironmentEligible } from "@/lib/analytics/runtime";
+import { analyticsSchemaVersion, type UtilityAnalyticsEligibility } from "@/lib/analytics/contracts";
 import { validateAnalyticsEvent } from "@/lib/analytics/validation";
 
 const eligibility = Object.freeze({
-  allowResultClassification: true,
+  allowResultClassification: false,
   allowedCommercialCapabilityIds: [],
-  allowedErrorCodes: ["required"],
+  allowedErrorCodes: [],
   allowedEvents: ["tool_complete"],
-  allowedFieldIds: ["distance"],
+  allowedFieldIds: [],
   allowedInteractionSources: [],
-  allowedResultTypes: ["illustrative-total"],
-  ownerApprovalReference: "phase-8-review-inspector",
+  allowedResultTypes: [],
+  ownerApprovalReference: "r",
   reviewedDate: "2026-07-14",
 } satisfies UtilityAnalyticsEligibility);
 
 const baseEvent = Object.freeze({
   analyticsSchemaVersion,
-  categoryId: "review",
   consentState: "analytics-granted",
   environment: "production",
-  eventName: "tool_complete" as AnalyticsEventName,
+  eventName: "tool_complete",
   locale: "en",
-  nonSensitiveResultType: "illustrative-total",
   pageType: "review",
-  resultClassification: "estimate",
-  utilityId: "review-fixture",
-  utilitySlug: "review-fixture",
 });
 
-type InspectorItem = Readonly<{ id: number; label: string; outcome: string }>;
+const canonicalContext = Object.freeze({
+  categoryId: "r",
+  releasedTargetUtilityIds: [],
+  utilityId: "r",
+  utilitySlug: "r",
+});
+
+type InspectorItem = readonly [label: string, outcome: string];
 
 export function AnalyticsMonetisationReview() {
   const [items, setItems] = useState<readonly InspectorItem[]>([]);
 
   function inspect(label: string, payload: unknown) {
-    const result = validateAnalyticsEvent(payload, eligibility);
+    const result = validateAnalyticsEvent(payload, eligibility, canonicalContext);
     setItems((current) => [
       ...current,
-      { id: current.length + 1, label, outcome: result.ok ? "accepted" : `dropped: ${result.reason}` },
+      [label, result.ok ? "accepted" : `dropped: ${result.reason}`],
     ]);
   }
 
   return (
     <section className="analytics-review" aria-labelledby="analytics-review-title">
-      <h2 id="analytics-review-title">Analytics contract inspector</h2>
-      <p>
-        Fixed examples. No provider, network, storage, input, or Production route.
-      </p>
+      <h2 id="analytics-review-title">Event inspector</h2>
       <div className="control-row">
-        <Button onClick={() => inspect("Valid event", baseEvent)}>Inspect valid event</Button>
+        <Button onClick={() => inspect("Valid", baseEvent)}>Valid event</Button>
         <Button
           variant="secondary"
-          onClick={() => inspect("Sensitive payload", { ...baseEvent, rawInput: "redacted-by-contract" })}
+          onClick={() => inspect("Sensitive", { ...baseEvent, rawInput: "blocked" })}
         >
-          Inspect sensitive payload
+          Sensitive
         </Button>
         <Button
           variant="secondary"
-          onClick={() => inspect("Unknown parameter", { ...baseEvent, callerParameter: "not-allowed" })}
+          onClick={() => inspect("Unknown", { ...baseEvent, callerParameter: "blocked" })}
         >
-          Inspect unknown parameter
+          Unknown field
         </Button>
-        <Button variant="quiet" onClick={() => setItems([])}>Clear in-memory list</Button>
+        <Button variant="quiet" onClick={() => setItems([])}>Clear</Button>
       </div>
-      <p className="analytics-review__decision">
-        Preview environment: {isAnalyticsEnvironmentEligible("preview") ? "allowed" : "environment-blocked"}. Unknown consent: {isAnalyticsConsentGranted("unknown") ? "allowed" : "consent-blocked"}.
+      <p>
+        Preview blocked. Consent blocked.
       </p>
-      <div aria-live="polite" aria-atomic="false">
-        {items.length === 0 ? <p>No inspection results.</p> : (
+      <div aria-live="polite">
+        {items.length === 0 ? <p>No results.</p> : (
           <ol className="analytics-review__list">
-            {items.map((item) => <li key={item.id}><strong>{item.label}:</strong> {item.outcome}</li>)}
+            {items.map(([label, outcome], index) => <li key={index}>{label}: {outcome}</li>)}
           </ol>
         )}
       </div>

@@ -98,14 +98,14 @@ describe("Phase 8 review-only surfaces", () => {
   it("shows accepted and rejected fixed analytics cases and clears ephemeral results", async () => {
     const user = userEvent.setup();
     render(<AnalyticsMonetisationReview />);
-    await user.click(screen.getByRole("button", { name: "Inspect valid event" }));
-    await user.click(screen.getByRole("button", { name: "Inspect sensitive payload" }));
-    await user.click(screen.getByRole("button", { name: "Inspect unknown parameter" }));
-    expect(screen.getByText(/Valid event:/).parentElement?.textContent).toContain("accepted");
-    expect(screen.getByText(/Sensitive payload:/).parentElement?.textContent).toContain("prohibited-field");
-    expect(screen.getByText(/Unknown parameter:/).parentElement?.textContent).toContain("unknown-field");
-    await user.click(screen.getByRole("button", { name: "Clear in-memory list" }));
-    expect(screen.getByText("No inspection results.")).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Valid event" }));
+    await user.click(screen.getByRole("button", { name: "Sensitive" }));
+    await user.click(screen.getByRole("button", { name: "Unknown field" }));
+    expect(screen.getByText(/Valid:/).parentElement?.textContent).toContain("accepted");
+    expect(screen.getByText(/Sensitive:/).parentElement?.textContent).toContain("prohibited-field");
+    expect(screen.getByText(/Unknown:/).parentElement?.textContent).toContain("unknown-field");
+    await user.click(screen.getByRole("button", { name: "Clear" }));
+    expect(screen.getByText("No results.")).toBeTruthy();
   });
 
   it("renders commercial examples as inert disclosure-only content", () => {

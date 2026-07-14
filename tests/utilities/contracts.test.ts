@@ -15,7 +15,16 @@ describe("utility framework boundaries", () => {
     expect(PROHIBITED_ANALYTICS_FIELDS).toEqual(
       expect.arrayContaining(["rawInput", "exactResult", "email", "personalData"]),
     );
-    expect(validateAnalyticsEvent({ eventName: "tool_complete", rawInput: "private" }, fuelTripFrameworkFixture.analyticsEligibility)).toEqual({ ok: false, reason: "prohibited-field" });
+    expect(validateAnalyticsEvent(
+      { eventName: "tool_complete", rawInput: "private" },
+      fuelTripFrameworkFixture.analyticsEligibility,
+      {
+        categoryId: "travel-mobility",
+        releasedTargetUtilityIds: [],
+        utilityId: "fuel-trip-calculator",
+        utilitySlug: "fuel-trip-calculator",
+      },
+    )).toEqual({ ok: false, reason: "prohibited-field" });
   });
 
   it("retains result classification and normalized values outside presentation", () => {
