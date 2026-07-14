@@ -68,3 +68,11 @@ Analytics, experiment and commercial contracts use existing TypeScript, React an
 Phase 7 adds no package. Native Next.js metadata routes, repository-owned TypeScript contracts, deterministic JSON serialization, Vitest and Playwright satisfy canonical, metadata, sitemap, structured-data and trust-page requirements.
 
 An SEO framework, schema package, CMS, metadata service, external validation API or AI content generator would add maintenance or network coupling without solving a demonstrated requirement. Phase 7 adds no client dependency, paid service, credential or Production integration.
+
+## Phase 9 dependency decision
+
+Phase 9 adds no package or lockfile change. Release contracts and validators use TypeScript and Node.js; contract tests use Vitest; browser, accessibility, screenshot and trace evidence use the existing Playwright and axe installations; CI evidence uses GitHub Actions and the existing Vercel integration.
+
+No test-management platform, visual-regression SaaS, release-management service, external security scanner or cloud-browser service is justified. The repository remains small enough to run the full suite. GitHub failure artifacts are retained for 14 days and add no Production code or provider dependency.
+
+Every future dependency review must record purpose, alternatives, runtime or development classification, bundle effect, licence, maintenance status, transitive risk, update policy, necessity and removal path.
