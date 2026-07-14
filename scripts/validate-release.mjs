@@ -5,7 +5,7 @@ import { pathToFileURL } from "node:url";
 
 const root = resolve(import.meta.dirname, "..");
 const validationUrl = pathToFileURL(join(root, "lib/release/validation.ts")).href;
-const { validateGoldenVectorDocument, validateReleaseRecord } = await import(validationUrl);
+const { validateGoldenVectorDocument, validateReleaseProvenanceHistory, validateReleaseRecord } = await import(validationUrl);
 
 function valueFor(name) {
   const equals = process.argv.find((argument) => argument.startsWith(`${name}=`));
@@ -40,18 +40,24 @@ function validateRecords() {
   for (const path of paths) {
     const record = readJson(path);
     const issues = validateReleaseRecord(record);
-    if (typeof record.candidateCommit === "string" && record.candidateCommit !== "pending-review") {
-      try {
-        execFileSync("git", ["cat-file", "-e", `${record.candidateCommit}^{commit}`], { cwd: root, stdio: "ignore" });
-        execFileSync("git", ["merge-base", "--is-ancestor", record.candidateCommit, "HEAD"], { cwd: root, stdio: "ignore" });
-      } catch {
-        issues.push("record:candidate-commit-not-in-history");
-      }
-    }
+    issues.push(...validateReleaseProvenanceHistory(record, {
+      commitExists: (commit) => gitSucceeds(["cat-file", "-e", `${commit}^{commit}`]),
+      isAncestor: (commit, ref) => gitSucceeds(["merge-base", "--is-ancestor", commit, ref]),
+      refExists: (ref) => gitSucceeds(["show-ref", "--verify", "--quiet", ref]),
+    }));
     if (issues.length) failures.push(`${path}:\n  - ${issues.join("\n  - ")}`);
   }
   if (failures.length) throw new Error(failures.join("\n"));
   return `${paths.length} release record${paths.length === 1 ? "" : "s"}`;
+}
+
+function gitSucceeds(args) {
+  try {
+    execFileSync("git", args, { cwd: root, stdio: "ignore" });
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function validateUtility() {

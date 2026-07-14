@@ -8,6 +8,8 @@ Youtoola uses six sequential gates: PLAN, BUILD, REVIEW, SHIP, POST-DEPLOYMENT a
 
 PLAN defines scope, additive risk tags, methods, sources, evidence and rollback. BUILD produces the smallest approved implementation, tests and candidate release record. REVIEW inspects the complete diff and risk-selected Preview evidence. SHIP verifies the exact approved head, checks and rollback before merge. POST-DEPLOYMENT verifies the Git-integrated Production deployment. POST-LAUNCH REVIEW evaluates the scheduled evidence and assigns owner-reviewed actions.
 
+Release provenance distinguishes the reviewed branch head from the merge result and the durable release commit. Candidate records prove that the reviewed head is in the candidate branch history. Completed squash-merge records retain that reviewed head and source ref without requiring it to be an ancestor of `main`; they separately require the squash merge and durable release commit to match the Production deployment and exist in `main` history. The retained source ref, pull-request identity, timestamps and deployment evidence fail closed when missing or inconsistent.
+
 ## Additive risk and evidence
 
 A change carries one or more approved tags. Evidence requirements are the union of every tag, plus the platform baseline. Unknown or duplicate tags fail closed. `documentation-only` cannot be combined with a runtime or public-behavior tag. `high-consequence` requires `calculation-change`.
