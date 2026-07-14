@@ -50,8 +50,7 @@ export function AnalyticsMonetisationReview() {
     <section className="analytics-review" aria-labelledby="analytics-review-title">
       <h2 id="analytics-review-title">Analytics contract inspector</h2>
       <p>
-        Fixed, in-memory contract examples only. This inspector has no provider, network transport,
-        storage, arbitrary input, or Production route.
+        Fixed examples. No provider, network, storage, input, or Production route.
       </p>
       <div className="control-row">
         <Button onClick={() => inspect("Valid event", baseEvent)}>Inspect valid event</Button>
