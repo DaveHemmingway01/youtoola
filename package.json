@@ -19,6 +19,7 @@
     "registry:validate": "node scripts/validate-utility-registry.mjs",
     "knowledge:validate": "node scripts/validate-knowledge-layer.mjs",
     "seo:validate": "vitest run tests/seo lib/crawler-policy.test.ts",
+    "architecture:validate": "vitest run tests/analytics tests/experiments tests/monetisation",
     "brand:generate": "node scripts/brand/generate-raster-candidates.mjs",
     "brand:preview": "node scripts/brand/render-preview.mjs",
     "brand:validate": "node scripts/brand/validate-assets.mjs",
@@ -28,7 +29,7 @@
     "brand:application-icons:generate": "node scripts/brand/generate-application-icon-candidates.mjs",
     "brand:application-icons:preview": "node scripts/brand/render-application-icon-preview.mjs",
     "brand:application-icons:validate": "node scripts/brand/validate-application-icon-assets.mjs --write-report",
-    "check": "npm run lint && npm run typecheck && npm run registry:validate && npm run knowledge:validate && npm run test && npm run build"
+    "check": "npm run lint && npm run typecheck && npm run registry:validate && npm run knowledge:validate && npm run architecture:validate && npm run test && npm run build"
   },
   "dependencies": {
     "next": "16.2.10",

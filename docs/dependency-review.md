@@ -59,6 +59,10 @@ Phase 6 adds no package. Explicit React forms, handwritten TypeScript validation
 
 Zod, form libraries, decimal libraries, date libraries, sharing/export libraries and analytics providers are not justified without a specific utility requirement. This adds no runtime service, licence, bundle, lockfile or paid operating cost.
 
+## Phase 8
+
+Analytics, experiment and commercial contracts use existing TypeScript, React and Vitest tooling. No provider SDK, tag manager, consent platform, experiment service, storage library, commercial integration, runtime dependency or paid service is added. GA4 and all provider activation remain deferred to Phase 11.
+
 ## Phase 7 dependency decision
 
 Phase 7 adds no package. Native Next.js metadata routes, repository-owned TypeScript contracts, deterministic JSON serialization, Vitest and Playwright satisfy canonical, metadata, sitemap, structured-data and trust-page requirements.

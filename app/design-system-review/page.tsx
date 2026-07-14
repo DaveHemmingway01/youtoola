@@ -26,6 +26,13 @@ import { isDesignSystemReviewAvailable } from "@/lib/design-system-review";
 
 import { ReviewForm } from "./review-form";
 import { UtilityFrameworkExample } from "./utility-framework-example";
+import { AnalyticsMonetisationReview } from "./analytics-monetisation-review";
+import {
+  InertAdvertisingReview,
+  InertAffiliateReview,
+  InertLeadReview,
+  InertPremiumReview,
+} from "@/components/monetisation/review-components";
 
 export const dynamic = "force-dynamic";
 
@@ -104,6 +111,17 @@ export default function DesignSystemReviewPage() {
       <Disclosure summary="How this pattern works">
         Clear assumptions and methodology support trust without delaying the primary result.
       </Disclosure>
+
+      <AnalyticsMonetisationReview />
+
+      <h2>Inactive commercial capability reviews</h2>
+      <p>These review-only examples contain no provider, destination, offer, form, or activation.</p>
+      <div className="review-grid">
+        <InertAdvertisingReview />
+        <InertAffiliateReview />
+        <InertPremiumReview />
+        <InertLeadReview />
+      </div>
     </div>
   );
 }

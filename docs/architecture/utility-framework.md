@@ -58,6 +58,8 @@ Methodology contracts include formula steps, assumptions, limitations, examples,
 
 ## Related, commercial and analytics boundaries
 
+Phase 8 replaces the loose event list with the canonical utility eligibility record: approved events, interaction sources, error codes, stable field IDs, non-sensitive result types, result-classification permission, commercial capability IDs, review date, and owner approval reference. Slug, category, canonical URL, and lifecycle remain registry and public Knowledge Layer truth. Analytics, commercial composition, and experiment assignment remain outside calculation engines, validation, result models, and registry identity.
+
 Related tools are composed through public-safe Phase 4 and Phase 5 selectors. No released relationship means no card, placeholder or unavailable link.
 
 Commercial capabilities are advertising, affiliate, premium and lead. Unconfigured Production output is absent. The review surface may show inert labelled examples after free value.

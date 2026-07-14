@@ -1,4 +1,6 @@
 import type { SourceAuthorityClass, SourceEntityId } from "@/lib/knowledge/types";
+import type { UtilityAnalyticsEligibility } from "@/lib/analytics/contracts";
+import type { CommercialCapabilityId } from "@/lib/monetisation/contracts";
 
 export type UtilityRiskProfile =
   | "standard"
@@ -65,13 +67,11 @@ export interface UtilityMethodology {
   workedExamples: readonly string[];
 }
 
-export type CommercialCapability = "advertising" | "affiliate" | "premium" | "lead";
-
 export interface UtilityDefinition {
-  analyticsEligibility: readonly UtilityAnalyticsEventName[];
+  analyticsEligibility: UtilityAnalyticsEligibility;
   assumptions: readonly string[];
   calculationVersion: number;
-  commercialEligibility: readonly CommercialCapability[];
+  commercialEligibility: readonly CommercialCapabilityId[];
   contentVersion: number;
   inputs: readonly UtilityInputDefinition[];
   methodology: UtilityMethodology;
@@ -128,16 +128,3 @@ export interface UtilityCalculationError {
   code: string;
   message: string;
 }
-
-export type UtilityAnalyticsEventName =
-  | "tool_view"
-  | "tool_start"
-  | "tool_validation_error"
-  | "tool_complete"
-  | "result_share"
-  | "result_export"
-  | "related_tool_click"
-  | "affiliate_click"
-  | "premium_click"
-  | "lead_start"
-  | "lead_submit";

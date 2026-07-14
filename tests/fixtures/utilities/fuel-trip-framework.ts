@@ -1,7 +1,17 @@
 import type { UtilityDefinition } from "@/lib/utilities/contracts";
 
 export const fuelTripFrameworkFixture = {
-  analyticsEligibility: [],
+  analyticsEligibility: {
+    allowResultClassification: false,
+    allowedCommercialCapabilityIds: [],
+    allowedErrorCodes: [],
+    allowedEvents: [],
+    allowedFieldIds: [],
+    allowedInteractionSources: [],
+    allowedResultTypes: [],
+    ownerApprovalReference: "test-fixture-only",
+    reviewedDate: "2026-07-14",
+  },
   assumptions: [],
   calculationVersion: 1,
   commercialEligibility: [],

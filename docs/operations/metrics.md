@@ -16,14 +16,14 @@ Metrics describe aggregate platform behaviour. Sensitive utility inputs are neve
 - validation-failure category
 - `tool_complete`
 - time to first useful result
-- result copy, share, and export
+- `result_copy`, `result_share`, and `result_export`
 - repeat visit rate
 - related-tool and journey-continuation rate
 
 ## Commercial outcomes
 
 - advertising revenue per thousand sessions
-- affiliate click-through and attributed conversion
+- affiliate clicks per completed use and attributed conversion; do not call this click-through rate without a reliable impression denominator
 - lead start, submission, qualification, and attributed value
 - premium click and conversion
 - revenue per session

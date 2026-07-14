@@ -36,6 +36,8 @@ jobs:
         run: npm run registry:validate
       - name: Validate repository knowledge layer
         run: npm run knowledge:validate
+      - name: Validate analytics, experiment and monetisation architecture
+        run: npm run architecture:validate
       - name: Run unit tests
         run: npm run test
       - name: Build

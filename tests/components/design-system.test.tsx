@@ -8,6 +8,8 @@ import { Field, NumberInput, RadioGroup, Toggle } from "@/components/forms";
 import { MobileNavigation } from "@/components/mobile-navigation";
 import { ResultPanel } from "@/components/tool-patterns";
 import { IconButton } from "@/components/ui";
+import { AnalyticsMonetisationReview } from "@/app/design-system-review/analytics-monetisation-review";
+import { InertAdvertisingReview, InertAffiliateReview, InertLeadReview, InertPremiumReview } from "@/components/monetisation/review-components";
 import {
   DISABLED_DESIGN_SYSTEM_REVIEW_PATH,
   getDesignSystemReviewRewrites,
@@ -89,5 +91,27 @@ describe("review route policy", () => {
         destination: DISABLED_DESIGN_SYSTEM_REVIEW_PATH,
       },
     ]);
+  });
+});
+
+describe("Phase 8 review-only surfaces", () => {
+  it("shows accepted and rejected fixed analytics cases and clears ephemeral results", async () => {
+    const user = userEvent.setup();
+    render(<AnalyticsMonetisationReview />);
+    await user.click(screen.getByRole("button", { name: "Valid event" }));
+    await user.click(screen.getByRole("button", { name: "Sensitive" }));
+    await user.click(screen.getByRole("button", { name: "Unknown field" }));
+    expect(screen.getByText(/Valid:/).parentElement?.textContent).toContain("accepted");
+    expect(screen.getByText(/Sensitive:/).parentElement?.textContent).toContain("prohibited-field");
+    expect(screen.getByText(/Unknown:/).parentElement?.textContent).toContain("unknown-field");
+    await user.click(screen.getByRole("button", { name: "Clear" }));
+    expect(screen.getByText("No results.")).toBeTruthy();
+  });
+
+  it("renders commercial examples as inert disclosure-only content", () => {
+    render(<><InertAdvertisingReview /><InertAffiliateReview /><InertPremiumReview /><InertLeadReview /></>);
+    expect(screen.queryByRole("link")).toBeNull();
+    expect(screen.queryByRole("form")).toBeNull();
+    expect(screen.getAllByText("Review-only · inactive")).toHaveLength(4);
   });
 });
