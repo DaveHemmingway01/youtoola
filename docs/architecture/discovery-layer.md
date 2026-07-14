@@ -34,7 +34,7 @@ The returned model is immutable and exposes only the fields needed for public di
 | `/journeys/<journey-id>` | No route until its threshold and content approval pass | Only when public |
 | `/search` | Prohibited; future search stays inside `/tools` | Never |
 
-At the Phase 5 zero-inventory state, the sitemap contains exactly `https://www.youtoola.com` and `https://www.youtoola.com/tools`.
+At the Phase 5 zero-inventory state, the discovery model contributes exactly `https://www.youtoola.com` and `https://www.youtoola.com/tools`. Later SEO phases may compose approved trust pages without weakening released-only discovery.
 
 ## Rendering and performance
 

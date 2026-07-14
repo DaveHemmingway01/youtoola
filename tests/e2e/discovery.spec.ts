@@ -40,7 +40,7 @@ test("keeps the permanent tools directory useful and empty at zero releases", as
 
   expect(response?.status()).toBe(200);
   expect(response?.headers()["x-robots-tag"]).toBe("noindex, nofollow");
-  await expect(page).toHaveTitle("Tools | Youtoola");
+  await expect(page).toHaveTitle("Practical Online Tools | Youtoola");
   await expect(
     page.getByRole("heading", {
       level: 1,
@@ -63,9 +63,13 @@ test("keeps the permanent tools directory useful and empty at zero releases", as
 test("publishes only the approved discovery URLs in the sitemap", async ({ request }) => {
   const sitemap = await (await request.get("/sitemap.xml")).text();
 
-  expect(sitemap.match(/<loc>/g)).toHaveLength(2);
+  expect(sitemap.match(/<loc>/g)).toHaveLength(5);
   expect(sitemap).toContain("<loc>https://www.youtoola.com</loc>");
   expect(sitemap).toContain("<loc>https://www.youtoola.com/tools</loc>");
+  expect(sitemap).toContain("<loc>https://www.youtoola.com/about</loc>");
+  expect(sitemap).toContain("<loc>https://www.youtoola.com/methodology</loc>");
+  expect(sitemap).toContain("<loc>https://www.youtoola.com/privacy</loc>");
+  expect(sitemap).not.toContain("accessibility");
   expect(sitemap).not.toContain("fuel-trip-calculator");
   expect(sitemap).not.toContain("categories/");
   expect(sitemap).not.toContain("journeys/");
@@ -78,6 +82,9 @@ for (const path of [
   "/categories/travel-mobility",
   "/journeys/road-trip-planning",
   "/search",
+  "/accessibility",
+  "/contact",
+  "/editorial-policy",
 ]) {
   test(`${path} remains unavailable`, async ({ request }) => {
     expect((await request.get(path)).status()).toBe(404);

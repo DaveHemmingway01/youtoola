@@ -32,6 +32,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Design system review",
   robots: { index: false, follow: false },
+  alternates: { canonical: "https://www.youtoola.com" },
 };
 
 export default function DesignSystemReviewPage() {

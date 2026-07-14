@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
-import { getPublicDiscoveryUrls } from "@/lib/discovery";
+import { createPublicSitemap } from "@/lib/seo/sitemap";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return getPublicDiscoveryUrls().map((url) => ({ url }));
+  return createPublicSitemap();
 }

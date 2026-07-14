@@ -1,20 +1,18 @@
 import type { Metadata } from "next";
 
+import { JsonLd } from "@/components/seo/json-ld";
 import { Card, TextLink } from "@/components/ui";
+import { PLATFORM_PAGE_DEFINITIONS, PLATFORM_SEO } from "@/data/seo/platform";
 import { PUBLIC_DISCOVERY_ROUTES } from "@/lib/discovery";
+import { createPageMetadata } from "@/lib/seo/metadata";
+import { createHomeStructuredData } from "@/lib/seo/structured-data";
 
 import styles from "./discovery.module.css";
 
-export const metadata: Metadata = {
-  title: {
-    absolute: "Youtoola — Useful tools. No account. No nonsense.",
-  },
-  description:
-    "Youtoola brings practical, focused online tools together in one trustworthy place, without requiring an account for the core experience.",
-  alternates: {
-    canonical: "/",
-  },
-};
+export const metadata: Metadata = createPageMetadata(
+  PLATFORM_PAGE_DEFINITIONS.home,
+  { absoluteTitle: true },
+);
 
 const workingPrinciples = [
   {
@@ -41,12 +39,12 @@ const trustPrinciples = [
 export default function HomePage() {
   return (
     <div className={styles.page}>
+      <JsonLd data={createHomeStructuredData()} id="youtoola-entities" />
       <section className={styles.hero} aria-labelledby="home-heading">
         <p className="eyebrow">Practical online utilities</p>
         <h1 id="home-heading">Useful tools. No account. No nonsense.</h1>
         <p className="lede">
-          Youtoola is one place for practical online tools that help with everyday
-          decisions, calculations, and tasks.
+          {PLATFORM_SEO.extendedDescription}
         </p>
         <TextLink href={PUBLIC_DISCOVERY_ROUTES.tools}>Browse the tool directory</TextLink>
       </section>

@@ -14,6 +14,7 @@ import {
 } from "@/lib/registry";
 import type { UtilityRegistryEntry } from "@/lib/registry/types";
 import { validateRegistry } from "@/lib/registry/validation";
+import { RESERVED_ROOT_SLUGS } from "@/lib/registry/reserved-routes";
 
 function validate(testTools: readonly UtilityRegistryEntry[]) {
   return validateRegistry({ tools: testTools, categories, journeys });
@@ -72,6 +73,20 @@ describe("Canonical utility registry", () => {
       canonicalUrl: "https://www.youtoola.com/robots.txt" as const,
     };
     expect(validate([invalid])).toContain("Reserved route collision: robots.txt.");
+    expect([...RESERVED_ROOT_SLUGS]).toEqual(
+      expect.arrayContaining([
+        "tools",
+        "about",
+        "methodology",
+        "privacy",
+        "accessibility",
+        "editorial-policy",
+        "contact",
+        "categories",
+        "journeys",
+        "search",
+      ]),
+    );
   });
 
   it("rejects unknown category and journey references", () => {

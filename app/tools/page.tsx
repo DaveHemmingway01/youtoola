@@ -1,36 +1,37 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { JsonLd } from "@/components/seo/json-ld";
 import { Breadcrumbs } from "@/components/site-shell";
 import { Card, EmptyState, TextLink } from "@/components/ui";
+import { PLATFORM_PAGE_DEFINITIONS } from "@/data/seo/platform";
 import {
   getPublicDiscoveryTools,
   PUBLIC_DISCOVERY_ROUTES,
 } from "@/lib/discovery";
+import { createPageMetadata } from "@/lib/seo/metadata";
+import {
+  createBreadcrumbItems,
+  createBreadcrumbStructuredData,
+} from "@/lib/seo/structured-data";
 
 import styles from "../discovery.module.css";
 
-export const metadata: Metadata = {
-  title: "Tools",
-  description:
-    "Browse practical Youtoola tools that have completed review and are ready for public use.",
-  alternates: {
-    canonical: "/tools",
-  },
-};
+const breadcrumbs = createBreadcrumbItems("Tools", "/tools");
+
+export const metadata: Metadata = createPageMetadata(PLATFORM_PAGE_DEFINITIONS.tools);
 
 export default function ToolsPage() {
   const tools = getPublicDiscoveryTools();
 
   return (
     <div className={styles.page}>
+      <JsonLd
+        data={createBreadcrumbStructuredData(breadcrumbs)}
+        id="tools-breadcrumbs"
+      />
       <section className={styles.directoryHeader} aria-labelledby="tools-heading">
-        <Breadcrumbs
-          items={[
-            { href: PUBLIC_DISCOVERY_ROUTES.home, label: "Home" },
-            { label: "Tools" },
-          ]}
-        />
+        <Breadcrumbs items={breadcrumbs} />
         <p className="eyebrow">Youtoola directory</p>
         <h1 id="tools-heading">Practical tools, reviewed before release</h1>
         <p className="lede">

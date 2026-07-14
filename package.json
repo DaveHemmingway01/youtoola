@@ -18,6 +18,7 @@
     "utility:read:live": "node scripts/read-youtoola-utility.mjs --tab \"Travel & Mobility\" --row 5 --expect-name \"Fuel Trip Calculator\"",
     "registry:validate": "node scripts/validate-utility-registry.mjs",
     "knowledge:validate": "node scripts/validate-knowledge-layer.mjs",
+    "seo:validate": "vitest run tests/seo lib/crawler-policy.test.ts",
     "brand:generate": "node scripts/brand/generate-raster-candidates.mjs",
     "brand:preview": "node scripts/brand/render-preview.mjs",
     "brand:validate": "node scripts/brand/validate-assets.mjs",
