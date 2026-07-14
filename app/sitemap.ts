@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
-import { CANONICAL_ORIGIN } from "@/lib/environment";
+import { getPublicDiscoveryUrls } from "@/lib/discovery";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [{ url: CANONICAL_ORIGIN }];
+  return getPublicDiscoveryUrls().map((url) => ({ url }));
 }
