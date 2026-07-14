@@ -1,7 +1,7 @@
 {
   "recordVersion": 1,
   "recordId": "2026-07-14-phase-9",
-  "status": "candidate",
+  "status": "completed",
   "phaseOrUtility": "Phase 9",
   "summary": "Testing, release-gate and durable evidence architecture with no public behavior change.",
   "riskTags": [
@@ -14,7 +14,7 @@
     "reference": "APPROVE PLAN: Youtoola Phase 9"
   },
   "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/11",
-  "candidateCommit": "4e63a2b471049b6c7bd0b007eb2f9051b2225bcf",
+  "candidateCommit": "52783bf36b0d5bcb737195ebe8c87d9743d9c377",
   "evidence": [
     {
       "id": "clean-diff",
@@ -135,6 +135,24 @@
       "status": "approved",
       "reference": "Phase 9 architecture review: no runtime, provider, route or dependency change",
       "reviewedDate": "2026-07-14"
+    },
+    {
+      "id": "owner-review-approval",
+      "status": "approved",
+      "reference": "APPROVE REVIEW: Youtoola Phase 9",
+      "reviewedDate": "2026-07-14"
+    },
+    {
+      "id": "owner-ship-approval",
+      "status": "approved",
+      "reference": "APPROVE SHIP: Youtoola Phase 9",
+      "reviewedDate": "2026-07-14"
+    },
+    {
+      "id": "production-smoke",
+      "status": "passed",
+      "reference": "Production deployment dpl_AwsJGmzxizSta9YX5tDR57LDVoYe immediate smoke verification",
+      "reviewedDate": "2026-07-14"
     }
   ],
   "exceptions": [],
@@ -161,19 +179,27 @@
       ]
     },
     "review": {
-      "status": "pending",
-      "approver": null,
-      "evidence": []
+      "status": "approved",
+      "approver": "Youtoola owner",
+      "evidence": [
+        "APPROVE REVIEW: Youtoola Phase 9"
+      ]
     },
     "ship": {
-      "status": "pending",
-      "approver": null,
-      "evidence": []
+      "status": "approved",
+      "approver": "Youtoola owner",
+      "evidence": [
+        "APPROVE SHIP: Youtoola Phase 9",
+        "PR #11 squash merge 52783bf36b0d5bcb737195ebe8c87d9743d9c377"
+      ]
     },
     "post-deployment": {
-      "status": "pending",
+      "status": "complete",
       "approver": null,
-      "evidence": []
+      "evidence": [
+        "Vercel Production deployment dpl_AwsJGmzxizSta9YX5tDR57LDVoYe",
+        "Immediate Production smoke verified 2026-07-14"
+      ]
     },
     "post-launch-review": {
       "status": "pending",
@@ -185,13 +211,31 @@
     "releaseSchema": 1,
     "analyticsSchema": 1
   },
-  "production": null,
+  "production": {
+    "mergeCommit": "52783bf36b0d5bcb737195ebe8c87d9743d9c377",
+    "deploymentId": "dpl_AwsJGmzxizSta9YX5tDR57LDVoYe",
+    "deploymentCommit": "52783bf36b0d5bcb737195ebe8c87d9743d9c377",
+    "liveUrls": [
+      "https://www.youtoola.com",
+      "https://www.youtoola.com/tools"
+    ],
+    "smokeResults": [
+      "Homepage and tools returned HTTP 200.",
+      "Apex returned HTTP 308 to https://www.youtoola.com/.",
+      "Fuel Trip Calculator and design-system review routes returned HTTP 404.",
+      "Sitemap contained only the five approved canonical URLs.",
+      "Production remained indexable with approved robots and security headers.",
+      "Browser smoke found no third-party requests, cookies, storage writes or console errors."
+    ],
+    "rollbackDeployment": "dpl_DPwLcuff7sCxDbx26FmiTkgbDyoV",
+    "releaseDate": "2026-07-14"
+  },
   "followUpDates": {
-    "immediate": null,
-    "24-hours": null,
-    "7-days": null,
-    "28-days": null,
-    "monthly": null,
-    "quarterly": null
+    "immediate": "2026-07-14",
+    "24-hours": "2026-07-15",
+    "7-days": "2026-07-21",
+    "28-days": "2026-08-11",
+    "monthly": "2026-08-14",
+    "quarterly": "2026-10-14"
   }
 }
