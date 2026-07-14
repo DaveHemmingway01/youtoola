@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { JsonLd } from "@/components/seo/json-ld";
 import { Card, TextLink } from "@/components/ui";
-import { PLATFORM_SEO } from "@/data/seo/platform";
+import { PLATFORM_PAGE_DEFINITIONS, PLATFORM_SEO } from "@/data/seo/platform";
 import { PUBLIC_DISCOVERY_ROUTES } from "@/lib/discovery";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { createHomeStructuredData } from "@/lib/seo/structured-data";
@@ -10,11 +10,7 @@ import { createHomeStructuredData } from "@/lib/seo/structured-data";
 import styles from "./discovery.module.css";
 
 export const metadata: Metadata = createPageMetadata(
-  {
-    canonicalPath: "/",
-    description: PLATFORM_SEO.conciseDescription,
-    title: PLATFORM_SEO.homeTitle,
-  },
+  PLATFORM_PAGE_DEFINITIONS.home,
   { absoluteTitle: true },
 );
 

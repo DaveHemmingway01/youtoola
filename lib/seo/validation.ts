@@ -1,6 +1,7 @@
+import { PLATFORM_PAGE_DEFINITIONS } from "@/data/seo/platform";
 import { TRUST_PAGE_DEFINITIONS } from "@/data/seo/trust-pages";
 import type { UtilityRegistryEntry } from "@/lib/registry/types";
-import type { TrustPageDefinition, UtilitySeoDefinition } from "@/lib/seo/types";
+import type { IndexablePageDefinition, UtilitySeoDefinition } from "@/lib/seo/types";
 
 import { assertCanonicalPath, createCanonicalUrl } from "./canonical";
 
@@ -11,7 +12,7 @@ export interface MetadataAdvisory {
 }
 
 export function getMetadataAdvisories(
-  definition: Pick<TrustPageDefinition, "canonicalPath" | "description" | "title">,
+  definition: Pick<IndexablePageDefinition, "canonicalPath" | "description" | "title">,
 ) {
   const advisories: MetadataAdvisory[] = [];
   if (definition.title.length > 60) {
@@ -31,13 +32,21 @@ export function getMetadataAdvisories(
   return advisories;
 }
 
-export function validateIndexablePageDefinitions() {
+const INDEXABLE_PAGE_DEFINITIONS = Object.freeze([
+  PLATFORM_PAGE_DEFINITIONS.home,
+  PLATFORM_PAGE_DEFINITIONS.tools,
+  ...TRUST_PAGE_DEFINITIONS,
+]);
+
+export function validateIndexablePageDefinitions(
+  definitions: readonly IndexablePageDefinition[] = INDEXABLE_PAGE_DEFINITIONS,
+) {
   const errors: string[] = [];
   const titles = new Set<string>();
   const descriptions = new Set<string>();
   const canonicals = new Set<string>();
 
-  for (const page of TRUST_PAGE_DEFINITIONS) {
+  for (const page of definitions) {
     try {
       assertCanonicalPath(page.canonicalPath);
     } catch (error) {

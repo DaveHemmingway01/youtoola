@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { createPublicSitemap, getPublicSitemapUrls } from "@/lib/seo/sitemap";
+import {
+  assertUniqueSitemapUrls,
+  createPublicSitemap,
+  getPublicSitemapUrls,
+} from "@/lib/seo/sitemap";
 
 const approvedUrls = [
   "https://www.youtoola.com",
@@ -33,5 +37,14 @@ describe("SEO sitemap composition", () => {
     ]) {
       expect(serialized).not.toContain(value);
     }
+  });
+
+  it("fails instead of silently deduplicating colliding URLs", () => {
+    expect(() =>
+      assertUniqueSitemapUrls([
+        "https://www.youtoola.com/tools",
+        "https://www.youtoola.com/tools",
+      ]),
+    ).toThrow("Duplicate sitemap URL: https://www.youtoola.com/tools.");
   });
 });

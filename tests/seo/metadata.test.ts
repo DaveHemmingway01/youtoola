@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { PLATFORM_SEO } from "@/data/seo/platform";
+import { PLATFORM_PAGE_DEFINITIONS, PLATFORM_SEO } from "@/data/seo/platform";
 import { TRUST_PAGE_DEFINITIONS } from "@/data/seo/trust-pages";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import {
@@ -41,6 +41,18 @@ describe("SEO metadata contracts", () => {
     expect(new Set(TRUST_PAGE_DEFINITIONS.map((page) => page.title)).size).toBe(3);
     expect(new Set(TRUST_PAGE_DEFINITIONS.map((page) => page.description)).size).toBe(3);
     expect(new Set(TRUST_PAGE_DEFINITIONS.map((page) => page.canonicalPath)).size).toBe(3);
+  });
+
+  it("rejects a trust page that collides with a permanent platform page", () => {
+    expect(
+      validateIndexablePageDefinitions([
+        PLATFORM_PAGE_DEFINITIONS.tools,
+        {
+          ...TRUST_PAGE_DEFINITIONS[0],
+          canonicalPath: "/tools",
+        },
+      ]),
+    ).toContain("Duplicate canonical URL: https://www.youtoola.com/tools.");
   });
 
   it("reports length guidance as advisory rather than publication failure", () => {

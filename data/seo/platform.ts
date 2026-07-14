@@ -1,5 +1,5 @@
 import { CANONICAL_ORIGIN } from "@/lib/environment";
-import type { PlatformSeoDefinition } from "@/lib/seo/types";
+import type { IndexablePageDefinition, PlatformSeoDefinition } from "@/lib/seo/types";
 
 export const PLATFORM_SEO = Object.freeze({
   applicationName: "Youtoola",
@@ -26,3 +26,21 @@ export const PLATFORM_THEME_COLORS = Object.freeze({
   dark: "#000A3F",
   light: "#F7F9FC",
 });
+
+export const PLATFORM_PAGE_DEFINITIONS = Object.freeze({
+  home: Object.freeze({
+    canonicalPath: "/",
+    description: PLATFORM_SEO.conciseDescription,
+    owner: "Youtoola owner",
+    reviewedDate: "2026-07-14",
+    title: PLATFORM_SEO.homeTitle,
+  }),
+  tools: Object.freeze({
+    canonicalPath: "/tools",
+    description:
+      "Browse Youtoola’s practical online tools as they complete review and become available for public use.",
+    owner: "Youtoola owner",
+    reviewedDate: "2026-07-14",
+    title: "Practical Online Tools",
+  }),
+} satisfies Record<"home" | "tools", IndexablePageDefinition>);

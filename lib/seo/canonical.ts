@@ -13,6 +13,15 @@ export function assertCanonicalPath(path: string): asserts path is `/${string}` 
     throw new Error("Non-root canonical paths must not end with a slash.");
   }
   if (path.includes("//")) throw new Error("Canonical paths must not contain duplicate slashes.");
+  if (
+    path !== "/" &&
+    path
+      .slice(1)
+      .split("/")
+      .some((segment) => !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(segment))
+  ) {
+    throw new Error("Canonical path segments must use lowercase kebab case.");
+  }
 }
 
 export function createCanonicalUrl(path: string) {
@@ -28,6 +37,9 @@ export function assertCanonicalUrl(url: string) {
   assertCanonicalPath(parsed.pathname);
   if (parsed.search || parsed.hash) {
     throw new Error("Canonical URLs must not contain query parameters or fragments.");
+  }
+  if (url !== createCanonicalUrl(parsed.pathname)) {
+    throw new Error("Canonical URLs must use their clean, normalized form.");
   }
 }
 

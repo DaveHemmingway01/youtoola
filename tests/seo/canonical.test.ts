@@ -14,7 +14,16 @@ describe("canonical URL governance", () => {
     expect(() => assertCanonicalUrl("https://www.youtoola.com/about")).not.toThrow();
   });
 
-  it.each(["tools", "/tools/", "/tools?utm_source=test", "/tools#section", "//tools"])(
+  it.each([
+    "tools",
+    "/tools/",
+    "/tools?utm_source=test",
+    "/tools#section",
+    "//tools",
+    "/Tools",
+    "/tools/private_file",
+    "/tools/%2fprivate",
+  ])(
     "rejects invalid canonical path %s",
     (path) => expect(() => assertCanonicalPath(path)).toThrow(),
   );
@@ -24,6 +33,7 @@ describe("canonical URL governance", () => {
       "https://youtoola.com/tools",
       "https://youtoola-git-example.vercel.app/tools",
       "http://www.youtoola.com/tools",
+      "https://www.youtoola.com/tools/../about",
     ]) {
       expect(() => assertCanonicalUrl(url)).toThrow();
     }

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Breadcrumbs } from "@/components/site-shell";
 import { Card, EmptyState, TextLink } from "@/components/ui";
+import { PLATFORM_PAGE_DEFINITIONS } from "@/data/seo/platform";
 import {
   getPublicDiscoveryTools,
   PUBLIC_DISCOVERY_ROUTES,
@@ -16,15 +17,9 @@ import {
 
 import styles from "../discovery.module.css";
 
-const toolsMetadata = {
-  canonicalPath: "/tools",
-  description:
-    "Browse Youtoola’s practical online tools as they complete review and become available for public use.",
-  title: "Practical Online Tools",
-} as const;
 const breadcrumbs = createBreadcrumbItems("Tools", "/tools");
 
-export const metadata: Metadata = createPageMetadata(toolsMetadata);
+export const metadata: Metadata = createPageMetadata(PLATFORM_PAGE_DEFINITIONS.tools);
 
 export default function ToolsPage() {
   const tools = getPublicDiscoveryTools();
