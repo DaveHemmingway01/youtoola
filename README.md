@@ -33,6 +33,13 @@ The environment file contains no required secrets. Leave `YOUTOOLA_ENV` empty fo
 | `npm run test` | Run deterministic Vitest unit tests once. |
 | `npm run test:watch` | Run Vitest in watch mode. |
 | `npm run test:e2e` | Start the app and run Playwright browser tests. |
+| `npm run test:e2e:cross-browser` | Run the targeted Chromium, Firefox and WebKit review suite when the approved risk policy requires it. |
+| `npm run validate` | Run the complete offline pre-review validation suite. |
+| `npm run validate:architecture` | Validate registry, Knowledge Layer, SEO, Phase 8 and release architecture. |
+| `npm run validate:release -- --record=<path>` | Validate one release record, or all records when no path is supplied. |
+| `npm run validate:utility -- --slug=<slug>` | Validate a future utility definition, specification and golden vectors. |
+| `npm run security:scan` | Scan tracked files for committed environment files and high-confidence secret signatures. |
+| `npm run security:audit` | Run the offline high/critical dependency audit used by normal CI. |
 | `npm run utility:read -- --tab "Travel & Mobility" --row 5` | Read one literal visible Google Sheets row through the public V1 workflow. |
 | `npm run utility:read:live` | Manually verify the approved Fuel Trip Calculator source fixture. |
 | `npm run registry:validate` | Validate utility registry identities, sources and release rules. |
@@ -45,6 +52,12 @@ Install the Playwright Chromium browser before the first end-to-end run:
 
 ```bash
 npx playwright install chromium
+```
+
+Install Firefox and WebKit only when a targeted cross-browser review is required:
+
+```bash
+npx playwright install firefox webkit
 ```
 
 ## Architecture
@@ -66,6 +79,7 @@ npx playwright install chromium
 - Inputs are not persisted, transmitted, added to URLs or sent to analytics by the Phase 6 framework
 - Phase 8 analytics, experiment, and commercial contracts validate offline; run `npm run architecture:validate`
 - No analytics or commercial provider is configured, and Local, Preview, and Production emit no Phase 8 events
+- Phase 9 release contracts select evidence through additive risk tags; validated JSON release records and data-only golden vectors fail closed without approving a release
 
 See [`docs/architecture/foundation.md`](docs/architecture/foundation.md) and [`docs/decisions/`](docs/decisions/) for the approved decisions.
 
@@ -80,6 +94,8 @@ The Phase 5 route and publication policies are documented in [`docs/architecture
 The Phase 6 calculator boundaries and future four-file utility contract are documented in [`docs/architecture/utility-framework.md`](docs/architecture/utility-framework.md) and [`docs/operations/utility-framework.md`](docs/operations/utility-framework.md). The neutral example extends the existing Local/Preview review route; Fuel Trip Calculator remains an isolated test fixture and `idea` registry record.
 
 Phase 7 SEO, entity, trust, canonical, sitemap and crawler governance is documented in [`docs/architecture/seo-entity-discoverability.md`](docs/architecture/seo-entity-discoverability.md) and [`docs/operations/seo-governance.md`](docs/operations/seo-governance.md). Public trust routes are `/about`, `/methodology` and `/privacy`; `/accessibility` remains reserved until a real public feedback method is approved.
+
+Phase 9 testing, release evidence, severity, flaky-test and rollback governance is documented in [`docs/architecture/testing-and-release-gates.md`](docs/architecture/testing-and-release-gates.md), [`docs/operations/release-validation.md`](docs/operations/release-validation.md) and [`docs/operations/rollback.md`](docs/operations/rollback.md). It adds no public route or Production behavior.
 
 ## Delivery
 
