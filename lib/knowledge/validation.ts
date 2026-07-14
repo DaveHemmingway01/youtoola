@@ -135,6 +135,23 @@ export function validateKnowledgeLayer(data: KnowledgeLayerData) {
   const unitFamilyIds = new Set(data.units.map((unit) => unit.unitFamilyId));
   const sourceEntityIds = new Set(data.sources.map((source) => source.entityId));
 
+  const utilityReferencesAreActive = (tool: UtilityRegistryEntry | undefined) => {
+    if (!tool) return false;
+    const category = data.categories.find((candidate) => candidate.id === tool.categoryId);
+    if (!category || category.status !== "active") return false;
+    const referencedEntityIds = [
+      ...(tool.conceptIds ?? []),
+      ...(tool.formulaFamilyIds ?? []),
+      ...(tool.intentClusterIds ?? []),
+      ...(tool.sourceEntityIds ?? []),
+      ...(tool.unitIds ?? []),
+    ];
+    return referencedEntityIds.every((entityId) => {
+      const entity = allEntities.find((candidate) => candidate.entityId === entityId);
+      return entity && entity.status === "active";
+    });
+  };
+
   duplicateValues(entityIds).forEach((id) => errors.push(`Duplicate global entity ID: ${id}.`));
   if (entityIds.some((id) => id.startsWith("jurisdiction:"))) {
     errors.push("Phase 4 must not contain jurisdiction data.");
@@ -343,6 +360,17 @@ export function validateKnowledgeLayer(data: KnowledgeLayerData) {
 
   const relationshipKeys: string[] = [];
   for (const relationship of data.relationships) {
+    const sourceTool = data.tools.find(
+      (tool) => tool.entityId === relationship.sourceEntityId,
+    );
+    const targetTool = data.tools.find(
+      (tool) => tool.entityId === relationship.targetEntityId,
+    );
+    const contextJourney = relationship.contextJourneyEntityId
+      ? data.journeys.find(
+          (journey) => journey.entityId === relationship.contextJourneyEntityId,
+        )
+      : undefined;
     if (relationship.knowledgeSchemaVersion !== KNOWLEDGE_SCHEMA_VERSION) {
       errors.push(`Invalid knowledge schema version on relationship ${relationship.sourceEntityId} -> ${relationship.targetEntityId}.`);
     }
@@ -370,8 +398,15 @@ export function validateKnowledgeLayer(data: KnowledgeLayerData) {
       (!PUBLIC_CANDIDATE_RELATIONSHIP_TYPES.has(relationship.type) ||
         relationship.status !== "approved" ||
         relationship.rationaleAuthorship !== "human" ||
-        data.tools.find((tool) => tool.entityId === relationship.sourceEntityId)?.status !== "released" ||
-        data.tools.find((tool) => tool.entityId === relationship.targetEntityId)?.status !== "released")
+        sourceTool?.status !== "released" ||
+        targetTool?.status !== "released" ||
+        !utilityReferencesAreActive(sourceTool) ||
+        !utilityReferencesAreActive(targetTool) ||
+        (relationship.contextJourneyEntityId !== undefined &&
+          (!contextJourney ||
+            contextJourney.status !== "active" ||
+            !contextJourney.active ||
+            contextJourney.visibility !== "public")))
     ) {
       errors.push(`Relationship ${relationship.sourceEntityId} -> ${relationship.targetEntityId} is not eligible as a public candidate.`);
     }
@@ -384,8 +419,14 @@ export function validateKnowledgeLayer(data: KnowledgeLayerData) {
     if (relationship.type === "input-provider" && relationship.visibility !== "internal") {
       errors.push("Input-provider relationships must remain internal in Phase 4.");
     }
+    if (
+      relationship.contextJourneyEntityId &&
+      !journeyEntityIds.has(relationship.contextJourneyEntityId)
+    ) {
+      errors.push(`Unknown relationship journey context ${relationship.contextJourneyEntityId}.`);
+    }
     if (relationship.type === "next-step") {
-      if (!relationship.contextJourneyEntityId || !journeyEntityIds.has(relationship.contextJourneyEntityId)) {
+      if (!relationship.contextJourneyEntityId) {
         errors.push("Next-step relationships require a valid journey context.");
       }
     }

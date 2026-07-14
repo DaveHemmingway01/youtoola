@@ -121,6 +121,32 @@ describe("Repository Knowledge Layer relationships", () => {
     ).toBe(true);
   });
 
+  it("rejects missing journey contexts and inactive public references", () => {
+    const data = withSecondTool();
+    const missingContext: StoredUtilityRelationship = {
+      ...baseRelationship,
+      type: "related",
+      visibility: "internal",
+      status: "proposed",
+      contextJourneyEntityId: "journey:missing",
+    };
+    expect(validateKnowledgeLayer({ ...data, relationships: [missingContext] })).toContain(
+      "Unknown relationship journey context journey:missing.",
+    );
+
+    const publicCandidate: StoredUtilityRelationship = {
+      ...baseRelationship,
+      type: "related",
+      contextJourneyEntityId: undefined,
+    };
+    const releasedTools = data.tools.map((tool) => ({ ...tool, status: "released" as const }));
+    expect(
+      validateKnowledgeLayer({ ...data, tools: releasedTools, relationships: [publicCandidate] }),
+    ).toContain(
+      "Relationship utility:fuel-trip-calculator -> utility:route-distance-calculator is not eligible as a public candidate.",
+    );
+  });
+
   it("rejects manual storage of inverse relationship types", () => {
     const data = withSecondTool();
     const manuallyStoredInverse = {

@@ -276,7 +276,7 @@ export function getPublicRelationshipsForUtility(utilityId: string) {
       relationship.rationaleAuthorship === "human" &&
       relationship.rationale.trim().length > 0 &&
       utilityIsPublic(target) &&
-      (!context || journeyIsPublic(context))
+      (!relationship.contextJourneyEntityId || Boolean(context && journeyIsPublic(context)))
     );
   });
 }
