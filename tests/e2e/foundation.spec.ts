@@ -39,6 +39,13 @@ test("returns the custom not-found page with a 404 status", async ({ page }) => 
     "href",
     "/",
   );
+  await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
+  const robotsDirectives = await page
+    .locator('meta[name="robots"]')
+    .evaluateAll((elements) => elements.map((element) => element.getAttribute("content")));
+  expect(robotsDirectives).not.toHaveLength(0);
+  expect(robotsDirectives.every((directive) => directive?.includes("noindex"))).toBe(true);
+  await expect(page.locator('script[type="application/ld\+json"]')).toHaveCount(0);
   const recoveryLinkSize = await page
     .getByRole("link", { name: "Go to the homepage" })
     .evaluate((element) => {
@@ -72,6 +79,15 @@ test("serves non-production crawler controls and the minimal sitemap", async ({
       "</url>\n" +
       "<url>\n" +
       "<loc>https://www.youtoola.com/tools</loc>\n" +
+      "</url>\n" +
+      "<url>\n" +
+      "<loc>https://www.youtoola.com/about</loc>\n" +
+      "</url>\n" +
+      "<url>\n" +
+      "<loc>https://www.youtoola.com/methodology</loc>\n" +
+      "</url>\n" +
+      "<url>\n" +
+      "<loc>https://www.youtoola.com/privacy</loc>\n" +
       "</url>\n" +
       "</urlset>\n",
   );

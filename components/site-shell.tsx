@@ -59,17 +59,24 @@ export function SiteFooter() {
           height={45}
         />
         <p>Useful tools. No account. No nonsense.</p>
+        <nav aria-label="Youtoola information">
+          <ul className="site-footer__links">
+            <li><Link href="/about">About</Link></li>
+            <li><Link href="/methodology">Methodology</Link></li>
+            <li><Link href="/privacy">Privacy</Link></li>
+          </ul>
+        </nav>
       </div>
     </footer>
   );
 }
 
-interface BreadcrumbItem {
+export interface BreadcrumbItem {
   href?: string;
   label: string;
 }
 
-export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
+export function Breadcrumbs({ items }: { items: readonly BreadcrumbItem[] }) {
   return (
     <nav className="breadcrumbs" aria-label="Breadcrumb">
       <ol>

@@ -98,6 +98,6 @@ test("keeps the framework review private and Fuel Trip unavailable", async ({ pa
   await expect(page.getByText("Fuel Trip Calculator")).toHaveCount(0);
   expect((await request.get("/fuel-trip-calculator")).status()).toBe(404);
   const sitemap = await (await request.get("/sitemap.xml")).text();
-  expect(sitemap.match(/<loc>/g)).toHaveLength(2);
+  expect(sitemap.match(/<loc>/g)).toHaveLength(5);
   expect(sitemap).not.toContain("fuel-trip-calculator");
 });

@@ -7,9 +7,10 @@ export const platforms: readonly PlatformEntity[] = [
     entityId: "platform:youtoola",
     name: "Youtoola",
     aliases: [],
-    definition: "One connected platform for practical online utilities.",
+    definition:
+      "Youtoola is a collection of free, practical online tools for everyday calculations, decisions and tasks, without requiring an account.",
     status: "active",
-    reviewedDate: "2026-07-13",
+    reviewedDate: "2026-07-14",
     sourceIds: [],
     canonicalUrl: "https://www.youtoola.com",
   },
