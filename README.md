@@ -64,6 +64,8 @@ npx playwright install chromium
 - The homepage and permanent `/tools` directory are static Server Components; category, journey, search and utility routes remain unavailable until their approved release gates pass
 - Future utilities use explicit forms, pure calculation modules, typed handwritten validation, browser-local processing and a Server Component page shell
 - Inputs are not persisted, transmitted, added to URLs or sent to analytics by the Phase 6 framework
+- Phase 8 analytics, experiment, and commercial contracts validate offline; run `npm run architecture:validate`
+- No analytics or commercial provider is configured, and Local, Preview, and Production emit no Phase 8 events
 
 See [`docs/architecture/foundation.md`](docs/architecture/foundation.md) and [`docs/decisions/`](docs/decisions/) for the approved decisions.
 

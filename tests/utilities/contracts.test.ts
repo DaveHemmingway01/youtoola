@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 
 import { getPublicRelatedToolsForUtility } from "@/lib/discovery";
-import { containsProhibitedAnalyticsField, createUtilityAnalyticsContext, isUtilityEventEligible, PROHIBITED_ANALYTICS_FIELDS } from "@/lib/utilities/analytics-contract";
+import { PROHIBITED_ANALYTICS_FIELDS } from "@/lib/analytics/contracts";
+import { validateAnalyticsEvent } from "@/lib/analytics/validation";
+import { fuelTripFrameworkFixture } from "@/tests/fixtures/utilities/fuel-trip-framework";
 import type { UtilityResult } from "@/lib/utilities/contracts";
 
 describe("utility framework boundaries", () => {
@@ -10,18 +12,10 @@ describe("utility framework boundaries", () => {
   });
 
   it("uses explicit analytics eligibility and prohibits sensitive fields", () => {
-    const eligibility = {
-      category: "example",
-      eligibleEvents: ["tool_complete"] as const,
-      utilitySlug: "example",
-    };
-    expect(isUtilityEventEligible(eligibility, "tool_complete")).toBe(true);
-    expect(isUtilityEventEligible(eligibility, "lead_submit")).toBe(false);
     expect(PROHIBITED_ANALYTICS_FIELDS).toEqual(
       expect.arrayContaining(["rawInput", "exactResult", "email", "personalData"]),
     );
-    expect(containsProhibitedAnalyticsField({ rawInput: "private", utilitySlug: "example" })).toBe(true);
-    expect(createUtilityAnalyticsContext({ category: "example", utilitySlug: "example" })).toEqual({ category: "example", utilitySlug: "example" });
+    expect(validateAnalyticsEvent({ eventName: "tool_complete", rawInput: "private" }, fuelTripFrameworkFixture.analyticsEligibility)).toEqual({ ok: false, reason: "prohibited-field" });
   });
 
   it("retains result classification and normalized values outside presentation", () => {

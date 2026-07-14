@@ -4,6 +4,7 @@ All notable Youtoola platform and utility changes will be recorded here.
 
 ## Unreleased
 
+- Add Phase 8 provider-neutral analytics contracts, fail-closed payload validation, utility eligibility, no-op dispatch, ephemeral deduplication, commercial capability gates, experiment governance, and a protected in-memory review inspector without provider activation or transmission.
 - Add the Phase 7 native SEO, entity, trust and AI-discoverability architecture, including three reviewed trust pages, minimal homepage structured data, canonical validation and released-only sitemap composition.
 
 ### Added

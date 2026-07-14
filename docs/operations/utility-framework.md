@@ -38,6 +38,8 @@ An unclassified utility cannot release. Data-dependent utilities require source 
 
 Ordinary utilities must make no calculation request and write no input to URLs, cookies, local storage, session storage, logs or analytics. Copy payloads require utility-level privacy review and exclude private values by default.
 
+Phase 8 analytics eligibility is fail-closed. A future utility event must pass lifecycle, global taxonomy, utility allowlists, payload validation, Production environment, consent, and configured-provider gates. Phase 8 has no provider, so no event can cross a provider boundary.
+
 ## Review surface
 
 The neutral framework example remains inside `/design-system-review`, which is Local/Preview-only, noindexed and Production-disabled. Fuel Trip fixture code must remain under `tests/fixtures/` and absent from application imports and client chunks.

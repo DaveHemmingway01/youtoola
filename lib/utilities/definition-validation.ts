@@ -1,5 +1,6 @@
 import { getToolById } from "@/lib/registry";
 import type { UtilityRegistryEntry } from "@/lib/registry/types";
+import { validateUtilityAnalyticsEligibility } from "@/lib/analytics/validation";
 
 import type { UtilityDefinition } from "./contracts";
 
@@ -102,6 +103,23 @@ export function validateUtilityDefinition(
       code: "unsafe-review-authority",
       message: "A released utility requires Youtoola owner approval.",
       path: "reviewAuthority",
+    });
+  }
+
+  for (const code of validateUtilityAnalyticsEligibility(definition.analyticsEligibility)) {
+    issues.push({
+      code: `invalid-analytics-eligibility:${code}`,
+      message: `Invalid analytics eligibility: ${code}.`,
+      path: "analyticsEligibility",
+    });
+  }
+
+  const capabilityIds = new Set(definition.commercialEligibility);
+  if (capabilityIds.size !== definition.commercialEligibility.length) {
+    issues.push({
+      code: "duplicate-commercial-eligibility",
+      message: "Commercial eligibility cannot contain duplicate capability IDs.",
+      path: "commercialEligibility",
     });
   }
 
