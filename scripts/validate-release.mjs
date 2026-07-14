@@ -38,7 +38,16 @@ function validateRecords() {
   if (valueFor("--record") && paths.some((path) => !existsSync(path))) throw new Error(`Release record not found: ${paths.find((path) => !existsSync(path))}`);
   const failures = [];
   for (const path of paths) {
-    const issues = validateReleaseRecord(readJson(path));
+    const record = readJson(path);
+    const issues = validateReleaseRecord(record);
+    if (typeof record.candidateCommit === "string" && record.candidateCommit !== "pending-review") {
+      try {
+        execFileSync("git", ["cat-file", "-e", `${record.candidateCommit}^{commit}`], { cwd: root, stdio: "ignore" });
+        execFileSync("git", ["merge-base", "--is-ancestor", record.candidateCommit, "HEAD"], { cwd: root, stdio: "ignore" });
+      } catch {
+        issues.push("record:candidate-commit-not-in-history");
+      }
+    }
     if (issues.length) failures.push(`${path}:\n  - ${issues.join("\n  - ")}`);
   }
   if (failures.length) throw new Error(failures.join("\n"));
