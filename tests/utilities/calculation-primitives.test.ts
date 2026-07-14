@@ -7,13 +7,18 @@ import { convertDistance } from "@/lib/units/distance";
 describe("calculation primitives", () => {
   it("rounds only at an explicit boundary", () => {
     expect(roundToDecimalPlaces(1.005, 2)).toBe(1.01);
+    expect(roundToDecimalPlaces(10.075, 2)).toBe(10.08);
     expect(roundToDecimalPlaces(-1.005, 2)).toBe(-1.01);
+    expect(roundToDecimalPlaces(-10.075, 2)).toBe(-10.08);
     expect(() => roundToDecimalPlaces(1, -1)).toThrow();
   });
 
   it("uses safe integer minor units for exact currency operations", () => {
     expect(toMinorUnits(10.25)).toBe(1025);
     expect(fromMinorUnits(1025)).toBe(10.25);
+    expect(toMinorUnits(10.075)).toBe(1008);
+    expect(() => toMinorUnits(1, 1.5)).toThrow();
+    expect(() => fromMinorUnits(100, 13)).toThrow();
     expect(() => toMinorUnits(Number.MAX_SAFE_INTEGER)).toThrow();
   });
 
