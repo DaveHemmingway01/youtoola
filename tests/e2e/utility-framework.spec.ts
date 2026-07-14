@@ -65,6 +65,15 @@ test("links the error summary to the invalid field", async ({ page }) => {
   await expect(page.getByLabel("Example quantity")).toBeFocused();
 });
 
+test("supports keyboard-only calculation completion", async ({ page }) => {
+  await page.goto("/design-system-review");
+  const input = page.getByLabel("Example quantity");
+  await input.focus();
+  await input.fill("4");
+  await input.press("Enter");
+  await expect(page.getByText("5 units", { exact: true })).toBeVisible();
+});
+
 for (const size of sizes) {
   test(`framework has no overflow at ${size.width}x${size.height}`, async ({ page }) => {
     await page.setViewportSize(size);

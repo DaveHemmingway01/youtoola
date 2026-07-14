@@ -78,3 +78,13 @@ export function sortValidationIssues(
     return (leftPosition ?? inputOrder.length) - (rightPosition ?? inputOrder.length);
   });
 }
+
+export function combineValidationIssues<T>(
+  fieldIssues: readonly UtilityValidationIssue[],
+  values: T,
+  inputOrder: readonly string[],
+  crossFieldValidators: readonly CrossFieldValidator<T>[] = [],
+) {
+  const crossFieldIssues = crossFieldValidators.flatMap((validate) => validate(values));
+  return sortValidationIssues([...fieldIssues, ...crossFieldIssues], inputOrder);
+}

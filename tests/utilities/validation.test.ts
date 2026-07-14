@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { UtilityInputDefinition } from "@/lib/utilities/contracts";
-import { parseNumberField, sortValidationIssues } from "@/lib/validation/utility-validation";
+import { combineValidationIssues, parseNumberField, sortValidationIssues } from "@/lib/validation/utility-validation";
 
 const input: UtilityInputDefinition = {
   errorMessages: {
@@ -37,5 +37,19 @@ describe("utility validation", () => {
       ["first", "second"],
     );
     expect(issues.map((issue) => issue.code)).toEqual(["first", "second", "form"]);
+  });
+
+  it("combines field and cross-field validation in definition order", () => {
+    const issues = combineValidationIssues(
+      [{ code: "second", fieldId: "second", message: "Second" }],
+      { first: 10, second: 5 },
+      ["first", "second"],
+      [
+        (values) => values.first > values.second
+          ? [{ code: "invalid-order", fieldId: "first", message: "First must not exceed second." }]
+          : [],
+      ],
+    );
+    expect(issues.map((issue) => issue.code)).toEqual(["invalid-order", "second"]);
   });
 });
