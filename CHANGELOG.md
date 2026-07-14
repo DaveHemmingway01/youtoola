@@ -26,3 +26,4 @@ All notable Youtoola platform and utility changes will be recorded here.
 - Component accessibility tests and axe-enabled responsive browser coverage.
 - Public GViz-first retrieval of an exact Google Sheet tab and literal visible row, with an explicit CSV-export fallback and deterministic source hashing.
 - A typed Git-controlled utility registry containing the approved Fuel Trip Calculator `idea` record, category mapping, governed status transitions, safe selectors and offline validation.
+- Repository Knowledge Layer schema version 1 with typed entities, conservative semantic fixtures, journey-scoped future slots, central relationship governance, public-safe selectors and offline validation.

@@ -35,7 +35,8 @@ The environment file contains no required secrets. Leave `YOUTOOLA_ENV` empty fo
 | `npm run test:e2e` | Start the app and run Playwright browser tests. |
 | `npm run utility:read -- --tab "Travel & Mobility" --row 5` | Read one literal visible Google Sheets row through the public V1 workflow. |
 | `npm run utility:read:live` | Manually verify the approved Fuel Trip Calculator source fixture. |
-| `npm run registry:validate` | Validate registry identities, sources, relationships and release rules. |
+| `npm run registry:validate` | Validate utility registry identities, sources and release rules. |
+| `npm run knowledge:validate` | Validate Repository Knowledge Layer entities, journeys, relationships and public boundaries. |
 | `npm run build` | Create a production Next.js build. |
 | `npm run start` | Serve the production build locally. |
 | `npm run check` | Run lint, type-check, unit tests, and production build. |
@@ -65,6 +66,8 @@ See [`docs/architecture/foundation.md`](docs/architecture/foundation.md) and [`d
 The component and brand-usage rules are documented in [`docs/architecture/design-system.md`](docs/architecture/design-system.md) and [`docs/brand/USAGE.md`](docs/brand/USAGE.md). The `/design-system-review` route is available only in Local and Preview, is explicitly `noindex, nofollow`, and returns 404 in Production.
 
 Sheet retrieval and registry governance are documented in [`docs/architecture/utility-registry.md`](docs/architecture/utility-registry.md) and [`docs/operations/utility-registry.md`](docs/operations/utility-registry.md). An `idea` registry record is not a route and cannot appear in public discovery.
+
+The Repository Knowledge Layer is documented in [`docs/architecture/repository-knowledge-layer.md`](docs/architecture/repository-knowledge-layer.md). Phase 4 adds repository data and selectors only; it creates no public discovery surface.
 
 ## Delivery
 

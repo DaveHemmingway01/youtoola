@@ -5,7 +5,6 @@ import { RESERVED_ROOT_SLUGS } from "./reserved-routes";
 import type {
   CategoryRecord,
   JourneyRecord,
-  RelationshipType,
   UtilityRegistryEntry,
 } from "./types";
 
@@ -13,11 +12,6 @@ const CANONICAL_ORIGIN = "https://www.youtoola.com";
 const HASH_PATTERN = /^sha256:[a-f0-9]{64}$/;
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
-const DIRECTIONAL_RELATIONSHIPS = new Set<RelationshipType>([
-  "prerequisite",
-  "previous-step",
-  "next-step",
-]);
 
 export interface RegistryData {
   tools: readonly UtilityRegistryEntry[];
@@ -33,36 +27,6 @@ function duplicateValues(values: readonly string[]) {
     seen.add(value);
   });
   return [...duplicates];
-}
-
-function hasCycle(
-  tools: readonly UtilityRegistryEntry[],
-  type: RelationshipType,
-) {
-  const adjacency = new Map(
-    tools.map((tool) => [
-      tool.utilityId,
-      tool.relationships
-        .filter((relationship) => relationship.type === type)
-        .map((relationship) => relationship.targetUtilityId),
-    ]),
-  );
-  const visiting = new Set<string>();
-  const visited = new Set<string>();
-
-  const visit = (id: string): boolean => {
-    if (visiting.has(id)) return true;
-    if (visited.has(id)) return false;
-    visiting.add(id);
-    for (const target of adjacency.get(id) ?? []) {
-      if (visit(target)) return true;
-    }
-    visiting.delete(id);
-    visited.add(id);
-    return false;
-  };
-
-  return [...adjacency.keys()].some(visit);
 }
 
 function isSorted(values: readonly string[]) {
@@ -94,9 +58,7 @@ export function validateRegistry(
   if (!isSorted(categoryIds)) errors.push("Categories must be ordered by category ID.");
   if (!isSorted(journeyIds)) errors.push("Journeys must be ordered by journey ID.");
 
-  const utilityIdSet = new Set(utilityIds);
   const categoryIdSet = new Set(categoryIds);
-  const journeyIdSet = new Set(journeyIds);
 
   for (const tool of registry.tools) {
     if (!SLUG_PATTERN.test(tool.slug)) errors.push(`Invalid slug: ${tool.slug}.`);
@@ -106,11 +68,6 @@ export function validateRegistry(
     }
     if (!categoryIdSet.has(tool.categoryId)) {
       errors.push(`Unknown category ${tool.categoryId} for ${tool.utilityId}.`);
-    }
-    for (const journeyId of tool.journeyIds ?? []) {
-      if (!journeyIdSet.has(journeyId)) {
-        errors.push(`Unknown journey ${journeyId} for ${tool.utilityId}.`);
-      }
     }
     if (!Number.isSafeInteger(tool.source.visibleRow) || tool.source.visibleRow < 1) {
       errors.push(`Invalid source visible row for ${tool.utilityId}.`);
@@ -138,32 +95,6 @@ export function validateRegistry(
       errors.push(`Unreleased tool ${tool.utilityId} must not have a release date.`);
     }
 
-    const relationshipKeys = tool.relationships.map(
-      (relationship) => `${relationship.type}:${relationship.targetUtilityId}`,
-    );
-    duplicateValues(relationshipKeys).forEach((key) =>
-      errors.push(`Duplicate relationship ${key} on ${tool.utilityId}.`),
-    );
-    if (!isSorted(relationshipKeys)) {
-      errors.push(`Relationships for ${tool.utilityId} must be deterministically ordered.`);
-    }
-    for (const relationship of tool.relationships) {
-      if (relationship.targetUtilityId === tool.utilityId) {
-        errors.push(`Prohibited self-link on ${tool.utilityId}.`);
-      }
-      if (!utilityIdSet.has(relationship.targetUtilityId)) {
-        errors.push(`Unknown relationship target ${relationship.targetUtilityId} on ${tool.utilityId}.`);
-      }
-      if (!relationship.reason.trim()) {
-        errors.push(`Relationship reason is required on ${tool.utilityId}.`);
-      }
-    }
-  }
-
-  for (const type of DIRECTIONAL_RELATIONSHIPS) {
-    if (hasCycle(registry.tools, type)) {
-      errors.push(`Inappropriate ${type} relationship cycle detected.`);
-    }
   }
 
   return errors;
