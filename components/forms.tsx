@@ -3,6 +3,7 @@ import {
   type InputHTMLAttributes,
   type ReactElement,
   type ReactNode,
+  type Ref,
   type SelectHTMLAttributes,
 } from "react";
 
@@ -72,7 +73,17 @@ export function TextInput(props: InputHTMLAttributes<HTMLInputElement>) {
   return <input type="text" {...props} />;
 }
 
-export function NumberInput(props: InputHTMLAttributes<HTMLInputElement>) {
+type InputProps = InputHTMLAttributes<HTMLInputElement> & { ref?: Ref<HTMLInputElement> };
+
+export function NumberInput(props: InputProps) {
+  return <input type="number" inputMode="decimal" {...props} />;
+}
+
+export function CurrencyInput(props: InputProps) {
+  return <input type="number" inputMode="decimal" {...props} />;
+}
+
+export function PercentageInput(props: InputProps) {
   return <input type="number" inputMode="decimal" {...props} />;
 }
 
@@ -125,5 +136,36 @@ export function Toggle({ children, ...props }: ChoiceProps) {
       <span className="toggle__track" aria-hidden="true" />
       <span>{children}</span>
     </label>
+  );
+}
+
+interface ErrorSummaryIssue {
+  fieldId?: string;
+  message: string;
+}
+
+interface ErrorSummaryProps {
+  issues: readonly ErrorSummaryIssue[];
+  summaryRef?: Ref<HTMLDivElement>;
+  title?: string;
+}
+
+export function ErrorSummary({
+  issues,
+  summaryRef,
+  title = "Check the form",
+}: ErrorSummaryProps) {
+  if (issues.length === 0) return null;
+  return (
+    <div className="error-summary" ref={summaryRef} role="alert" tabIndex={-1}>
+      <strong>{title}</strong>
+      <ul>
+        {issues.map((issue, index) => (
+          <li key={`${issue.fieldId ?? "form"}-${index}`}>
+            {issue.fieldId ? <a href={`#${issue.fieldId}`}>{issue.message}</a> : issue.message}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

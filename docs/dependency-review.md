@@ -52,3 +52,9 @@ Phase 4 adds no client dependency, Production service, credential or paid operat
 The public discovery layer adds no package. Static Server Components, typed repository selectors, metadata routes, CSS Modules and the existing Vitest and Playwright setup satisfy the approved homepage, directory, sitemap, accessibility and responsive requirements.
 
 Phase 5 adds no search library, hosted search, client state framework, database, CMS, analytics provider, consent provider, third-party script or paid service. Search remains deferred until three released utilities justify a small native client-side island.
+
+## Phase 6 dependency decision
+
+Phase 6 adds no package. Explicit React forms, handwritten TypeScript validation, native `Number`, integer minor units, `Intl.NumberFormat`, browser Clipboard support and the existing Vitest, Testing Library and Playwright setup satisfy the approved utility framework.
+
+Zod, form libraries, decimal libraries, date libraries, sharing/export libraries and analytics providers are not justified without a specific utility requirement. This adds no runtime service, licence, bundle, lockfile or paid operating cost.

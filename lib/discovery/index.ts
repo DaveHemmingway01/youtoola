@@ -13,6 +13,10 @@ export {
   getPublicJourneys,
   selectHomepageTools,
 } from "./selectors";
+export {
+  getPublicRelatedToolsForUtility,
+  type PublicRelatedTool,
+} from "./related-tools";
 export type {
   DiscoveryModelInput,
   PublicDiscoveryCategory,
