@@ -29,3 +29,5 @@ All notable Youtoola platform and utility changes will be recorded here.
 - Repository Knowledge Layer schema version 1 with typed entities, conservative semantic fixtures, journey-scoped future slots, central relationship governance, public-safe selectors and offline validation.
 - Phase 5 production-quality zero-inventory homepage and permanent `/tools` directory with honest server-rendered empty states.
 - An immutable released-only discovery model, category and journey publication thresholds, deterministic ordering, shared public URL generation and sitemap coverage for the homepage and tool directory.
+- Phase 6 utility definitions, pure calculation primitives, typed validation, result contracts, Server Component page shell, released-only related-tool composition and privacy-safe copy interaction.
+- A neutral Local/Preview utility-framework demonstration plus isolated test-only Fuel Trip framework fixture with no formula, route or public exposure.

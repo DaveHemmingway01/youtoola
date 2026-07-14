@@ -4,7 +4,7 @@ Youtoola is one connected platform for practical online utilities.
 
 > Useful tools. No account. No nonsense.
 
-The repository contains the approved platform foundation, shared design system, canonical registry, Repository Knowledge Layer, and released-only public discovery layer. It does not yet contain a production utility.
+The repository contains the approved platform foundation, shared design system, canonical registry, Repository Knowledge Layer, released-only public discovery layer, and reusable utility framework. It does not yet contain a production utility.
 
 ## Requirements
 
@@ -62,6 +62,8 @@ npx playwright install chromium
 - Public Google GViz retrieval is developer tooling only; Production uses reviewed TypeScript registry records from Git
 - Public pages consume one immutable released-only discovery model; internal registry and Knowledge Layer fields do not enter pages or client bundles
 - The homepage and permanent `/tools` directory are static Server Components; category, journey, search and utility routes remain unavailable until their approved release gates pass
+- Future utilities use explicit forms, pure calculation modules, typed handwritten validation, browser-local processing and a Server Component page shell
+- Inputs are not persisted, transmitted, added to URLs or sent to analytics by the Phase 6 framework
 
 See [`docs/architecture/foundation.md`](docs/architecture/foundation.md) and [`docs/decisions/`](docs/decisions/) for the approved decisions.
 
@@ -72,6 +74,8 @@ Sheet retrieval and registry governance are documented in [`docs/architecture/ut
 The Repository Knowledge Layer is documented in [`docs/architecture/repository-knowledge-layer.md`](docs/architecture/repository-knowledge-layer.md). Phase 4 adds repository data and selectors only; it creates no public discovery surface.
 
 The Phase 5 route and publication policies are documented in [`docs/architecture/discovery-layer.md`](docs/architecture/discovery-layer.md) and [`docs/operations/discovery-publication.md`](docs/operations/discovery-publication.md). `/tools` is permanent, while category and journey routes remain fail-closed until their thresholds and owner-approved content exist.
+
+The Phase 6 calculator boundaries and future four-file utility contract are documented in [`docs/architecture/utility-framework.md`](docs/architecture/utility-framework.md) and [`docs/operations/utility-framework.md`](docs/operations/utility-framework.md). The neutral example extends the existing Local/Preview review route; Fuel Trip Calculator remains an isolated test fixture and `idea` registry record.
 
 ## Delivery
 

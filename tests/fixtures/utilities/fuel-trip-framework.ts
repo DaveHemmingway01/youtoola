@@ -1,0 +1,43 @@
+import type { UtilityDefinition } from "@/lib/utilities/contracts";
+
+export const fuelTripFrameworkFixture = {
+  analyticsEligibility: [],
+  assumptions: [],
+  calculationVersion: 1,
+  commercialEligibility: [],
+  contentVersion: 1,
+  inputs: [
+    "distance",
+    "fuel-consumption",
+    "fuel-price",
+    "return-journey",
+    "toll-cost",
+    "passenger-count",
+  ].map((id) => ({
+    errorMessages: { invalid: "Test-only invalid value." },
+    id,
+    label: `Test-only ${id}`,
+    required: false,
+    type: id === "return-journey" ? "toggle" as const : "number" as const,
+  })),
+  methodology: {
+    assumptions: [],
+    calculationVersion: 1,
+    citations: [],
+    formulaSteps: [],
+    freshnessExpectation: "Not applicable to this test-only fixture.",
+    limitations: ["This fixture defines no calculation."],
+    methodologyVersion: 1,
+    reviewedDate: "2026-07-14",
+    summary: "Test-only framework placeholder; not a calculation methodology.",
+    workedExamples: [],
+  },
+  methodologyVersion: 1,
+  outputs: [],
+  reviewAuthority: "Youtoola owner",
+  reviewedDate: "2026-07-14",
+  riskProfile: "unclassified",
+  supportedUnits: [],
+  utilityId: "fuel-trip-calculator",
+  warnings: [],
+} satisfies UtilityDefinition;

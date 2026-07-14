@@ -25,6 +25,7 @@ import {
 import { isDesignSystemReviewAvailable } from "@/lib/design-system-review";
 
 import { ReviewForm } from "./review-form";
+import { UtilityFrameworkExample } from "./utility-framework-example";
 
 export const dynamic = "force-dynamic";
 
@@ -84,7 +85,15 @@ export default function DesignSystemReviewPage() {
         relatedTool={<RelatedToolCard href="/" linkLabel="Go to Youtoola home" title="Youtoola home" description="Return to the current live platform route." />}
       />
       <CommercialPlaceholder kind="advertising" />
-      <CommercialPlaceholder kind="affiliate-or-lead" />
+      <CommercialPlaceholder kind="affiliate" />
+
+      <h2>Utility framework</h2>
+      <Card aria-labelledby="utility-framework-title">
+        <h3 id="utility-framework-title">Neutral browser-local calculation</h3>
+        <p>This fictional example demonstrates validation, calculation, reset, result announcement, and privacy-safe copy feedback without a Production utility.</p>
+        <UtilityFrameworkExample />
+        <CommercialPlaceholder kind="premium" />
+      </Card>
 
       <h2>Supporting states</h2>
       <div className="review-grid">
