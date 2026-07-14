@@ -111,6 +111,9 @@ test("discovery pages remain usable at 200 percent text size", async ({ page }) 
     );
     expect(overflow).toBe(false);
     await expect(page.locator("h1")).toBeVisible();
+    await page.evaluate(() => {
+      document.documentElement.style.fontSize = "";
+    });
   }
 });
 

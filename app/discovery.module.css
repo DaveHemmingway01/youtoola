@@ -1,6 +1,15 @@
 .page {
+  min-width: 0;
   display: grid;
   gap: clamp(3rem, 8vw, 6rem);
+}
+
+.page > * {
+  min-width: 0;
+}
+
+.page a {
+  overflow-wrap: anywhere;
 }
 
 .hero {
@@ -104,6 +113,8 @@
 }
 
 .emptyDirectory {
+  width: 100%;
+  min-width: 0;
   max-width: 48rem;
 }
 
