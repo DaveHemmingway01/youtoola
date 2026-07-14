@@ -58,3 +58,9 @@ Phase 5 adds no search library, hosted search, client state framework, database,
 Phase 6 adds no package. Explicit React forms, handwritten TypeScript validation, native `Number`, integer minor units, `Intl.NumberFormat`, browser Clipboard support and the existing Vitest, Testing Library and Playwright setup satisfy the approved utility framework.
 
 Zod, form libraries, decimal libraries, date libraries, sharing/export libraries and analytics providers are not justified without a specific utility requirement. This adds no runtime service, licence, bundle, lockfile or paid operating cost.
+
+## Phase 7 dependency decision
+
+Phase 7 adds no package. Native Next.js metadata routes, repository-owned TypeScript contracts, deterministic JSON serialization, Vitest and Playwright satisfy canonical, metadata, sitemap, structured-data and trust-page requirements.
+
+An SEO framework, schema package, CMS, metadata service, external validation API or AI content generator would add maintenance or network coupling without solving a demonstrated requirement. Phase 7 adds no client dependency, paid service, credential or Production integration.

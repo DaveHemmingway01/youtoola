@@ -4,6 +4,8 @@ All notable Youtoola platform and utility changes will be recorded here.
 
 ## Unreleased
 
+- Add the Phase 7 native SEO, entity, trust and AI-discoverability architecture, including three reviewed trust pages, minimal homepage structured data, canonical validation and released-only sitemap composition.
+
 ### Added
 
 - Phase 0 architecture, governance, delivery, metric, crawler, and brand-asset decisions.

@@ -77,6 +77,8 @@ The Phase 5 route and publication policies are documented in [`docs/architecture
 
 The Phase 6 calculator boundaries and future four-file utility contract are documented in [`docs/architecture/utility-framework.md`](docs/architecture/utility-framework.md) and [`docs/operations/utility-framework.md`](docs/operations/utility-framework.md). The neutral example extends the existing Local/Preview review route; Fuel Trip Calculator remains an isolated test fixture and `idea` registry record.
 
+Phase 7 SEO, entity, trust, canonical, sitemap and crawler governance is documented in [`docs/architecture/seo-entity-discoverability.md`](docs/architecture/seo-entity-discoverability.md) and [`docs/operations/seo-governance.md`](docs/operations/seo-governance.md). Public trust routes are `/about`, `/methodology` and `/privacy`; `/accessibility` remains reserved until a real public feedback method is approved.
+
 ## Delivery
 
 Feature work uses an isolated branch and pull request. GitHub controls review and merge authority; the connected Vercel project creates Preview deployments for non-production branches and Production deployments only from approved `main` commits.

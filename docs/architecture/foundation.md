@@ -41,7 +41,7 @@ A content security policy will be introduced only after the script, asset, analy
 
 Production `robots.txt` allows ordinary crawlers and `OAI-SearchBot`, explicitly disallows `GPTBot`, and references `https://www.youtoola.com/sitemap.xml`. Local and Preview `robots.txt` disallow every crawler in addition to the response-level `noindex, nofollow` protection.
 
-The initial sitemap contains only the canonical homepage. Registry-driven sitemap generation, structured data, and the wider SEO system remain deferred to their roadmap phases.
+The Phase 1 sitemap initially contained only the canonical homepage. Later approved phases own registry-driven sitemap composition, structured data and the wider SEO system without changing this crawler foundation.
 
 ## Merge checks
 
