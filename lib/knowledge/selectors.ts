@@ -194,14 +194,26 @@ function utilityIsPublic(tool: UtilityRegistryEntry | undefined) {
 
 function journeyIsPublic(journey: JourneyEntity) {
   const utilityIds = [...new Set(journey.stages.flatMap((stage) => stage.utilityEntityIds))];
+  const occupiedStages = journey.stages.filter((stage) => stage.utilityEntityIds.length > 0);
   return (
     journey.status === "active" &&
     journey.active &&
     journey.visibility === "public" &&
     utilityIds.length >= 2 &&
+    occupiedStages.length >= 2 &&
+    journey.objective.trim().length > 0 &&
+    journey.targetAudience.trim().length > 0 &&
     journey.stages.every((stage) => stage.futureSlots.length === 0) &&
     utilityIds.every((entityId) => utilityIsPublic(getUtilityByEntityId(entityId)))
   );
+}
+
+export function getPublicEligibleUtilities() {
+  return tools.filter(utilityIsPublic);
+}
+
+export function getPublicEligibleJourneys() {
+  return journeys.filter(journeyIsPublic);
 }
 
 export function getEntityById(entityId: string): IndexedEntity | undefined {

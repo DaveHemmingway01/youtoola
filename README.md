@@ -4,7 +4,7 @@ Youtoola is one connected platform for practical online utilities.
 
 > Useful tools. No account. No nonsense.
 
-The repository contains the approved platform foundation and shared design system. Phase 3 adds a Git-controlled utility registry and developer-only live opportunity retrieval; it does not contain a production utility.
+The repository contains the approved platform foundation, shared design system, canonical registry, Repository Knowledge Layer, and released-only public discovery layer. It does not yet contain a production utility.
 
 ## Requirements
 
@@ -60,6 +60,8 @@ npx playwright install chromium
 - Preview and local responses receive `X-Robots-Tag: noindex, nofollow`
 - No database, authentication, CMS, analytics provider, UI framework, graph database, or AI service
 - Public Google GViz retrieval is developer tooling only; Production uses reviewed TypeScript registry records from Git
+- Public pages consume one immutable released-only discovery model; internal registry and Knowledge Layer fields do not enter pages or client bundles
+- The homepage and permanent `/tools` directory are static Server Components; category, journey, search and utility routes remain unavailable until their approved release gates pass
 
 See [`docs/architecture/foundation.md`](docs/architecture/foundation.md) and [`docs/decisions/`](docs/decisions/) for the approved decisions.
 
@@ -68,6 +70,8 @@ The component and brand-usage rules are documented in [`docs/architecture/design
 Sheet retrieval and registry governance are documented in [`docs/architecture/utility-registry.md`](docs/architecture/utility-registry.md) and [`docs/operations/utility-registry.md`](docs/operations/utility-registry.md). An `idea` registry record is not a route and cannot appear in public discovery.
 
 The Repository Knowledge Layer is documented in [`docs/architecture/repository-knowledge-layer.md`](docs/architecture/repository-knowledge-layer.md). Phase 4 adds repository data and selectors only; it creates no public discovery surface.
+
+The Phase 5 route and publication policies are documented in [`docs/architecture/discovery-layer.md`](docs/architecture/discovery-layer.md) and [`docs/operations/discovery-publication.md`](docs/operations/discovery-publication.md). `/tools` is permanent, while category and journey routes remain fail-closed until their thresholds and owner-approved content exist.
 
 ## Delivery
 

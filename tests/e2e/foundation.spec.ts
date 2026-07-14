@@ -70,6 +70,9 @@ test("serves non-production crawler controls and the minimal sitemap", async ({
       "<url>\n" +
       "<loc>https://www.youtoola.com</loc>\n" +
       "</url>\n" +
+      "<url>\n" +
+      "<loc>https://www.youtoola.com/tools</loc>\n" +
+      "</url>\n" +
       "</urlset>\n",
   );
 });

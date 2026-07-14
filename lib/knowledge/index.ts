@@ -38,6 +38,8 @@ export {
   getIntentClustersForUtility,
   getJourneysForUtility,
   getPublicJourneysForUtility,
+  getPublicEligibleJourneys,
+  getPublicEligibleUtilities,
   getPublicRelationshipsForUtility,
   getPublicUtilitiesForJourney,
   getRelationshipsFrom,

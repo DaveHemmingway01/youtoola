@@ -8,6 +8,8 @@ import {
   getIntentClustersForUtility,
   getJourneysForUtility,
   getPublicJourneysForUtility,
+  getPublicEligibleJourneys,
+  getPublicEligibleUtilities,
   getPublicRelationshipsForUtility,
   getPublicUtilitiesForJourney,
   getUnitsForConcept,
@@ -38,6 +40,8 @@ describe("Repository Knowledge Layer selectors", () => {
   });
 
   it("exposes no idea, provisional journey or future slot through public selectors", () => {
+    expect(getPublicEligibleUtilities()).toEqual([]);
+    expect(getPublicEligibleJourneys()).toEqual([]);
     expect(getPublicRelationshipsForUtility("fuel-trip-calculator")).toEqual([]);
     expect(getPublicJourneysForUtility("fuel-trip-calculator")).toEqual([]);
     expect(getPublicUtilitiesForJourney("road-trip-planning")).toEqual([]);

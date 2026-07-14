@@ -46,3 +46,9 @@ This adds no browser bundle, Production service, credential, paid cost or runtim
 The Repository Knowledge Layer adds no package. Typed repository records, selectors and validation use TypeScript, Node.js and the existing Vitest installation. A graph library, database, ORM, schema framework, search service or external API would add cost and maintenance without solving a demonstrated V1 constraint.
 
 Phase 4 adds no client dependency, Production service, credential or paid operating cost.
+
+## Phase 5 dependency decision
+
+The public discovery layer adds no package. Static Server Components, typed repository selectors, metadata routes, CSS Modules and the existing Vitest and Playwright setup satisfy the approved homepage, directory, sitemap, accessibility and responsive requirements.
+
+Phase 5 adds no search library, hosted search, client state framework, database, CMS, analytics provider, consent provider, third-party script or paid service. Search remains deferred until three released utilities justify a small native client-side island.

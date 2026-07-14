@@ -20,7 +20,12 @@ export function MobileNavigation({ items }: { items: NavigationItem[] }) {
   }
 
   return (
-    <div className="mobile-navigation">
+    <div
+      className="mobile-navigation"
+      onKeyDown={(event) => {
+        if (event.key === "Escape" && open) closeAndRestoreFocus();
+      }}
+    >
       <button
         ref={triggerRef}
         className="mobile-navigation__trigger"
@@ -36,9 +41,6 @@ export function MobileNavigation({ items }: { items: NavigationItem[] }) {
           id="mobile-navigation-panel"
           className="mobile-navigation__panel"
           aria-label="Mobile navigation"
-          onKeyDown={(event) => {
-            if (event.key === "Escape") closeAndRestoreFocus();
-          }}
         >
           {items.map((item) => (
             <Link key={item.href} href={item.href} onClick={() => setOpen(false)}>
