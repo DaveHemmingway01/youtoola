@@ -23,9 +23,9 @@
     "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/17",
     "sourceBranch": "origin/main",
     "sourceCommit": "47821635c82153673e790a437b0cc5be09fe8e77",
-    "reviewedHeadCommit": "pending-review",
+    "reviewedHeadCommit": "838555791e3c0eb5ed901328121f6f973648abf5",
     "reviewedHeadRef": "platform/growth-foundation",
-    "reviewedDate": null,
+    "reviewedDate": "2026-07-15",
     "mergeMethod": null,
     "mergeCommit": null,
     "durableReleaseCommit": null,
@@ -35,9 +35,9 @@
     "branch": "platform/growth-foundation",
     "releaseKind": "normal",
     "preview": {
-      "deploymentId": "dpl_8CjiZ39uPF18uX3pFU8yVEQyqLEM",
-      "deploymentCommit": "4f5b59de2ca11d85f928df4aaa13a68299c8af1f",
-      "uniqueUrl": "https://youtoola-cesz6dd2s-davincistudio.vercel.app/",
+      "deploymentId": "dpl_4J2zYDQ6yFe18fLaUSHcgJhWLYx4",
+      "deploymentCommit": "838555791e3c0eb5ed901328121f6f973648abf5",
+      "uniqueUrl": "https://youtoola-7bzujcvqb-davincistudio.vercel.app/",
       "branchAlias": "https://youtoola-git-platform-growth-foundation-davincistudio.vercel.app/",
       "ready": true,
       "protected": true,
@@ -48,126 +48,126 @@
       {
         "name": "Quality",
         "status": "passed",
-        "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29415247150/job/87351634089"
+        "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29415541489/job/87352635601"
       },
       {
         "name": "End-to-end",
         "status": "passed",
-        "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29415247150/job/87351634144"
+        "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29415541489/job/87352635621"
       },
       {
         "name": "Vercel",
         "status": "passed",
-        "reference": "https://vercel.com/davincistudio/youtoola/8CjiZ39uPF18uX3pFU8yVEQyqLEM"
+        "reference": "https://vercel.com/davincistudio/youtoola/4J2zYDQ6yFe18fLaUSHcgJhWLYx4"
       }
     ]
   },
   "evidence": [
     {
       "id": "accessibility-review",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Final Unit 2 review confirmed keyboard, focus, 44x44 targets, reduced motion and 200-percent text behavior for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "analytics-contract-tests",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Phase 8 and Unit 2 analytics contract tests passed in the 299-test suite for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "axe-scan",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "The 61-test Chromium suite passed its serious-and-critical axe checks for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "browser-tests",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "All 61 Chromium E2E tests passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "clean-diff",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Complete PR #17 diff inspection and git diff --check passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "component-tests",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Consent component behavior and saved-state tests passed in the 299-test suite for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "consent-fail-closed-tests",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Consent parsing, serialization, reserved-state and dormant behavior fail-closed tests passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "content-review",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Final Unit 2 review confirmed factual dormant analytics, consent and provider wording for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "contract-tests",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Growth, consent, analytics, delivery, release, SEO, registry and Knowledge Layer contract tests passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "crawler-validation",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Crawler and sitemap regression validation passed with membership and crawler policy unchanged for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "debug-route-tests",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Protected design-system review behavior and Production-mode 404 coverage passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "dependency-audit",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Online npm audit and offline security audit reported zero vulnerabilities for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "dependency-review",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Complete diff confirmed no dependency or lockfile change for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "environment-transmission-tests",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Tests and protected Preview verification confirmed Local and Preview remain provider-disabled with no Measurement ID or provider transmission for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "environment-validation",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Environment precedence and Production-only analytics configuration validation passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "manual-keyboard-review",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Final Unit 2 review confirmed normal Tab order, Escape closure and focus restoration for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "negative-tests",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Malformed configuration, identifiers, consent values, records and provider failures were covered by passing negative tests for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "normal-ci",
-      "reference": "Quality and End-to-end passed for branch head 4f5b59de2ca11d85f928df4aaa13a68299c8af1f.",
+      "reference": "Quality and End-to-end passed for reviewed implementation head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
       "status": "passed"
     },
@@ -179,63 +179,63 @@
     },
     {
       "id": "payload-limit-tests",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Analytics payload size, bounded scalar and allowlist tests passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "preview-verification",
-      "reference": "Protected noindexed Preview dpl_8CjiZ39uPF18uX3pFU8yVEQyqLEM for branch head 4f5b59de2ca11d85f928df4aaa13a68299c8af1f.",
+      "reference": "Protected noindexed Preview dpl_4J2zYDQ6yFe18fLaUSHcgJhWLYx4 for reviewed implementation head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
       "status": "passed"
     },
     {
       "id": "privacy-review",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Final Unit 2 review confirmed privacy wording matches dormant behavior and makes no unsupported compliance or deletion claims for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "production-smoke-plan",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "The read-only Production and Growth smoke commands and rollback procedure were verified before merge for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5; no Production execution evidence is claimed here.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "prototype-pollution-tests",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Plain-object, unknown-field and prototype-boundary analytics validation tests passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "provider-boundary-review",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Final Unit 2 review confirmed the lazy GA4 adapter is the sole provider boundary and remains activation- and consent-gated for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "public-boundary-regression",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Public routes, unavailable routes, registry, Knowledge Layer, sitemap and crawler boundaries passed regression validation for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "redirect-allowlist-tests",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Canonical and apex redirect allowlist coverage passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "release-report",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "APPROVE REVIEW: Youtoola Phase 11 Unit 2 Growth Foundation for reviewed implementation head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "approved"
     },
     {
       "id": "responsive-review",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Final Unit 2 review covered 320x568, 390x844, 430x932, 768x1024, 1440x900 and 200-percent text; the clipping blocker was fixed and retested for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "rollback-plan",
@@ -245,63 +245,63 @@
     },
     {
       "id": "safe-serialization-tests",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Fresh allowlisted analytics mapping and consent-cookie serialization tests passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "secret-leakage-tests",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Client-boundary and configuration tests found no secret, provider identifier or Measurement ID leakage for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "secret-scan",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Repository secret scan passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "security-header-tests",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Report-only CSP and existing security-header tests passed without an enforcing CSP regression for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "security-review",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Final Unit 2 review found no remaining security or privacy release blocker for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "sensitive-data-tests",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Analytics mapping tests rejected raw inputs, exact results, free text, personal data, sensitive scenarios and unknown fields for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "seo-validation",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "SEO validation passed with unchanged titles, descriptions, canonicals, sitemap membership and crawler policy for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "storage-and-replay-tests",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Consent and provider tests confirmed no automatic cookie, buffering, replay, analytics persistence or retry for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "structured-data-validation",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Structured-data validation passed with existing visible-content contracts unchanged for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "visual-review",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "APPROVE REVIEW: owner-approved final visual and responsive review for Phase 11 Unit 2 reviewed implementation head 838555791e3c0eb5ed901328121f6f973648abf5.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "approved"
     }
   ],
   "exceptions": [],
@@ -324,9 +324,11 @@
       "evidence": []
     },
     "review": {
-      "status": "pending",
-      "approver": null,
-      "evidence": []
+      "status": "approved",
+      "approver": "Youtoola owner",
+      "evidence": [
+        "APPROVE REVIEW: Phase 11 Unit 2 Growth Foundation for reviewed implementation head 838555791e3c0eb5ed901328121f6f973648abf5"
+      ]
     },
     "ship": {
       "status": "pending",
