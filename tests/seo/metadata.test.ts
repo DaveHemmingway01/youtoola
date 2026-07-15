@@ -11,7 +11,7 @@ import {
 import { tools } from "@/data/registry/tools";
 
 describe("SEO metadata contracts", () => {
-  it("uses the approved homepage metadata without an inherited image", () => {
+  it("uses the approved homepage metadata and frozen social image", () => {
     const metadata = createPageMetadata(
       {
         canonicalPath: "/",
@@ -32,8 +32,17 @@ describe("SEO metadata contracts", () => {
       type: "website",
       url: "https://www.youtoola.com",
     });
-    expect(metadata.openGraph).not.toHaveProperty("images");
-    expect(metadata.twitter).toMatchObject({ card: "summary" });
+    expect(metadata.openGraph).toHaveProperty("images", [{
+      alt: "Youtoola — Useful tools. No account. No nonsense.",
+      height: 630,
+      type: "image/png",
+      url: "https://www.youtoola.com/brand/og-default.png",
+      width: 1200,
+    }]);
+    expect(metadata.twitter).toMatchObject({
+      card: "summary_large_image",
+      images: ["https://www.youtoola.com/brand/og-default.png"],
+    });
   });
 
   it("requires unique, complete trust-page metadata", () => {

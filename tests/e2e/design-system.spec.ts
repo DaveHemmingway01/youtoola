@@ -133,6 +133,21 @@ test("supports large text and reduced motion", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Youtoola design system" })).toBeVisible();
 });
 
+test("controlled consent fixture keeps equal choices and supports withdrawal", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/design-system-review");
+  const accepts = page.getByRole("button", { name: "Accept analytics" });
+  const rejects = page.getByRole("button", { name: "Reject" });
+  await expect(accepts).toHaveCount(2);
+  await expect(rejects).toHaveCount(2);
+  expect(await accepts.first().getAttribute("class")).toBe(await rejects.first().getAttribute("class"));
+  await accepts.first().click();
+  await expect(page.getByText("Current controlled state:")).toContainText("analytics-granted");
+  await rejects.last().click();
+  await expect(page.getByText("Current controlled state:")).toContainText("denied");
+  expect(await page.evaluate(() => document.cookie)).toBe("");
+});
+
 test("has no serious or critical axe violations", async ({ page }) => {
   await page.goto("/design-system-review");
   const results = await new AxeBuilder({ page }).analyze();

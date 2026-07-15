@@ -9,6 +9,8 @@ test("renders the Youtoola foundation with safe Preview metadata", async ({
   expect(response?.headers()["x-robots-tag"]).toBe("noindex, nofollow");
   expect(response?.headers()["x-content-type-options"]).toBe("nosniff");
   expect(response?.headers()["x-frame-options"]).toBe("DENY");
+  expect(response?.headers()["content-security-policy-report-only"]).toContain("default-src 'self'");
+  expect(response?.headers()["content-security-policy"]).toBeUndefined();
 
   await expect(
     page.getByRole("heading", {
@@ -26,6 +28,24 @@ test("renders the Youtoola foundation with safe Preview metadata", async ({
   await expect(
     page.locator('link[rel="apple-touch-icon"][href="/brand/apple-touch-icon.png"]'),
   ).toHaveAttribute("sizes", "180x180");
+});
+
+test("keeps dormant privacy preferences provider-free and storage-free", async ({ page }) => {
+  const providerRequests: string[] = [];
+  page.on("request", (request) => {
+    if (/googletagmanager|google-analytics|clarity/i.test(request.url())) providerRequests.push(request.url());
+  });
+  await page.goto("/");
+  const storageBefore = await page.evaluate(() => ({ cookie: document.cookie, local: localStorage.length, session: sessionStorage.length }));
+  await expect(page.getByRole("heading", { name: "Optional analytics" })).toHaveCount(0);
+  await page.getByRole("button", { name: "Privacy preferences" }).click();
+  await expect(page.getByText("Optional analytics is currently off. No analytics provider is active.")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("button", { name: "Privacy preferences" })).toBeFocused();
+  await expect(page.getByText("Optional analytics is currently off. No analytics provider is active.")).toHaveCount(0);
+  expect(await page.evaluate(() => ({ cookie: document.cookie, local: localStorage.length, session: sessionStorage.length }))).toEqual(storageBefore);
+  expect(storageBefore.cookie).toBe("");
+  expect(providerRequests).toEqual([]);
 });
 
 test("returns the custom not-found page with a 404 status", async ({ page }) => {

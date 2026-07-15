@@ -2,10 +2,15 @@ import type { NextConfig } from "next";
 
 import { getDesignSystemReviewRewrites } from "./lib/design-system-review";
 import { isIndexingAllowed } from "./lib/environment";
+import { createReportOnlyContentSecurityPolicy } from "./lib/security/content-security-policy";
 
 const indexingAllowed = isIndexingAllowed();
 
 const securityHeaders = [
+  {
+    key: "Content-Security-Policy-Report-Only",
+    value: createReportOnlyContentSecurityPolicy(),
+  },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },

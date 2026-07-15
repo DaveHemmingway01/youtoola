@@ -237,6 +237,72 @@ h3 {
   font-weight: 700;
 }
 
+.site-footer__preference {
+  min-height: 44px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--color-interaction);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  cursor: pointer;
+}
+
+.consent-notice,
+.consent-preferences {
+  position: fixed;
+  z-index: 80;
+  inset: auto var(--space-4) var(--space-4);
+  width: min(calc(100% - 2rem), 44rem);
+  margin-inline: auto;
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  box-shadow: 0 1rem 3rem rgb(0 10 63 / 18%);
+}
+
+.consent-notice h2,
+.consent-preferences h2 {
+  margin: 0 0 var(--space-3);
+  font-size: 1.35rem;
+}
+
+.consent-notice p,
+.consent-preferences p {
+  margin: 0;
+}
+
+.consent-preferences {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.consent-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.consent-actions .button {
+  flex: 1 1 10rem;
+}
+
+.consent-review-card {
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.consent-review-card h3,
+.consent-review-card p {
+  margin-top: 0;
+}
+
 .mobile-navigation {
   display: none;
   position: relative;

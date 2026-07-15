@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
+import { ConsentProvider } from "@/components/consent/consent-provider";
 import { MainContent, SiteFooter, SiteHeader, SkipLink } from "@/components/site-shell";
 import { PLATFORM_SEO, PLATFORM_THEME_COLORS } from "@/data/seo/platform";
+import { createClientGrowthConfiguration, resolveGa4Configuration } from "@/lib/analytics/ga4-configuration";
 import { getCanonicalOrigin, isIndexingAllowed } from "@/lib/environment";
 
 import "./globals.css";
@@ -36,14 +38,18 @@ export const viewport: Viewport = {
   ],
 };
 
+const growthConfiguration = createClientGrowthConfiguration(resolveGa4Configuration());
+
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang={PLATFORM_SEO.language}>
       <body>
-        <SkipLink />
-        <SiteHeader />
-        <MainContent>{children}</MainContent>
-        <SiteFooter />
+        <ConsentProvider configuration={growthConfiguration}>
+          <SkipLink />
+          <SiteHeader />
+          <MainContent>{children}</MainContent>
+          <SiteFooter />
+        </ConsentProvider>
       </body>
     </html>
   );
