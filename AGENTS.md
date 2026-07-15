@@ -33,7 +33,7 @@ Utility quality, speed and trust always come before monetisation.
 
 ## Delivery operations
 
-- Start approved work from current `origin/main` on `platform/`, `utility/`, `fix/`, `docs/`, `brand/` or owner-authorised `hotfix/`; never stack on an unmerged feature branch.
+- Start approved work from current `origin/main` on `platform/`, `utility/`, `docs/` or owner-authorised `hotfix/`; never stack on an unmerged feature branch.
 - Use protected pull requests and squash-only merges. Retain merged source branches as release provenance.
 - `Quality`, `End-to-end` and `Vercel` are required. Preview Comments is informational. Automation reports evidence but never grants PLAN, REVIEW or SHIP approval.
 - Vercel Git integration is the only normal Production path. Never use `vercel --prod`, force-push or bypass protected `main`.
