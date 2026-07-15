@@ -1,0 +1,47 @@
+{
+  "recordVersion": 1,
+  "owner": "Youtoola owner",
+  "reviewedDate": "2026-07-15",
+  "consent": {
+    "policyVersion": "v1",
+    "activeChoices": ["denied", "analytics-granted"],
+    "marketingStatus": "reserved-unavailable-denied",
+    "cookieMaxAgeSeconds": 15552000
+  },
+  "analytics": {
+    "activation": "disabled",
+    "displayName": "Google Analytics 4",
+    "identifierStatus": "not-configured",
+    "recommendedKeyEvents": ["tool_complete"],
+    "legalPrivacyApproval": "pending"
+  },
+  "features": {
+    "analytics": false,
+    "clarity": false,
+    "advertising": false,
+    "premium": false,
+    "leads": false,
+    "experiments": false
+  },
+  "searchConsole": {
+    "status": "not-configured",
+    "owner": "Youtoola owner"
+  },
+  "bing": {
+    "status": "not-configured",
+    "owner": "Youtoola owner"
+  },
+  "sitemapSubmission": {
+    "status": "not-submitted"
+  },
+  "dashboard": {
+    "status": "definition-only",
+    "owner": "Youtoola owner",
+    "zeroDenominator": "not-available"
+  },
+  "monitoring": {
+    "status": "definition-only",
+    "owner": "Youtoola owner",
+    "schedule": "0 7 * * 1"
+  }
+}
