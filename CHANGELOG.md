@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Prepare Phase 11 Growth Activation with fail-closed activation records, route-aware successful-send page-view deduplication, browser smoke coverage and explicit legal/external/SHIP gates. Analytics remains dormant and Production configuration is unchanged.
 - Add the dormant Phase 11 Growth Foundation: fail-closed consent and provider contracts, privacy preferences, frozen Open Graph metadata, report-only CSP, configuration records, validation and package-free monitoring. Analytics and external provider configuration remain disabled.
 
 All notable Youtoola platform and utility changes will be recorded here.

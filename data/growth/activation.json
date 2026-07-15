@@ -1,0 +1,62 @@
+{
+  "recordVersion": 1,
+  "owner": "Youtoola owner",
+  "reviewedDate": "2026-07-15",
+  "activationState": "dormant",
+  "legalPrivacy": {
+    "status": "pending",
+    "approvalReference": null,
+    "jurisdictions": []
+  },
+  "privacyContact": {
+    "status": "pending",
+    "address": null
+  },
+  "analytics": {
+    "provider": "Google Analytics 4",
+    "status": "not-configured",
+    "measurementIdStatus": "not-configured",
+    "productionVariables": "not-configured",
+    "retentionMonths": 2,
+    "sanitizedPageView": "build-ready",
+    "keyEvents": ["tool_complete"],
+    "customDimensions": [],
+    "settings": {
+      "advertisingFeatures": false,
+      "automaticPageViews": false,
+      "crossDomainMeasurement": false,
+      "enhancedMeasurement": false,
+      "googleSignals": false,
+      "measurementProtocol": false,
+      "userId": false
+    }
+  },
+  "searchConsole": {
+    "status": "not-configured",
+    "property": null
+  },
+  "bing": {
+    "status": "not-configured",
+    "site": null
+  },
+  "sitemapSubmission": {
+    "status": "not-submitted",
+    "url": "https://www.youtoola.com/sitemap.xml"
+  },
+  "dashboard": {
+    "status": "definition-only",
+    "owner": "Youtoola owner"
+  },
+  "monitoring": {
+    "status": "definition-only",
+    "owner": "Youtoola owner",
+    "schedule": "0 7 * * 1"
+  },
+  "evidence": {
+    "externalConfiguration": "pending",
+    "previewProviderFree": "pending",
+    "productionActivation": "pending",
+    "immediateReview": "pending",
+    "twentyFourHourReview": "pending"
+  }
+}

@@ -1,6 +1,6 @@
 # Growth Foundation Architecture
 
-Status: Phase 11 Unit 2 candidate; provider activation is disabled.
+Status: Phase 11 Unit 2 shipped; provider activation remains disabled.
 
 ## Boundary
 
@@ -30,4 +30,4 @@ Only a validated enabled Production analytics configuration may add the exact ad
 
 ## Operating state
 
-The version-controlled growth records are secret-free definitions. Analytics, Search Console, Bing and sitemap console submission are not configured; legal/privacy approval is pending; dashboard and weekly monitoring are definition-only. The non-required Monday 07:00 UTC workflow runs direct, read-only, package-free Production checks from current `main` and does not call provider or hosting APIs.
+The frozen Unit 2 baseline is `data/growth/foundation.json`. Unit 3 records must not revise it; later factual state belongs in separate records under `data/growth/`. Analytics, Search Console, Bing and sitemap console submission are not configured; legal/privacy approval is pending; dashboard and weekly monitoring are definition-only. The non-required Monday 07:00 UTC workflow runs direct, read-only, package-free Production checks from current `main` and does not call provider or hosting APIs.

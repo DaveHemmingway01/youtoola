@@ -23,7 +23,31 @@ const requiredMonitoringChecks = [
   "no-provider-identifiers-or-requests",
   "no-analytics-set-cookie",
   "no-clarity-or-commercial-providers",
+  "preview-provider-free",
+  "pre-consent-provider-silence",
+  "reject-provider-silence",
+  "single-sanitized-page-view",
+  "withdrawal-blocks-future-events",
 ] as const;
+const activationStates = new Set([
+  "dormant",
+  "legally-approved",
+  "externally-configured",
+  "activation-ready",
+  "active",
+  "disabled",
+  "incident-disabled",
+]);
+const allowedCustomDimensions = new Set([
+  "utility_id",
+  "category_id",
+  "error_code",
+  "result_classification",
+  "non_sensitive_result_type",
+  "time_to_result_bucket",
+  "relationship_type",
+  "target_utility_id",
+]);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -161,6 +185,158 @@ export function validateGrowthFoundationRecord(input: unknown) {
     if (monitoring.owner !== "Youtoola owner") issues.push("monitoring-owner");
     if (monitoring.schedule !== "0 7 * * 1") issues.push("monitoring-schedule");
     if (monitoring.status !== "definition-only") issues.push("monitoring-status");
+  }
+
+  return Object.freeze([...new Set(issues)]);
+}
+
+export function validateGrowthActivationRecord(input: unknown) {
+  const issues: string[] = [];
+  const record = expectRecord(
+    input,
+    [
+      "activationState",
+      "analytics",
+      "bing",
+      "dashboard",
+      "evidence",
+      "legalPrivacy",
+      "monitoring",
+      "owner",
+      "privacyContact",
+      "recordVersion",
+      "reviewedDate",
+      "searchConsole",
+      "sitemapSubmission",
+    ],
+    "activation-record-fields",
+    issues,
+  );
+  if (!record) return Object.freeze(issues);
+
+  if (record.recordVersion !== 1) issues.push("activation-record-version");
+  if (record.owner !== "Youtoola owner") issues.push("activation-owner");
+  if (!isValidDate(record.reviewedDate)) issues.push("activation-reviewed-date");
+  if (typeof record.activationState !== "string" || !activationStates.has(record.activationState)) {
+    issues.push("activation-state");
+  }
+
+  const legal = expectRecord(
+    record.legalPrivacy,
+    ["approvalReference", "jurisdictions", "status"],
+    "legal-privacy-fields",
+    issues,
+  );
+  if (legal) {
+    if (!["approved", "pending"].includes(legal.status as string)) issues.push("legal-privacy-status");
+    if (!Array.isArray(legal.jurisdictions) || legal.jurisdictions.some((value) => typeof value !== "string" || value.length === 0)) {
+      issues.push("legal-jurisdictions");
+    }
+    if (legal.status === "approved" && (typeof legal.approvalReference !== "string" || legal.approvalReference.length === 0)) {
+      issues.push("legal-approval-reference");
+    }
+    if (legal.status === "pending" && legal.approvalReference !== null) issues.push("premature-legal-reference");
+  }
+
+  const contact = expectRecord(
+    record.privacyContact,
+    ["address", "status"],
+    "privacy-contact-fields",
+    issues,
+  );
+  if (contact) {
+    if (!["operational", "pending"].includes(contact.status as string)) issues.push("privacy-contact-status");
+    if (contact.status === "operational" && (typeof contact.address !== "string" || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(contact.address))) {
+      issues.push("privacy-contact-address");
+    }
+    if (contact.status === "pending" && contact.address !== null) issues.push("premature-privacy-contact");
+  }
+
+  const analytics = expectRecord(
+    record.analytics,
+    ["customDimensions", "keyEvents", "measurementIdStatus", "productionVariables", "provider", "retentionMonths", "sanitizedPageView", "settings", "status"],
+    "activation-analytics-fields",
+    issues,
+  );
+  if (analytics) {
+    if (analytics.provider !== "Google Analytics 4") issues.push("activation-provider");
+    if (!["configured", "disabled", "not-configured", "verified"].includes(analytics.status as string)) issues.push("activation-analytics-status");
+    if (!["configured", "not-configured"].includes(analytics.measurementIdStatus as string)) issues.push("measurement-id-status");
+    if (!["configured", "not-configured"].includes(analytics.productionVariables as string)) issues.push("production-variables-status");
+    if (analytics.retentionMonths !== 2) issues.push("analytics-retention");
+    if (!["approved", "build-ready", "verified"].includes(analytics.sanitizedPageView as string)) issues.push("sanitized-page-view-status");
+    if (!Array.isArray(analytics.keyEvents) || analytics.keyEvents.join(",") !== "tool_complete") issues.push("activation-key-events");
+    if (!Array.isArray(analytics.customDimensions) ||
+      analytics.customDimensions.some((value) => typeof value !== "string" || !allowedCustomDimensions.has(value)) ||
+      new Set(analytics.customDimensions).size !== analytics.customDimensions.length) {
+      issues.push("custom-dimensions");
+    }
+    const settings = expectRecord(
+      analytics.settings,
+      ["advertisingFeatures", "automaticPageViews", "crossDomainMeasurement", "enhancedMeasurement", "googleSignals", "measurementProtocol", "userId"],
+      "analytics-settings-fields",
+      issues,
+    );
+    if (settings && Object.values(settings).some((value) => value !== false)) issues.push("prohibited-analytics-setting");
+  }
+
+  for (const [key, issue] of [["searchConsole", "search-console"], ["bing", "bing"]] as const) {
+    const service = expectRecord(record[key], key === "searchConsole" ? ["property", "status"] : ["site", "status"], `${issue}-activation-fields`, issues);
+    if (!service) continue;
+    if (!["configured", "error", "not-configured", "verified"].includes(service.status as string)) issues.push(`${issue}-activation-status`);
+    const identifier = key === "searchConsole" ? service.property : service.site;
+    if ((service.status === "configured" || service.status === "verified") && (typeof identifier !== "string" || identifier.length === 0)) issues.push(`${issue}-identifier`);
+    if (service.status === "not-configured" && identifier !== null) issues.push(`premature-${issue}-identifier`);
+  }
+
+  const sitemap = expectRecord(record.sitemapSubmission, ["status", "url"], "activation-sitemap-fields", issues);
+  if (sitemap) {
+    if (!["accepted", "error", "not-submitted", "submitted"].includes(sitemap.status as string)) issues.push("activation-sitemap-status");
+    if (sitemap.url !== "https://www.youtoola.com/sitemap.xml") issues.push("activation-sitemap-url");
+  }
+
+  for (const key of ["dashboard", "monitoring"] as const) {
+    const expectedKeys = key === "monitoring" ? ["owner", "schedule", "status"] : ["owner", "status"];
+    const item = expectRecord(record[key], expectedKeys, `${key}-activation-fields`, issues);
+    if (!item) continue;
+    if (item.owner !== "Youtoola owner") issues.push(`${key}-activation-owner`);
+    if (!["definition-only", "operational"].includes(item.status as string)) issues.push(`${key}-activation-status`);
+    if (key === "monitoring" && item.schedule !== "0 7 * * 1") issues.push("monitoring-activation-schedule");
+  }
+
+  const evidence = expectRecord(
+    record.evidence,
+    ["externalConfiguration", "immediateReview", "previewProviderFree", "productionActivation", "twentyFourHourReview"],
+    "activation-evidence-fields",
+    issues,
+  );
+  if (evidence && Object.values(evidence).some((value) => value !== "pending" && value !== "complete")) {
+    issues.push("activation-evidence-status");
+  }
+
+  const state = record.activationState;
+  const legalReady = legal?.status === "approved" && contact?.status === "operational";
+  const externalReady = analytics?.status === "configured" || analytics?.status === "verified";
+  const servicesReady =
+    ["configured", "verified"].includes((record.searchConsole as Record<string, unknown> | undefined)?.status as string) &&
+    ["configured", "verified"].includes((record.bing as Record<string, unknown> | undefined)?.status as string) &&
+    ["submitted", "accepted"].includes(sitemap?.status as string);
+  if (["legally-approved", "externally-configured", "activation-ready", "active"].includes(state as string) && !legalReady) {
+    issues.push("activation-transition:legal");
+  }
+  if (["externally-configured", "activation-ready", "active"].includes(state as string) &&
+    (!externalReady || !servicesReady || evidence?.externalConfiguration !== "complete")) {
+    issues.push("activation-transition:external");
+  }
+  if (["activation-ready", "active"].includes(state as string) &&
+    (analytics?.productionVariables !== "configured" || evidence?.previewProviderFree !== "complete")) {
+    issues.push("activation-transition:ready");
+  }
+  if (state === "active" &&
+    (analytics?.status !== "verified" || sitemap?.status !== "accepted" ||
+      evidence?.productionActivation !== "complete" || evidence?.immediateReview !== "complete" ||
+      evidence?.twentyFourHourReview !== "complete")) {
+    issues.push("activation-transition:active");
   }
 
   return Object.freeze([...new Set(issues)]);

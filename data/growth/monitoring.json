@@ -16,6 +16,11 @@
     "no-enforced-csp",
     "no-provider-identifiers-or-requests",
     "no-analytics-set-cookie",
-    "no-clarity-or-commercial-providers"
+    "no-clarity-or-commercial-providers",
+    "preview-provider-free",
+    "pre-consent-provider-silence",
+    "reject-provider-silence",
+    "single-sanitized-page-view",
+    "withdrawal-blocks-future-events"
   ]
 }

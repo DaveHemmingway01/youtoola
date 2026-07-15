@@ -7,6 +7,7 @@ Phase 8 defines metrics; Phase 11 activates and verifies measurement. The Youtoo
 | KPI | Exact numerator / value | Exact denominator | Source and cadence | Owner | Known blind spot |
 | --- | --- | --- | --- | --- | --- |
 | Organic landing sessions | Production sessions whose default channel is Organic Search and whose first page is Youtoola | All Production sessions | GA4; monthly | Youtoola owner | Consent denial and blockers undercount sessions. |
+| Consented page views | Accepted sanitized provider `page_view` events | Not applicable | GA4; monthly | Product owner | Consent denial and blockers undercount views; repeated delivery of the current route is deduplicated. |
 | Search impressions | Google impressions for canonical Youtoola URLs | Not applicable | Search Console; monthly | Search owner | Sampling, privacy thresholds and reporting delay apply. |
 | Search clicks | Google clicks for canonical Youtoola URLs | Not applicable | Search Console; monthly | Search owner | Does not include AI answers or Bing. |
 | Search click-through rate | Search Console clicks | Search Console impressions | Search Console; monthly | Search owner | Query and page aggregation can hide mix changes. |
@@ -22,6 +23,8 @@ Phase 8 defines metrics; Phase 11 activates and verifies measurement. The Youtoo
 | Journey progression | Consecutive released utility views matching an approved public journey stage order | Eligible journey-entry sequences | GA4 path report; only after journeys publish | Discovery owner | Unavailable until public journeys and sufficient consented traffic exist. |
 | Redacted application error rate | Redacted application errors on Production requests | Production requests | Vercel logs; monthly | Engineering owner | Client errors not reaching logs may be absent. |
 | Core Web Vitals | Good/needs-improvement/poor distributions for LCP, INP and CLS | Eligible field observations | Search Console and CrUX; 28-day rolling | Engineering owner | Low traffic can delay or suppress field data. |
+| Indexed routes | Canonical public routes reported indexed | Canonical public routes submitted for indexing | Search Console; monthly | Search owner | Submission and discovery do not prove indexing; low-volume evidence may lag. |
+| Lab performance | Passing controlled mobile and desktop lab checks | Defined controlled lab checks | Repository evidence; per release | Engineering owner | Lab evidence does not replace field data. |
 | Methodology freshness | Released utility methodologies reviewed within their approved freshness window | Released utilities requiring methodology review | Repository records; monthly | Editorial owner | A current review date does not prove source correctness. |
 | Correction frequency | Owner-approved calculation or methodology correction releases | Released utilities | Git and changelog; monthly | Editorial owner | Minor defects fixed without formal classification may be missed. |
 | Deployment failure rate | Failed Production deployments | All Production deployment attempts | Vercel and GitHub; monthly | Engineering owner | Provider status does not prove the deployed product worked for users. |
