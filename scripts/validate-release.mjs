@@ -5,7 +5,7 @@ import { pathToFileURL } from "node:url";
 
 const root = resolve(import.meta.dirname, "..");
 const validationUrl = pathToFileURL(join(root, "lib/release/validation.ts")).href;
-const { validateGoldenVectorDocument, validateReleaseProvenanceHistory, validateReleaseRecord } = await import(validationUrl);
+const { getOverdueFollowUpReviews, validateCorrectionReferences, validateGoldenVectorDocument, validateReleaseProvenanceHistory, validateReleaseRecord } = await import(validationUrl);
 
 function valueFor(name) {
   const equals = process.argv.find((argument) => argument.startsWith(`${name}=`));
@@ -37,9 +37,15 @@ function validateRecords() {
   const paths = releaseRecordPaths();
   if (valueFor("--record") && paths.some((path) => !existsSync(path))) throw new Error(`Release record not found: ${paths.find((path) => !existsSync(path))}`);
   const failures = [];
+  const records = [];
+  const warnings = [];
   for (const path of paths) {
     const record = readJson(path);
+    records.push(record);
     const issues = validateReleaseRecord(record);
+    for (const period of getOverdueFollowUpReviews(record)) {
+      warnings.push(`${path}: follow-up overdue: ${period}`);
+    }
     issues.push(...validateReleaseProvenanceHistory(record, {
       commitExists: (commit) => gitSucceeds(["cat-file", "-e", `${commit}^{commit}`]),
       isAncestor: (commit, ref) => gitSucceeds(["merge-base", "--is-ancestor", commit, ref]),
@@ -47,8 +53,10 @@ function validateRecords() {
     }));
     if (issues.length) failures.push(`${path}:\n  - ${issues.join("\n  - ")}`);
   }
+  const correctionIssues = validateCorrectionReferences(records);
+  if (correctionIssues.length) failures.push(`Release correction references:\n  - ${correctionIssues.join("\n  - ")}`);
   if (failures.length) throw new Error(failures.join("\n"));
-  return `${paths.length} release record${paths.length === 1 ? "" : "s"}`;
+  return `${paths.length} release record${paths.length === 1 ? "" : "s"}${warnings.length ? `; warnings: ${warnings.join(" | ")}` : ""}`;
 }
 
 function gitSucceeds(args) {

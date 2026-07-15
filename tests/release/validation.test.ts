@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { RELEASE_GATES, type ReleaseRecord } from "@/lib/release/contracts";
+import { RELEASE_GATES, type ReleaseCorrectionRecord, type ReleaseRecord } from "@/lib/release/contracts";
 import {
+  getOverdueFollowUpReviews,
   requiredEvidenceForRiskTags,
+  validateCorrectionReferences,
   validateGoldenVectorDocument,
   validateReleaseProvenanceHistory,
   validateReleaseRecord,
@@ -18,7 +20,8 @@ function candidate(tags: ReleaseRecord["riskTags"] = ["platform-architecture"]):
     status: id.includes("approval") || id.includes("review") ? "approved" as const : "passed" as const,
   }));
   return {
-    recordVersion: 2,
+    recordVersion: 3,
+    recordKind: "release",
     recordId: "2026-07-14-phase-9",
     status: "candidate",
     phaseOrUtility: "Phase 9",
@@ -28,13 +31,26 @@ function candidate(tags: ReleaseRecord["riskTags"] = ["platform-architecture"]):
     pullRequest: "pending",
     provenance: {
       pullRequest: "pending",
+      sourceBranch: "origin/main",
+      sourceCommit: "c".repeat(40),
       reviewedHeadCommit: "pending-review",
       reviewedHeadRef: "platform/release-gates",
-      reviewedDate: "2026-07-14",
+      reviewedDate: null,
       mergeMethod: null,
       mergeCommit: null,
       durableReleaseCommit: null,
       mergedAt: null,
+    },
+    delivery: {
+      branch: "platform/release-gates",
+      releaseKind: "normal",
+      preview: null,
+      productionUnchangedBeforeMerge: true,
+      requiredChecks: ["Quality", "End-to-end", "Vercel"].map((name) => ({
+        name: name as "Quality" | "End-to-end" | "Vercel",
+        reference: null,
+        status: "pending" as const,
+      })),
     },
     evidence,
     exceptions: [],
@@ -44,9 +60,18 @@ function candidate(tags: ReleaseRecord["riskTags"] = ["platform-architecture"]):
       evidence: gate === "plan" ? ["owner-approved-phase-9-plan"] : [],
       status: gate === "plan" ? "approved" : "pending",
     }])) as unknown as ReleaseRecord["gateEvidence"],
-    versions: { analyticsSchema: 1, releaseSchema: 2 },
+    versions: { analyticsSchema: 1, releaseSchema: 3 },
     production: null,
-    followUpDates: { immediate: null, "24-hours": null, "7-days": null, "28-days": null, monthly: null, quarterly: null },
+    followUpReviews: Object.fromEntries(
+      ["immediate", "24-hour", "7-day", "28-day", "monthly", "quarterly"].map((period) => [period, {
+        completedDate: null,
+        dueDate: null,
+        evidence: [],
+        notApplicableReason: null,
+        owner: "Youtoola owner",
+        status: "pending",
+      }]),
+    ) as unknown as ReleaseRecord["followUpReviews"],
   };
 }
 
@@ -57,6 +82,8 @@ function completed(): ReleaseRecord {
   record.pullRequest = "https://github.com/DaveHemmingway01/youtoola/pull/11";
   record.provenance = {
     pullRequest: record.pullRequest,
+    sourceBranch: "origin/main",
+    sourceCommit: "c".repeat(40),
     reviewedHeadCommit: "b".repeat(40),
     reviewedHeadRef: "platform/release-gates",
     reviewedDate: "2026-07-14",
@@ -64,6 +91,23 @@ function completed(): ReleaseRecord {
     mergeCommit: durableCommit,
     durableReleaseCommit: durableCommit,
     mergedAt: "2026-07-14T10:00:00.000Z",
+  };
+  record.delivery = {
+    ...record.delivery,
+    preview: {
+      branchAlias: "https://youtoola-git-platform-release-gates-davincistudio.vercel.app/",
+      deploymentCommit: "b".repeat(40),
+      deploymentId: "dpl_preview",
+      noindex: true,
+      protected: true,
+      ready: true,
+      uniqueUrl: "https://youtoola-example-davincistudio.vercel.app/",
+    },
+    requiredChecks: ["Quality", "End-to-end", "Vercel"].map((name) => ({
+      name: name as "Quality" | "End-to-end" | "Vercel",
+      reference: "https://github.com/DaveHemmingway01/youtoola/actions/runs/1",
+      status: "passed" as const,
+    })),
   };
   record.production = {
     mergeCommit: durableCommit,
@@ -75,7 +119,20 @@ function completed(): ReleaseRecord {
     rollbackDeployment: "dpl_previous",
     releaseDate: "2026-07-14",
   };
-  record.followUpDates = { ...record.followUpDates, immediate: "2026-07-14" };
+  record.followUpReviews = Object.fromEntries(
+    Object.entries(record.followUpReviews).map(([period, review]) => [
+      period,
+      period === "immediate"
+        ? {
+            ...review,
+            completedDate: "2026-07-14",
+            dueDate: "2026-07-14",
+            evidence: ["Production smoke passed."],
+            status: "complete",
+          }
+        : { ...review, dueDate: "2026-07-15" },
+    ]),
+  ) as unknown as ReleaseRecord["followUpReviews"];
   record.gateEvidence = {
     ...record.gateEvidence,
     plan: { approver: "Youtoola owner", evidence: ["approved"], status: "approved" },
@@ -128,6 +185,14 @@ describe("release record validation", () => {
     expect(validateReleaseRecord(candidate(), today)).toEqual([]);
   });
 
+  it("does not permit a candidate to claim a review date before its reviewed head exists", () => {
+    const record = candidate();
+    record.provenance.reviewedDate = "2026-07-14";
+    expect(validateReleaseRecord(record, today)).toContain(
+      "provenance:reviewed-date-contradiction",
+    );
+  });
+
   it("rejects missing evidence, approvals, rollback and stale dates", () => {
     const record = candidate();
     record.evidence = record.evidence.slice(1);
@@ -167,7 +232,7 @@ describe("release record validation", () => {
       "methodology:version",
       "record:independent-review",
     ]));
-    record.versions = { releaseSchema: 2, calculation: 2, methodology: 3 };
+    record.versions = { releaseSchema: 3, calculation: 2, methodology: 3 };
     record.independentReview = { reviewer: "Qualified reviewer", scope: "Formula and sources", reviewedDate: "2026-07-14", evidence: "review:123", qualified: true };
     expect(validateReleaseRecord(record, today)).toEqual([]);
   });
@@ -235,6 +300,8 @@ describe("release record validation", () => {
     const validProbe = {
       commitExists: () => true,
       isAncestor: (commit: string, ref: string) =>
+        (commit === record.provenance.sourceCommit && ref === "HEAD") ||
+        (commit === record.provenance.sourceCommit && ref === record.provenance.reviewedHeadCommit) ||
         (commit === record.provenance.reviewedHeadCommit && ref === `refs/remotes/origin/${record.provenance.reviewedHeadRef}`) ||
         (commit === record.provenance.durableReleaseCommit && ref === "HEAD"),
       refExists: () => true,
@@ -243,6 +310,7 @@ describe("release record validation", () => {
     expect(validProbe.isAncestor(record.provenance.reviewedHeadCommit, "HEAD")).toBe(false);
 
     expect(validateReleaseProvenanceHistory(record, { ...validProbe, commitExists: () => false })).toEqual(expect.arrayContaining([
+      "provenance:source-commit-not-found",
       "provenance:reviewed-head-not-found",
       "provenance:durable-release-commit-not-in-main-history",
     ]));
@@ -253,12 +321,136 @@ describe("release record validation", () => {
     ]));
   });
 
-  it("rejects invalid follow-up dates and invalid deployment URLs", () => {
+  it("validates structured completion and not-applicable review evidence", () => {
+    const record = completed();
+    record.followUpReviews = {
+      ...record.followUpReviews,
+      "7-day": {
+        ...record.followUpReviews["7-day"],
+        completedDate: "2026-07-15",
+        evidence: ["Owner approved no indexing evidence before Phase 11."],
+        notApplicableReason: "Search Console is intentionally deferred to Phase 11.",
+        status: "not-applicable",
+      },
+    };
+    expect(validateReleaseRecord(record, today)).toEqual([]);
+
+    record.followUpReviews = {
+      ...record.followUpReviews,
+      "7-day": {
+        ...record.followUpReviews["7-day"],
+        evidence: [],
+        notApplicableReason: null,
+      },
+    };
+    expect(validateReleaseRecord(record, today)).toContain(
+      "follow-up:not-applicable-approval:7-day",
+    );
+  });
+
+  it("reports overdue reviews without invalidating normal record validation", () => {
+    const record = completed();
+    record.followUpReviews = {
+      ...record.followUpReviews,
+      "24-hour": {
+        ...record.followUpReviews["24-hour"],
+        dueDate: "2026-07-15",
+      },
+    };
+    expect(validateReleaseRecord(record, new Date("2026-07-16T12:00:00Z"))).toEqual([]);
+    expect(getOverdueFollowUpReviews(record, new Date("2026-07-16T12:00:00Z"))).toContain("24-hour");
+  });
+
+  it("requires hotfix and documentation-only records to use their reserved branch families", () => {
+    const hotfix = candidate();
+    hotfix.delivery = {
+      ...hotfix.delivery,
+      branch: "hotfix/canonical-loop",
+      releaseKind: "hotfix",
+    };
+    hotfix.provenance = {
+      ...hotfix.provenance,
+      reviewedHeadRef: "hotfix/canonical-loop",
+    };
+    expect(validateReleaseRecord(hotfix, today)).toEqual([]);
+
+    const invalidHotfix = candidate();
+    invalidHotfix.delivery = { ...invalidHotfix.delivery, releaseKind: "hotfix" };
+    expect(validateReleaseRecord(invalidHotfix, today)).toContain(
+      "delivery:hotfix-branch",
+    );
+
+    const documentation = candidate(["documentation-only"]);
+    documentation.delivery = {
+      ...documentation.delivery,
+      branch: "docs/phase-9-release-record",
+      releaseKind: "documentation-only",
+    };
+    documentation.provenance = {
+      ...documentation.provenance,
+      reviewedHeadRef: "docs/phase-9-release-record",
+    };
+    expect(validateReleaseRecord(documentation, today)).toEqual([]);
+
+    documentation.delivery = {
+      ...documentation.delivery,
+      branch: "platform/phase-9-release-record",
+    };
+    expect(validateReleaseRecord(documentation, today)).toContain(
+      "delivery:documentation-branch",
+    );
+  });
+
+  it("requires correction records to reference an existing release", () => {
+    const source = completed();
+    const correction: ReleaseCorrectionRecord = {
+      approvedDate: "2026-07-14",
+      approver: "Youtoola owner",
+      correctsRecordId: source.recordId,
+      evidence: ["Owner-approved factual correction."],
+      planApproval: {
+        approvedDate: "2026-07-14",
+        approver: "Youtoola owner",
+        reference: "APPROVE PLAN: correction",
+      },
+      provenance: {
+        ...source.provenance,
+        durableReleaseCommit: null,
+        mergeCommit: null,
+        mergeMethod: null,
+        mergedAt: null,
+        pullRequest: "pending",
+        reviewedHeadCommit: "pending-review",
+        reviewedHeadRef: "docs/phase-9-correction",
+        reviewedDate: null,
+      },
+      pullRequest: "pending",
+      reason: "Correct a factual evidence field without rewriting the original record.",
+      recordId: "2026-07-14-phase-9-correction-1",
+      recordKind: "correction",
+      recordVersion: 3,
+      status: "candidate",
+      summary: "Factual Phase 9 evidence correction.",
+    };
+    expect(validateReleaseRecord(correction, today)).toEqual([]);
+    expect(validateCorrectionReferences([source, correction])).toEqual([]);
+    expect(validateCorrectionReferences([correction])).toContain(
+      `correction:missing-target:${source.recordId}`,
+    );
+    expect(validateReleaseRecord({ ...correction, production: source.production }, today)).toContain(
+      "correction:unknown-field:production",
+    );
+  });
+
+  it("rejects invalid follow-up reviews and invalid deployment URLs", () => {
     const record = candidate();
-    record.followUpDates = { ...record.followUpDates, "7-days": "not-a-date" };
+    record.followUpReviews = {
+      ...record.followUpReviews,
+      "7-day": { ...record.followUpReviews["7-day"], dueDate: "not-a-date" },
+    };
     record.pullRequest = "http://github.example/pr";
     expect(validateReleaseRecord(record, today)).toEqual(expect.arrayContaining([
-      "record:follow-up-date:7-days",
+      "follow-up:due-date:7-day",
       "record:pull-request",
     ]));
   });

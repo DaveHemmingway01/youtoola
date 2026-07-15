@@ -1,5 +1,6 @@
 {
-  "recordVersion": 2,
+  "recordVersion": 3,
+  "recordKind": "release",
   "recordId": "2026-07-14-phase-9",
   "status": "completed",
   "phaseOrUtility": "Phase 9",
@@ -16,6 +17,8 @@
   "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/11",
   "provenance": {
     "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/11",
+    "sourceBranch": "origin/main",
+    "sourceCommit": "149134d497757081f9a9fc73c6e0f6338e492956",
     "reviewedHeadCommit": "cc9fa609b7be3a7d760d706b053e1fd2ae573c22",
     "reviewedHeadRef": "platform/release-gates",
     "reviewedDate": "2026-07-14",
@@ -23,6 +26,37 @@
     "mergeCommit": "52783bf36b0d5bcb737195ebe8c87d9743d9c377",
     "durableReleaseCommit": "52783bf36b0d5bcb737195ebe8c87d9743d9c377",
     "mergedAt": "2026-07-14T21:39:39.000Z"
+  },
+  "delivery": {
+    "branch": "platform/release-gates",
+    "releaseKind": "normal",
+    "preview": {
+      "deploymentId": "dpl_Can9UW8V393zKKGezzVMXzWsJA9M",
+      "deploymentCommit": "cc9fa609b7be3a7d760d706b053e1fd2ae573c22",
+      "uniqueUrl": "https://youtoola-17sbgqp5e-davincistudio.vercel.app/",
+      "branchAlias": "https://youtoola-git-platform-release-gates-davincistudio.vercel.app/",
+      "ready": true,
+      "protected": true,
+      "noindex": true
+    },
+    "requiredChecks": [
+      {
+        "name": "Quality",
+        "status": "passed",
+        "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29358658182/job/87172742344"
+      },
+      {
+        "name": "End-to-end",
+        "status": "passed",
+        "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29358658182/job/87172742320"
+      },
+      {
+        "name": "Vercel",
+        "status": "passed",
+        "reference": "https://vercel.com/davincistudio/youtoola/Can9UW8V393zKKGezzVMXzWsJA9M"
+      }
+    ],
+    "productionUnchangedBeforeMerge": true
   },
   "evidence": [
     {
@@ -89,6 +123,12 @@
       "id": "prototype-pollution-tests",
       "status": "passed",
       "reference": "tests/analytics/contracts.test.ts and plain-object release validation",
+      "reviewedDate": "2026-07-14"
+    },
+    {
+      "id": "preview-verification",
+      "status": "passed",
+      "reference": "Protected noindexed Vercel Preview dpl_Can9UW8V393zKKGezzVMXzWsJA9M for reviewed head cc9fa609b7be3a7d760d706b053e1fd2ae573c22",
       "reviewedDate": "2026-07-14"
     },
     {
@@ -217,7 +257,7 @@
     }
   },
   "versions": {
-    "releaseSchema": 2,
+    "releaseSchema": 3,
     "analyticsSchema": 1
   },
   "production": {
@@ -240,12 +280,56 @@
     "rollbackDeployment": "dpl_DPwLcuff7sCxDbx26FmiTkgbDyoV",
     "releaseDate": "2026-07-14"
   },
-  "followUpDates": {
-    "immediate": "2026-07-14",
-    "24-hours": "2026-07-15",
-    "7-days": "2026-07-21",
-    "28-days": "2026-08-11",
-    "monthly": "2026-08-14",
-    "quarterly": "2026-10-14"
+  "followUpReviews": {
+    "immediate": {
+      "dueDate": "2026-07-14",
+      "status": "complete",
+      "owner": "Youtoola owner",
+      "completedDate": "2026-07-14",
+      "evidence": [
+        "Production deployment dpl_AwsJGmzxizSta9YX5tDR57LDVoYe immediate smoke verification"
+      ],
+      "notApplicableReason": null
+    },
+    "24-hour": {
+      "dueDate": "2026-07-15",
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "7-day": {
+      "dueDate": "2026-07-21",
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "28-day": {
+      "dueDate": "2026-08-11",
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "monthly": {
+      "dueDate": "2026-08-14",
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "quarterly": {
+      "dueDate": "2026-10-14",
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    }
   }
 }

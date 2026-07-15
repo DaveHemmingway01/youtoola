@@ -28,18 +28,45 @@ describe("resolveRuntimeEnvironment", () => {
     );
   });
 
-  it("gives the explicit override precedence over Vercel", () => {
-    expect(
+  it("makes Vercel authoritative and rejects conflicting overrides", () => {
+    expect(() =>
       resolveRuntimeEnvironment({
         VERCEL_ENV: "production",
         YOUTOOLA_ENV: "preview",
       }),
+    ).toThrow("VERCEL_ENV=production is authoritative");
+    expect(() =>
+      resolveRuntimeEnvironment({
+        VERCEL_ENV: "preview",
+        YOUTOOLA_ENV: "production",
+      }),
+    ).toThrow("VERCEL_ENV=preview is authoritative");
+  });
+
+  it("accepts an explicit value only when it agrees with Vercel", () => {
+    expect(
+      resolveRuntimeEnvironment({
+        VERCEL_ENV: "preview",
+        YOUTOOLA_ENV: "preview",
+      }),
     ).toBe("preview");
+    expect(
+      resolveRuntimeEnvironment({
+        VERCEL_ENV: "development",
+        YOUTOOLA_ENV: "local",
+      }),
+    ).toBe("local");
   });
 
   it("rejects invalid explicit overrides", () => {
     expect(() => resolveRuntimeEnvironment({ YOUTOOLA_ENV: "staging" })).toThrow(
       "Invalid YOUTOOLA_ENV",
+    );
+  });
+
+  it("rejects unknown Vercel environments", () => {
+    expect(() => resolveRuntimeEnvironment({ VERCEL_ENV: "staging" })).toThrow(
+      "Invalid VERCEL_ENV",
     );
   });
 });
