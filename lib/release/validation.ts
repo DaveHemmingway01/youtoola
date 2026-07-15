@@ -654,6 +654,7 @@ function validateFollowUpReviews(
   input: unknown,
   status: unknown,
   issues: string[],
+  now: Date,
 ) {
   if (!isRecord(input)) {
     issues.push("record:follow-up-reviews");
@@ -706,6 +707,13 @@ function validateFollowUpReviews(
       if (!validDate(raw.completedDate) || !Array.isArray(raw.evidence) || raw.evidence.length === 0 || !nonEmptyString(raw.notApplicableReason)) {
         issues.push(`follow-up:not-applicable-approval:${period}`);
       }
+    }
+    if (
+      (raw.status === "complete" || raw.status === "not-applicable") &&
+      validDate(raw.completedDate) &&
+      raw.completedDate > now.toISOString().slice(0, 10)
+    ) {
+      issues.push(`follow-up:future-completion:${period}`);
     }
   }
 }
@@ -817,7 +825,7 @@ export function validateReleaseRecord(input: unknown, now = new Date()): string[
   );
 
   if (!isRecord(input.versions) || input.versions.releaseSchema !== RELEASE_SCHEMA_VERSION) issues.push("record:versions");
-  validateFollowUpReviews(input.followUpReviews, input.status, issues);
+  validateFollowUpReviews(input.followUpReviews, input.status, issues, now);
 
   if (selection.tags.includes("calculation-change")) {
     const versions = isRecord(input.versions) ? input.versions : {};
@@ -854,6 +862,12 @@ export function validateReleaseRecord(input: unknown, now = new Date()): string[
       if (input.production.mergeCommit !== input.production.deploymentCommit) issues.push("production:commit-mismatch");
       if (provenance && (input.production.mergeCommit !== provenance.mergeCommit || input.production.deploymentCommit !== provenance.durableReleaseCommit)) issues.push("production:provenance-mismatch");
       if (!deploymentId(input.production.deploymentId) || !deploymentId(input.production.rollbackDeployment)) issues.push("production:deployment-evidence");
+      if (
+        isRecord(input.rollbackPlan) &&
+        input.production.rollbackDeployment !== input.rollbackPlan.target
+      ) {
+        issues.push("production:rollback-mismatch");
+      }
       if (!Array.isArray(input.production.liveUrls) || input.production.liveUrls.length === 0 || input.production.liveUrls.some((url) => !productionUrl(url))) issues.push("production:live-urls");
       if (!Array.isArray(input.production.smokeResults) || input.production.smokeResults.length === 0 || input.production.smokeResults.some((result) => !nonEmptyString(result))) issues.push("production:smoke-results");
       if (!validDate(input.production.releaseDate)) issues.push("production:release-date");

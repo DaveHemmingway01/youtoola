@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import { describe, expect, it } from "vitest";
 
 import {
@@ -12,7 +15,16 @@ import {
   validateBranchName,
   validateBranchPolicy,
   validateEnvironmentVariableName,
+  validateReleaseRecordCompletionChange,
 } from "@/lib/delivery/validation";
+
+const phase10RecordPath = "docs/releases/2026-07-15-phase-10.json";
+
+function factualPhase10Record(): Record<string, unknown> {
+  return JSON.parse(
+    readFileSync(join(process.cwd(), phase10RecordPath), "utf8"),
+  ) as Record<string, unknown>;
+}
 
 describe("delivery contracts", () => {
   it.each([
@@ -84,6 +96,146 @@ describe("delivery contracts", () => {
     expect(
       isReleaseRecordCompletionChange("platform/delivery-operations", [
         "docs/releases/2026-07-15-phase-10.json",
+      ]),
+    ).toBe(false);
+  });
+
+  it("accepts a factual completion without a recursive candidate record", () => {
+    const changedPaths = [
+      phase10RecordPath,
+      "docs/operations/release-validation.md",
+      "lib/delivery/validation.ts",
+      "lib/release/validation.ts",
+      "scripts/validate-delivery.mjs",
+      "tests/delivery/contracts.test.ts",
+      "tests/release/validation.test.ts",
+    ];
+    expect(
+      isReleaseRecordCompletionChange(
+        "docs/phase-10-release-record",
+        changedPaths,
+      ),
+    ).toBe(true);
+    expect(
+      validateReleaseRecordCompletionChange({
+        branch: "docs/phase-10-release-record",
+        changedRecordPath: phase10RecordPath,
+        completedRecord: factualPhase10Record(),
+        now: new Date("2026-07-15T12:00:00Z"),
+      }),
+    ).toEqual([]);
+  });
+
+  it.each([
+    "app/page.tsx",
+    "components/card.tsx",
+    "lib/environment.ts",
+    ".env.example",
+    "next.config.ts",
+    "vercel.json",
+    "public/brand/youtoola-logo.png",
+    "package.json",
+    "package-lock.json",
+    "registry/utility-registry.ts",
+    "knowledge/entities.ts",
+    "lib/discovery/search.ts",
+    "lib/seo/metadata.ts",
+    "lib/analytics/runtime.ts",
+    "lib/monetisation/runtime.ts",
+    "lib/crawler-policy.ts",
+    "app/sitemap.ts",
+    "utilities/example/definition.ts",
+  ])("rejects release-record exemption when %s changes", (unsafePath) => {
+    expect(
+      isReleaseRecordCompletionChange("docs/phase-10-release-record", [
+        phase10RecordPath,
+        unsafePath,
+      ]),
+    ).toBe(false);
+  });
+
+  it("requires exactly one completed record for the matching source release", () => {
+    expect(
+      isReleaseRecordCompletionChange("docs/phase-10-release-record", [
+        "scripts/validate-release.mjs",
+      ]),
+    ).toBe(false);
+    expect(
+      isReleaseRecordCompletionChange("docs/phase-10-release-record", [
+        phase10RecordPath,
+        "docs/releases/2026-07-14-phase-9.json",
+      ]),
+    ).toBe(false);
+
+    const malformed = factualPhase10Record();
+    malformed.status = "candidate";
+    expect(
+      validateReleaseRecordCompletionChange({
+        branch: "docs/phase-10-release-record",
+        changedRecordPath: phase10RecordPath,
+        completedRecord: malformed,
+      }),
+    ).toContain("release-completion:record-status");
+
+    const mismatched = factualPhase10Record();
+    mismatched.recordId = "2026-07-15-phase-9";
+    expect(
+      validateReleaseRecordCompletionChange({
+        branch: "docs/phase-10-release-record",
+        changedRecordPath: phase10RecordPath,
+        completedRecord: mismatched,
+      }),
+    ).toContain("release-completion:source-release");
+  });
+
+  it("fails completion context for mismatched PR, rollback, or future review evidence", () => {
+    const mismatchedPr = factualPhase10Record();
+    (mismatchedPr.provenance as Record<string, unknown>).pullRequest =
+      "https://github.com/DaveHemmingway01/youtoola/pull/999";
+    expect(
+      validateReleaseRecordCompletionChange({
+        branch: "docs/phase-10-release-record",
+        changedRecordPath: phase10RecordPath,
+        completedRecord: mismatchedPr,
+      }),
+    ).toContain("release-completion:pull-request");
+
+    const fabricatedRollback = factualPhase10Record();
+    (fabricatedRollback.production as Record<string, unknown>).rollbackDeployment =
+      "dpl_fabricated";
+    expect(
+      validateReleaseRecordCompletionChange({
+        branch: "docs/phase-10-release-record",
+        changedRecordPath: phase10RecordPath,
+        completedRecord: fabricatedRollback,
+      }),
+    ).toContain("release-completion:rollback");
+
+    const inventedReview = factualPhase10Record();
+    const followUps = inventedReview.followUpReviews as Record<
+      string,
+      Record<string, unknown>
+    >;
+    followUps["24-hour"] = {
+      ...followUps["24-hour"],
+      completedDate: "2026-07-16",
+      evidence: ["Invented future result."],
+      status: "complete",
+    };
+    expect(
+      validateReleaseRecordCompletionChange({
+        branch: "docs/phase-10-release-record",
+        changedRecordPath: phase10RecordPath,
+        completedRecord: inventedReview,
+        now: new Date("2026-07-15T12:00:00Z"),
+      }),
+    ).toContain("release-completion:future-follow-up:24-hour");
+  });
+
+  it("does not exempt an ordinary implementation branch without a candidate record", () => {
+    expect(
+      isReleaseRecordCompletionChange("platform/delivery-operations", [
+        phase10RecordPath,
       ]),
     ).toBe(false);
   });

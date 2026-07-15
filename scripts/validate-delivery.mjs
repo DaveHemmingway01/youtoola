@@ -1,6 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { join, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 const root = resolve(import.meta.dirname, "..");
@@ -8,7 +8,11 @@ const deliveryUrl = pathToFileURL(
   join(root, "lib/delivery/validation.ts"),
 ).href;
 const releaseUrl = pathToFileURL(join(root, "lib/release/validation.ts")).href;
-const { isReleaseRecordCompletionChange, validateBranchPolicy } = await import(deliveryUrl);
+const {
+  isReleaseRecordCompletionChange,
+  validateBranchPolicy,
+  validateReleaseRecordCompletionChange,
+} = await import(deliveryUrl);
 const {
   getOverdueFollowUpReviews,
   validateCorrectionReferences,
@@ -67,8 +71,7 @@ const phaseRecord = records.find(
   ({ value }) => value.status === "candidate" && value.delivery?.branch === branch,
 );
 if (branch !== "main") {
-  if (!phaseRecord && !releaseRecordCompletion) issues.push(`delivery:candidate-record-missing:${branch}`);
-  else {
+  if (phaseRecord) {
     issues.push(
       ...validateBranchPolicy({
         branch,
@@ -77,6 +80,35 @@ if (branch !== "main") {
         sourceCommit: phaseRecord.value.provenance.sourceCommit,
       }),
     );
+  } else if (releaseRecordCompletion) {
+    const changedRecordPath = changedPaths.find((path) =>
+      /^docs\/releases\/[^/]+\.json$/.test(path),
+    );
+    const completedRecord = records.find(
+      ({ path }) => relative(root, path) === changedRecordPath,
+    )?.value;
+    const provenance =
+      completedRecord &&
+      completedRecord.provenance &&
+      typeof completedRecord.provenance === "object" &&
+      !Array.isArray(completedRecord.provenance)
+        ? completedRecord.provenance
+        : {};
+    issues.push(
+      ...validateBranchPolicy({
+        branch,
+        releaseKind: "documentation-only",
+        sourceBranch: provenance.sourceBranch ?? "",
+        sourceCommit: provenance.sourceCommit ?? "",
+      }),
+      ...validateReleaseRecordCompletionChange({
+        branch,
+        changedRecordPath: changedRecordPath ?? null,
+        completedRecord,
+      }),
+    );
+  } else {
+    issues.push(`delivery:candidate-record-missing:${branch}`);
   }
 }
 

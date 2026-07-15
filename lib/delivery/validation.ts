@@ -69,24 +69,104 @@ const releaseRecordCompletionPaths = [
   /^CHANGELOG\.md$/,
   /^docs\/operations\/release-validation\.md$/,
   /^docs\/releases\/[^/]+\.json$/,
+  /^lib\/delivery\/validation\.ts$/,
   /^lib\/release\/[^/]+\.ts$/,
+  /^scripts\/validate-delivery\.mjs$/,
   /^scripts\/validate-release\.mjs$/,
+  /^tests\/delivery\/[^/]+\.test\.ts$/,
   /^tests\/release\/[^/]+\.test\.ts$/,
 ] as const;
+
+const releaseRecordPathPattern = /^docs\/releases\/([^/]+)\.json$/;
+const releaseRecordCompletionBranchPattern =
+  /^docs\/([a-z0-9]+(?:-[a-z0-9]+)*)-release-record$/;
+
+function record(value: unknown): Record<string, unknown> | null {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : null;
+}
 
 export function isReleaseRecordCompletionChange(
   branch: string,
   paths: readonly string[],
 ) {
+  const releaseRecordPaths = paths.filter((path) =>
+    releaseRecordPathPattern.test(path),
+  );
   return (
-    /^docs\/(?=[a-z0-9-]*release-record)[a-z0-9]+(?:-[a-z0-9]+)*$/.test(
-      branch,
-    ) &&
+    releaseRecordCompletionBranchPattern.test(branch) &&
     paths.length > 0 &&
+    releaseRecordPaths.length === 1 &&
     paths.every((path) =>
       releaseRecordCompletionPaths.some((pattern) => pattern.test(path)),
     )
   );
+}
+
+export function validateReleaseRecordCompletionChange(input: {
+  branch: string;
+  changedRecordPath: string | null;
+  completedRecord: unknown;
+  now?: Date;
+}): string[] {
+  const issues: string[] = [];
+  const branchMatch = releaseRecordCompletionBranchPattern.exec(input.branch);
+  const pathMatch = input.changedRecordPath
+    ? releaseRecordPathPattern.exec(input.changedRecordPath)
+    : null;
+  const completedRecord = record(input.completedRecord);
+
+  if (!branchMatch) issues.push("release-completion:branch");
+  if (!pathMatch) issues.push("release-completion:record-path");
+  if (!completedRecord) return [...issues, "release-completion:record"].sort();
+
+  if (completedRecord.recordKind !== "release") {
+    issues.push("release-completion:record-kind");
+  }
+  if (completedRecord.status !== "completed") {
+    issues.push("release-completion:record-status");
+  }
+  if (
+    pathMatch &&
+    (completedRecord.recordId !== pathMatch[1] ||
+      (branchMatch && !pathMatch[1].endsWith(`-${branchMatch[1]}`)))
+  ) {
+    issues.push("release-completion:source-release");
+  }
+
+  const provenance = record(completedRecord.provenance);
+  const production = record(completedRecord.production);
+  const rollbackPlan = record(completedRecord.rollbackPlan);
+  if (!provenance || completedRecord.pullRequest !== provenance.pullRequest) {
+    issues.push("release-completion:pull-request");
+  }
+  if (
+    !production ||
+    !rollbackPlan ||
+    production.rollbackDeployment !== rollbackPlan.target
+  ) {
+    issues.push("release-completion:rollback");
+  }
+
+  const today = (input.now ?? new Date()).toISOString().slice(0, 10);
+  const followUps = record(completedRecord.followUpReviews);
+  if (followUps) {
+    for (const [period, rawReview] of Object.entries(followUps)) {
+      const review = record(rawReview);
+      if (
+        period !== "immediate" &&
+        review &&
+        review.status !== "pending" &&
+        typeof review.completedDate === "string" &&
+        review.completedDate > today
+      ) {
+        issues.push(`release-completion:future-follow-up:${period}`);
+      }
+    }
+  }
+
+  return [...new Set(issues)].sort();
 }
 
 export function validateEnvironmentVariableName(name: string): string[] {
