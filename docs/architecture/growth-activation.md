@@ -1,6 +1,6 @@
 # Growth Activation Architecture
 
-Status: Phase 11 Unit 3 legally approved; Search Console and Bing evidence recorded; GA4 configuration, REVIEW and activation remain pending.
+Status: Phase 11 Unit 3 legally approved; Search Console, Bing, sitemap and partial GA4 Stream evidence recorded; GA4 governance verification, REVIEW and activation remain pending.
 
 ## State and evidence boundary
 
@@ -14,13 +14,13 @@ The consent provider observes App Router transitions with `usePathname`. It deri
 
 ## Environment and provider boundary
 
-Only `YOUTOOLA_ANALYTICS_ENABLED=true` plus a valid server-owned `YOUTOOLA_GA4_MEASUREMENT_ID` in Production may expose the client configuration and exact report-only CSP origins. Local and Preview reject either value and remain provider-free and noindexed. The identifier is not committed to Growth records or application source. Vercel variables remain unset during BUILD and REVIEW and require owner authorization immediately before exact-head SHIP.
+Only `YOUTOOLA_ANALYTICS_ENABLED=true` plus a valid server-owned `YOUTOOLA_GA4_MEASUREMENT_ID` in Production may expose the client configuration and exact report-only CSP origins. Local and Preview reject either value and remain provider-free and noindexed. A fingerprint of the public GA4 Measurement ID is recorded as factual configuration evidence; the identifier is not wired into application source or any environment. Vercel variables remain unset during BUILD and REVIEW and require owner authorization immediately before exact-head SHIP.
 
 Direct `gtag.js` remains the sole provider integration. Automatic page views, enhanced measurement, Google Signals, advertising features, cross-domain measurement, User ID, Measurement Protocol, GTM and Clarity remain disabled. `tool_complete` remains the only planned initial key event. No utility event is generated in Unit 3.
 
 ## External gates
 
-Activation requires the recorded qualified legal/privacy approval, approved consent wording and lifetime, an operational privacy contact, owner-controlled GA4 property and stream, Search Console Domain ownership, Bing ownership, sitemap submission authorization, dashboard and monitoring owners, rollback authority and factual evidence for each state transition. Search Console Domain property `youtoola.com` and Bing site `youtoola.com` are verified; both report the five-URL sitemap successfully processed, but no route is claimed indexed until its provider confirms that state. GA4 and Vercel Production configuration remain absent, so the activation state stays `legally-approved` and external configuration evidence stays pending. The accepted review requires withdrawal to expire host-only and canonical-domain `_ga` and `_ga_*` cookies while blocking future provider delivery; this behavior is implemented and tested before external activation.
+Activation requires the recorded qualified legal/privacy approval, approved consent wording and lifetime, an operational privacy contact, owner-controlled GA4 property and stream, Search Console Domain ownership, Bing ownership, sitemap submission authorization, dashboard and monitoring owners, rollback authority and factual evidence for each state transition. Search Console Domain property `youtoola.com` and Bing site `youtoola.com` are verified; both report the five-URL sitemap successfully processed, but no route is claimed indexed until its provider confirms that state. Owner-supplied GA4 Stream details establish stream name `Youtoola`, canonical URL `https://www.youtoola.com`, Stream ID `15263953983` and a verified Measurement ID fingerprint. The identifier itself remains outside Git for later owner-authorised Production configuration. Account name, property name/ID and the approved GA4 governance settings remain unverified. Vercel Production variables remain absent, so the activation state stays `legally-approved` and external configuration evidence stays pending. The accepted review requires withdrawal to expire host-only and canonical-domain `_ga` and `_ga_*` cookies while blocking future provider delivery; this behavior is implemented and tested before external activation.
 
 The smallest controlled DebugView evidence is one consented sanitized homepage `page_view`. It contains no utility, personal, commercial, input or result data. Search submission is not represented as acceptance or indexing. Core Web Vitals may truthfully remain `insufficient-data`.
 

@@ -14,10 +14,21 @@
   },
   "analytics": {
     "provider": "Google Analytics 4",
-    "status": "not-configured",
-    "measurementIdStatus": "not-configured",
+    "status": "partially-configured",
+    "measurementIdStatus": "configured",
     "productionVariables": "not-configured",
+    "configuration": {
+      "accountDisplayName": null,
+      "propertyDisplayName": null,
+      "propertyId": null,
+      "streamDisplayName": "Youtoola",
+      "streamId": "15263953983",
+      "streamUrl": "https://www.youtoola.com",
+      "measurementIdFingerprint": "sha256:96718192b2e08dc78eec82cd444dbdf359b3d6bbcf550c1ae0a96f81b10fe67b",
+      "evidenceReference": "Owner-supplied GA4 Stream details screenshot dated 2026-07-15 21:06 Europe/Lisbon; SHA-256 7a684274b68f8bf0b56d74ce47791e7a369bb0e400627a328ffac04628743ee4"
+    },
     "retentionMonths": 2,
+    "settingsVerification": "pending",
     "sanitizedPageView": "build-ready",
     "keyEvents": ["tool_complete"],
     "customDimensions": [],

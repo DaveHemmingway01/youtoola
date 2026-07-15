@@ -74,6 +74,16 @@ type PublicUrlInspection = Readonly<{
 export interface GrowthActivationRecord {
   activationState: GrowthActivationState;
   analytics: Readonly<{
+    configuration: Readonly<{
+      accountDisplayName: string | null;
+      evidenceReference: string;
+      measurementIdFingerprint: string;
+      propertyDisplayName: string | null;
+      propertyId: string | null;
+      streamDisplayName: string;
+      streamId: string;
+      streamUrl: "https://www.youtoola.com";
+    }>;
     customDimensions: readonly string[];
     keyEvents: readonly ["tool_complete"];
     measurementIdStatus: "configured" | "not-configured";
@@ -81,6 +91,7 @@ export interface GrowthActivationRecord {
     provider: "Google Analytics 4";
     retentionMonths: 2;
     sanitizedPageView: "approved" | "build-ready" | "verified";
+    settingsVerification: "pending" | "verified";
     settings: Readonly<{
       advertisingFeatures: false;
       automaticPageViews: false;
@@ -90,7 +101,7 @@ export interface GrowthActivationRecord {
       measurementProtocol: false;
       userId: false;
     }>;
-    status: "configured" | "disabled" | "not-configured" | "verified";
+    status: "configured" | "disabled" | "not-configured" | "partially-configured" | "verified";
   }>;
   bing: Readonly<{
     site: string | null;

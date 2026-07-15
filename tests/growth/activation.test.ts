@@ -6,7 +6,7 @@ import type { GrowthActivationRecord } from "@/lib/growth/contracts";
 import { validateGrowthActivationRecord } from "@/lib/growth/validation";
 
 describe("Growth Activation record", () => {
-  it("records accepted legal evidence, pending external evidence and the frozen Unit 2 baseline", () => {
+  it("records accepted legal and partial GA4 evidence while external activation remains pending", () => {
     expect(validateGrowthActivationRecord(activation as unknown as GrowthActivationRecord)).toEqual([]);
     expect(activation.activationState).toBe("legally-approved");
     expect(activation.legalPrivacy).toEqual({
@@ -36,7 +36,23 @@ describe("Growth Activation record", () => {
       google: { discoveredUrls: 5, processingStatus: "successfully-processed", status: "submitted" },
       bing: { discoveredUrls: 5, processingStatus: "successfully-processed", status: "submitted" },
     });
-    expect(JSON.stringify(activation)).not.toMatch(/G-[A-Z0-9]{4,20}|token|credential|oauth|api.?key/i);
+    expect(activation.analytics).toMatchObject({
+      status: "partially-configured",
+      measurementIdStatus: "configured",
+      productionVariables: "not-configured",
+      settingsVerification: "pending",
+      configuration: {
+        accountDisplayName: null,
+        propertyDisplayName: null,
+        propertyId: null,
+        streamDisplayName: "Youtoola",
+        streamId: "15263953983",
+        streamUrl: "https://www.youtoola.com",
+        measurementIdFingerprint: "sha256:96718192b2e08dc78eec82cd444dbdf359b3d6bbcf550c1ae0a96f81b10fe67b",
+      },
+    });
+    expect(activation.evidence.externalConfiguration).toBe("pending");
+    expect(JSON.stringify(activation)).not.toMatch(/token|credential|oauth|api.?key/i);
     expect(foundation.analytics.activation).toBe("disabled");
     expect(foundation.analytics.legalPrivacyApproval).toBe("pending");
   });
@@ -76,5 +92,15 @@ describe("Growth Activation record", () => {
     const wrongSitemapCount = structuredClone(activation);
     wrongSitemapCount.sitemapSubmission.google.discoveredUrls = 6 as never;
     expect(validateGrowthActivationRecord(wrongSitemapCount)).toContain("activation-sitemap-google-urls");
+  });
+
+  it("rejects unsupported GA4 identity and completed-settings claims", () => {
+    const unsupportedProperty = structuredClone(activation);
+    unsupportedProperty.analytics.configuration.propertyId = "123456789" as never;
+    expect(validateGrowthActivationRecord(unsupportedProperty)).toContain("unverified-analytics-property-id");
+
+    const prematureSettings = structuredClone(activation);
+    prematureSettings.analytics.settingsVerification = "verified" as never;
+    expect(validateGrowthActivationRecord(prematureSettings)).toContain("analytics-partial-configuration");
   });
 });

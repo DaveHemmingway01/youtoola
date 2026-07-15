@@ -282,22 +282,45 @@ export function validateGrowthActivationRecord(input: unknown) {
 
   const analytics = expectRecord(
     record.analytics,
-    ["customDimensions", "keyEvents", "measurementIdStatus", "productionVariables", "provider", "retentionMonths", "sanitizedPageView", "settings", "status"],
+    ["configuration", "customDimensions", "keyEvents", "measurementIdStatus", "productionVariables", "provider", "retentionMonths", "sanitizedPageView", "settings", "settingsVerification", "status"],
     "activation-analytics-fields",
     issues,
   );
   if (analytics) {
     if (analytics.provider !== "Google Analytics 4") issues.push("activation-provider");
-    if (!["configured", "disabled", "not-configured", "verified"].includes(analytics.status as string)) issues.push("activation-analytics-status");
+    if (!["configured", "disabled", "not-configured", "partially-configured", "verified"].includes(analytics.status as string)) issues.push("activation-analytics-status");
     if (!["configured", "not-configured"].includes(analytics.measurementIdStatus as string)) issues.push("measurement-id-status");
     if (!["configured", "not-configured"].includes(analytics.productionVariables as string)) issues.push("production-variables-status");
     if (analytics.retentionMonths !== 2) issues.push("analytics-retention");
+    if (!["pending", "verified"].includes(analytics.settingsVerification as string)) issues.push("analytics-settings-verification");
     if (!["approved", "build-ready", "verified"].includes(analytics.sanitizedPageView as string)) issues.push("sanitized-page-view-status");
     if (!Array.isArray(analytics.keyEvents) || analytics.keyEvents.join(",") !== "tool_complete") issues.push("activation-key-events");
     if (!Array.isArray(analytics.customDimensions) ||
       analytics.customDimensions.some((value) => typeof value !== "string" || !allowedCustomDimensions.has(value)) ||
       new Set(analytics.customDimensions).size !== analytics.customDimensions.length) {
       issues.push("custom-dimensions");
+    }
+    const configuration = expectRecord(
+      analytics.configuration,
+      ["accountDisplayName", "evidenceReference", "measurementIdFingerprint", "propertyDisplayName", "propertyId", "streamDisplayName", "streamId", "streamUrl"],
+      "analytics-configuration-fields",
+      issues,
+    );
+    if (configuration) {
+      if (configuration.accountDisplayName !== null) issues.push("unverified-analytics-account-name");
+      if (configuration.propertyDisplayName !== null) issues.push("unverified-analytics-property-name");
+      if (configuration.propertyId !== null) issues.push("unverified-analytics-property-id");
+      if (configuration.streamDisplayName !== "Youtoola") issues.push("analytics-stream-name");
+      if (configuration.streamId !== "15263953983") issues.push("analytics-stream-id");
+      if (configuration.streamUrl !== "https://www.youtoola.com") issues.push("analytics-stream-url");
+      if (configuration.measurementIdFingerprint !== "sha256:96718192b2e08dc78eec82cd444dbdf359b3d6bbcf550c1ae0a96f81b10fe67b") issues.push("analytics-measurement-id-fingerprint");
+      if (typeof configuration.evidenceReference !== "string" || !configuration.evidenceReference.includes("7a684274b68f8bf0b56d74ce47791e7a369bb0e400627a328ffac04628743ee4")) {
+        issues.push("analytics-evidence-reference");
+      }
+    }
+    if (analytics.status === "partially-configured" &&
+      (analytics.measurementIdStatus !== "configured" || analytics.settingsVerification !== "pending")) {
+      issues.push("analytics-partial-configuration");
     }
     const settings = expectRecord(
       analytics.settings,
