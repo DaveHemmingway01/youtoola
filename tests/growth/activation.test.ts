@@ -100,6 +100,51 @@ describe("Growth Activation record", () => {
     );
   });
 
+  it("rejects every unsupported activation-state success claim", () => {
+    const activeWithoutLegal = structuredClone(activation);
+    activeWithoutLegal.activationState = "active";
+    activeWithoutLegal.legalPrivacy = {
+      approvalReference: null as never,
+      jurisdictions: [],
+      status: "pending",
+    };
+    expect(validateGrowthActivationRecord(activeWithoutLegal)).toContain("activation-transition:legal");
+
+    const activeWithoutVariables = structuredClone(activation);
+    activeWithoutVariables.activationState = "active";
+    expect(validateGrowthActivationRecord(activeWithoutVariables)).toContain("activation-transition:ready");
+
+    const readyWithoutMeasurementEvidence = structuredClone(activation);
+    readyWithoutMeasurementEvidence.activationState = "activation-ready";
+    readyWithoutMeasurementEvidence.analytics.status = "configured";
+    readyWithoutMeasurementEvidence.analytics.measurementIdStatus = "not-configured";
+    readyWithoutMeasurementEvidence.analytics.productionVariables = "configured";
+    readyWithoutMeasurementEvidence.evidence.externalConfiguration = "complete";
+    expect(validateGrowthActivationRecord(readyWithoutMeasurementEvidence)).toContain("activation-transition:external");
+
+    const productionWithPendingConsentPolicy = structuredClone(activation);
+    productionWithPendingConsentPolicy.activationState = "active";
+    productionWithPendingConsentPolicy.legalPrivacy = {
+      approvalReference: null as never,
+      jurisdictions: [],
+      status: "pending",
+    };
+    productionWithPendingConsentPolicy.evidence.productionActivation = "complete";
+    expect(validateGrowthActivationRecord(productionWithPendingConsentPolicy)).toContain("activation-transition:legal");
+
+    const dormantDebugView = structuredClone(activation);
+    dormantDebugView.analytics.debugView = "verified";
+    expect(validateGrowthActivationRecord(dormantDebugView)).toContain("debug-view-without-production-evidence");
+
+    const unsupportedCustomDimensions = structuredClone(activation);
+    unsupportedCustomDimensions.analytics.customDimensionConfiguration = "verified";
+    expect(validateGrowthActivationRecord(unsupportedCustomDimensions)).toContain("custom-dimensions-without-evidence");
+
+    const unsupportedKeyEvent = structuredClone(activation);
+    unsupportedKeyEvent.analytics.keyEventConfiguration = "verified";
+    expect(validateGrowthActivationRecord(unsupportedKeyEvent)).toContain("key-event-without-evidence");
+  });
+
   it("rejects unsupported indexing claims and contradictory sitemap evidence", () => {
     const claimedIndexed = structuredClone(activation);
     claimedIndexed.searchConsole.urlInspections[0].indexStatus = "indexed" as never;
@@ -108,6 +153,10 @@ describe("Growth Activation record", () => {
     const wrongSitemapCount = structuredClone(activation);
     wrongSitemapCount.sitemapSubmission.google.discoveredUrls = 6 as never;
     expect(validateGrowthActivationRecord(wrongSitemapCount)).toContain("activation-sitemap-google-urls");
+
+    const acceptedWithoutProviderEvidence = structuredClone(activation) as Record<string, unknown>;
+    delete (acceptedWithoutProviderEvidence.sitemapSubmission as Record<string, unknown>).google;
+    expect(validateGrowthActivationRecord(acceptedWithoutProviderEvidence)).toContain("activation-sitemap-fields");
   });
 
   it("rejects unsupported GA4 identity and contradictory settings evidence", () => {

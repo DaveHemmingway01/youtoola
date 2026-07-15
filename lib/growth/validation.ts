@@ -220,6 +220,7 @@ export function validateGrowthFoundationRecord(input: unknown) {
 
 export function validateGrowthActivationRecord(input: unknown) {
   const issues: string[] = [];
+  let measurementEvidenceReady = false;
   const record = expectRecord(
     input,
     [
@@ -317,12 +318,16 @@ export function validateGrowthActivationRecord(input: unknown) {
       if (configuration.streamDisplayName !== "Youtoola") issues.push("analytics-stream-name");
       if (configuration.streamId !== "15263953983") issues.push("analytics-stream-id");
       if (configuration.streamUrl !== "https://www.youtoola.com") issues.push("analytics-stream-url");
-      if (configuration.measurementIdFingerprint !== "sha256:96718192b2e08dc78eec82cd444dbdf359b3d6bbcf550c1ae0a96f81b10fe67b") issues.push("analytics-measurement-id-fingerprint");
-      if (typeof configuration.evidenceReference !== "string" ||
-        !configuration.evidenceReference.includes("7a684274b68f8bf0b56d74ce47791e7a369bb0e400627a328ffac04628743ee4") ||
-        !configuration.evidenceReference.includes("docs/operations/growth-infrastructure.md")) {
+      const fingerprintVerified = configuration.measurementIdFingerprint === "sha256:96718192b2e08dc78eec82cd444dbdf359b3d6bbcf550c1ae0a96f81b10fe67b";
+      if (!fingerprintVerified) issues.push("analytics-measurement-id-fingerprint");
+      const evidenceReferenceVerified = typeof configuration.evidenceReference === "string" &&
+        configuration.evidenceReference.includes("7a684274b68f8bf0b56d74ce47791e7a369bb0e400627a328ffac04628743ee4") &&
+        configuration.evidenceReference.includes("docs/operations/growth-infrastructure.md");
+      if (!evidenceReferenceVerified) {
         issues.push("analytics-evidence-reference");
       }
+      measurementEvidenceReady = analytics.measurementIdStatus === "configured" &&
+        fingerprintVerified && evidenceReferenceVerified;
     }
     const retention = expectRecord(
       analytics.retention,
@@ -438,7 +443,8 @@ export function validateGrowthActivationRecord(input: unknown) {
 
   const state = record.activationState;
   const legalReady = legal?.status === "approved" && contact?.status === "operational";
-  const externalReady = analytics?.status === "configured" || analytics?.status === "verified";
+  const externalReady = measurementEvidenceReady &&
+    (analytics?.status === "configured" || analytics?.status === "verified");
   const servicesReady =
     ["configured", "verified"].includes((record.searchConsole as Record<string, unknown> | undefined)?.status as string) &&
     ["configured", "verified"].includes((record.bing as Record<string, unknown> | undefined)?.status as string) &&
@@ -453,6 +459,20 @@ export function validateGrowthActivationRecord(input: unknown) {
   if (["activation-ready", "active"].includes(state as string) &&
     (analytics?.productionVariables !== "configured" || evidence?.previewProviderFree !== "complete")) {
     issues.push("activation-transition:ready");
+  }
+  if (analytics?.debugView === "verified" &&
+    (analytics.productionVariables !== "configured" ||
+      !["activation-ready", "active"].includes(state as string) ||
+      evidence?.productionActivation !== "complete")) {
+    issues.push("debug-view-without-production-evidence");
+  }
+  if (analytics?.customDimensionConfiguration === "verified" &&
+    ((!Array.isArray(analytics.customDimensions) || analytics.customDimensions.length === 0) ||
+      evidence?.externalConfiguration !== "complete")) {
+    issues.push("custom-dimensions-without-evidence");
+  }
+  if (analytics?.keyEventConfiguration === "verified" && evidence?.externalConfiguration !== "complete") {
+    issues.push("key-event-without-evidence");
   }
   if (state === "active" &&
     (analytics?.status !== "verified" || sitemap?.status !== "accepted" ||
