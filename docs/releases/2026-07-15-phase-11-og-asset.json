@@ -2,9 +2,9 @@
   "recordVersion": 3,
   "recordKind": "release",
   "recordId": "2026-07-15-phase-11-og-asset",
-  "status": "candidate",
+  "status": "completed",
   "phaseOrUtility": "Phase 11 Unit 1",
-  "summary": "Deterministic default Open Graph asset candidate with no metadata or Production integration.",
+  "summary": "Approved deterministic default Open Graph asset with no metadata or runtime integration.",
   "riskTags": [
     "visual-interface"
   ],
@@ -13,38 +13,46 @@
     "approver": "Youtoola owner",
     "reference": "APPROVE PLAN: Youtoola Phase 11 Unit 1 Open Graph asset"
   },
-  "pullRequest": "pending",
+  "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/15",
   "provenance": {
-    "pullRequest": "pending",
+    "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/15",
     "sourceBranch": "origin/main",
     "sourceCommit": "7ce3ac9b41b8f9a62588a38f17559cccb94907e4",
-    "reviewedHeadCommit": "pending-review",
+    "reviewedHeadCommit": "fe6b71f47396e92ed096459aca087625f3e3a10e",
     "reviewedHeadRef": "platform/growth-og-asset",
-    "reviewedDate": null,
-    "mergeMethod": null,
-    "mergeCommit": null,
-    "durableReleaseCommit": null,
-    "mergedAt": null
+    "reviewedDate": "2026-07-15",
+    "mergeMethod": "squash",
+    "mergeCommit": "8cd895a5b1cbcea3bc2af541e30132c19ccea5b6",
+    "durableReleaseCommit": "8cd895a5b1cbcea3bc2af541e30132c19ccea5b6",
+    "mergedAt": "2026-07-15T10:08:15.000Z"
   },
   "delivery": {
     "branch": "platform/growth-og-asset",
     "releaseKind": "normal",
-    "preview": null,
+    "preview": {
+      "deploymentId": "dpl_5884GWyCoZUacBVs7dYFPAe5mrtR",
+      "deploymentCommit": "fe6b71f47396e92ed096459aca087625f3e3a10e",
+      "uniqueUrl": "https://youtoola-v0eis0tib-davincistudio.vercel.app/",
+      "branchAlias": "https://youtoola-git-platform-growth-og-asset-davincistudio.vercel.app/",
+      "ready": true,
+      "protected": true,
+      "noindex": true
+    },
     "requiredChecks": [
       {
         "name": "Quality",
-        "status": "pending",
-        "reference": null
+        "status": "passed",
+        "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29406348959/job/87322621928"
       },
       {
         "name": "End-to-end",
-        "status": "pending",
-        "reference": null
+        "status": "passed",
+        "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29406348959/job/87322621909"
       },
       {
         "name": "Vercel",
-        "status": "pending",
-        "reference": null
+        "status": "passed",
+        "reference": "https://vercel.com/davincistudio/youtoola/5884GWyCoZUacBVs7dYFPAe5mrtR"
       }
     ],
     "productionUnchangedBeforeMerge": true
@@ -82,8 +90,8 @@
     },
     {
       "id": "normal-ci",
-      "status": "pending",
-      "reference": "Pending GitHub required checks after owner visual approval and candidate commit.",
+      "status": "passed",
+      "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29406348959",
       "reviewedDate": "2026-07-15"
     },
     {
@@ -94,8 +102,8 @@
     },
     {
       "id": "preview-verification",
-      "status": "pending",
-      "reference": "Pending protected Vercel Preview after owner visual approval and candidate commit.",
+      "status": "passed",
+      "reference": "Protected noindexed Vercel Preview dpl_5884GWyCoZUacBVs7dYFPAe5mrtR for reviewed head fe6b71f47396e92ed096459aca087625f3e3a10e.",
       "reviewedDate": "2026-07-15"
     },
     {
@@ -121,13 +129,25 @@
       "status": "approved",
       "reference": "APPROVE ASSET: owner approved the production candidate, light and dark contexts, hierarchy and safe margins.",
       "reviewedDate": "2026-07-15"
+    },
+    {
+      "id": "owner-ship-approval",
+      "status": "approved",
+      "reference": "APPROVE SHIP: Phase 11 Unit 1 for exact reviewed head fe6b71f47396e92ed096459aca087625f3e3a10e.",
+      "reviewedDate": "2026-07-15"
+    },
+    {
+      "id": "production-smoke",
+      "status": "passed",
+      "reference": "Production deployment dpl_GKaL8XsBrwRJQ47rqpwRieH9hXxB: live asset and regression verification on 2026-07-15.",
+      "reviewedDate": "2026-07-15"
     }
   ],
   "exceptions": [],
   "rollbackPlan": {
-    "method": "Restore the current Ready Production deployment, then revert the asset-only squash through protected main.",
+    "method": "Restore the previous Ready Production deployment, then revert the asset-only squash through protected main.",
     "owner": "Youtoola owner",
-    "target": "current-production"
+    "target": "dpl_2UnFrhZ5Z87q1b3EoeaJTHg2uzo7"
   },
   "gateEvidence": {
     "plan": {
@@ -146,19 +166,27 @@
       ]
     },
     "review": {
-      "status": "pending",
-      "approver": null,
-      "evidence": []
+      "status": "approved",
+      "approver": "Youtoola owner",
+      "evidence": [
+        "APPROVE SHIP: Phase 11 Unit 1 for exact reviewed head fe6b71f47396e92ed096459aca087625f3e3a10e"
+      ]
     },
     "ship": {
-      "status": "pending",
-      "approver": null,
-      "evidence": []
+      "status": "approved",
+      "approver": "Youtoola owner",
+      "evidence": [
+        "APPROVE SHIP: Phase 11 Unit 1",
+        "PR #15 squash merge 8cd895a5b1cbcea3bc2af541e30132c19ccea5b6"
+      ]
     },
     "post-deployment": {
-      "status": "pending",
+      "status": "complete",
       "approver": null,
-      "evidence": []
+      "evidence": [
+        "Vercel Production deployment dpl_GKaL8XsBrwRJQ47rqpwRieH9hXxB",
+        "Live asset and immediate Production regression verification on 2026-07-15"
+      ]
     },
     "post-launch-review": {
       "status": "pending",
@@ -170,18 +198,38 @@
     "releaseSchema": 3,
     "analyticsSchema": 1
   },
-  "production": null,
+  "production": {
+    "mergeCommit": "8cd895a5b1cbcea3bc2af541e30132c19ccea5b6",
+    "deploymentId": "dpl_GKaL8XsBrwRJQ47rqpwRieH9hXxB",
+    "deploymentCommit": "8cd895a5b1cbcea3bc2af541e30132c19ccea5b6",
+    "deployedAt": "2026-07-15T10:08:44.259Z",
+    "liveUrls": [
+      "https://www.youtoola.com",
+      "https://www.youtoola.com/brand/og-default.png"
+    ],
+    "smokeResults": [
+      "Homepage and the approved Open Graph asset returned HTTP 200.",
+      "Live asset is 1200x630, 167092 bytes and SHA-256 9a6c7ac46773ff6d8a6d2fe0de7aeaa5f0fc6c5ff272bc848d9da171d8aedcbc.",
+      "All 14 previously frozen brand hashes matched Production.",
+      "Homepage metadata, public routes, sitemap, canonicals, robots, indexing and security headers remained unchanged.",
+      "No Open Graph metadata, analytics, consent, storage or commercial activation was introduced."
+    ],
+    "rollbackDeployment": "dpl_2UnFrhZ5Z87q1b3EoeaJTHg2uzo7",
+    "releaseDate": "2026-07-15"
+  },
   "followUpReviews": {
     "immediate": {
-      "dueDate": null,
-      "status": "pending",
+      "dueDate": "2026-07-15",
+      "status": "complete",
       "owner": "Youtoola owner",
-      "completedDate": null,
-      "evidence": [],
+      "completedDate": "2026-07-15",
+      "evidence": [
+        "Production deployment dpl_GKaL8XsBrwRJQ47rqpwRieH9hXxB live asset and regression verification"
+      ],
       "notApplicableReason": null
     },
     "24-hour": {
-      "dueDate": null,
+      "dueDate": "2026-07-16",
       "status": "pending",
       "owner": "Youtoola owner",
       "completedDate": null,
@@ -189,7 +237,7 @@
       "notApplicableReason": null
     },
     "7-day": {
-      "dueDate": null,
+      "dueDate": "2026-07-22",
       "status": "pending",
       "owner": "Youtoola owner",
       "completedDate": null,
@@ -197,7 +245,7 @@
       "notApplicableReason": null
     },
     "28-day": {
-      "dueDate": null,
+      "dueDate": "2026-08-12",
       "status": "pending",
       "owner": "Youtoola owner",
       "completedDate": null,
@@ -205,7 +253,7 @@
       "notApplicableReason": null
     },
     "monthly": {
-      "dueDate": null,
+      "dueDate": "2026-08-15",
       "status": "pending",
       "owner": "Youtoola owner",
       "completedDate": null,
@@ -213,7 +261,7 @@
       "notApplicableReason": null
     },
     "quarterly": {
-      "dueDate": null,
+      "dueDate": "2026-10-15",
       "status": "pending",
       "owner": "Youtoola owner",
       "completedDate": null,
