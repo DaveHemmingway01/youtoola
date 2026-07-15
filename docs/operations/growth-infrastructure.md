@@ -1,15 +1,15 @@
 # Growth Infrastructure Runbook
 
-## Current Unit 3 BUILD state
+## Current Unit 3 legal-approval state
 
 - Analytics: disabled; no provider identifier configured.
 - Consent: no automatic notice or cookie while analytics is dormant; footer preferences remain available.
 - Search Console and Bing: not configured.
 - Sitemap provider-console submission: not submitted.
 - Dashboard and monitoring: definition-only.
-- Legal/privacy approval: pending.
+- Legal/privacy approval: accepted for Portugal and the EU/EEA under `YT-PRIV-2026-07-15-01 / PT99T0-1300-BG`.
 - Clarity, advertising, affiliate, premium, lead and experiment delivery: disabled.
-- Activation record: `dormant`; legal approval, public contact, GA4, Search Console, Bing, sitemap-console and Vercel evidence are pending.
+- Activation record: `legally-approved`; the public contact is operational, while GA4, Search Console, Bing, sitemap-console and Vercel evidence remain pending.
 - Unit 2 baseline: frozen at `data/growth/foundation.json`; later machine-readable Growth state remains under `data/growth/`.
 
 Run offline validation with `npm run validate:growth`. Run the read-only live baseline with `npm run smoke:growth`. The scheduled Growth monitor runs Monday at 07:00 UTC and is informational, not a required merge check.
@@ -22,7 +22,7 @@ Never add an identifier to Local or Preview. Never use `NEXT_PUBLIC_*`. Never ac
 
 ## Failure and withdrawal
 
-Analytics or consent defects require immediate provider disablement. Preserve the free platform, restore the previous Ready Vercel deployment when needed, then realign source through protected `main`. Withdrawal records denial, disables provider delivery, clears ephemeral state and performs no retry or replay. Provider-cookie deletion or expiry logic remains conditional on qualified review and must not be inferred from silence.
+Analytics or consent defects require immediate provider disablement. Preserve the free platform, restore the previous Ready Vercel deployment when needed, then realign source through protected `main`. Withdrawal records denial, disables provider delivery, expires host-only and canonical-domain `_ga` and `_ga_*` cookies, clears ephemeral state and performs no retry or replay. The reviewed cookie behavior is covered by deterministic tests before provider activation.
 
 ## Dashboard and review cadence
 

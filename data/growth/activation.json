@@ -2,11 +2,11 @@
   "recordVersion": 1,
   "owner": "Youtoola owner",
   "reviewedDate": "2026-07-15",
-  "activationState": "dormant",
+  "activationState": "legally-approved",
   "legalPrivacy": {
-    "status": "pending",
-    "approvalReference": null,
-    "jurisdictions": []
+    "status": "approved",
+    "approvalReference": "YT-PRIV-2026-07-15-01 / PT99T0-1300-BG",
+    "jurisdictions": ["PT", "EU/EEA"]
   },
   "privacyContact": {
     "status": "operational",

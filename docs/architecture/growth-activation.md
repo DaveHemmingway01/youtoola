@@ -1,12 +1,12 @@
 # Growth Activation Architecture
 
-Status: Phase 11 Unit 3 BUILD-ready; activation and external evidence remain pending.
+Status: Phase 11 Unit 3 legally approved; external configuration, REVIEW and activation remain pending.
 
 ## State and evidence boundary
 
 `data/growth/foundation.json` is the frozen Unit 2 baseline. `data/growth/activation.json` is the only machine-readable Unit 3 state record. It begins at `dormant` and may progress through `legally-approved`, `externally-configured`, `activation-ready` and `active`; `disabled` and `incident-disabled` are owner-controlled containment states. Unknown states and missing or contradictory evidence fail validation. Automation never advances the record to `active`.
 
-The activation pull request remains Draft until a qualified legal/privacy approval reference and factual external configuration evidence exist. No login, personal account, credential, token, recovery material or privileged legal content enters Git. The candidate release record keeps Production evidence null until a separately approved merge and automatic Production deployment occur.
+Qualified review reference `YT-PRIV-2026-07-15-01 / PT99T0-1300-BG` covers Portugal and the EU/EEA. The owner accepts the supplied review record as the legal gate evidence. The activation pull request remains Draft until factual external configuration evidence also exists. No login, personal account, credential, token, recovery material or privileged legal reasoning enters Git. The candidate release record keeps Production evidence null until a separately approved merge and automatic Production deployment occur.
 
 ## Page-view delivery
 
@@ -20,7 +20,7 @@ Direct `gtag.js` remains the sole provider integration. Automatic page views, en
 
 ## External gates
 
-Activation requires qualified legal/privacy approval, approved consent wording and lifetime, an operational privacy contact, owner-controlled GA4 property and stream, Search Console Domain ownership, Bing ownership, sitemap submission authorization, dashboard and monitoring owners, rollback authority and factual evidence for each state transition. Provider-cookie deletion or expiry logic is conditional on the qualified review and is not part of this BUILD.
+Activation requires the recorded qualified legal/privacy approval, approved consent wording and lifetime, an operational privacy contact, owner-controlled GA4 property and stream, Search Console Domain ownership, Bing ownership, sitemap submission authorization, dashboard and monitoring owners, rollback authority and factual evidence for each state transition. The accepted review requires withdrawal to expire host-only and canonical-domain `_ga` and `_ga_*` cookies while blocking future provider delivery; this behavior is implemented and tested before external activation.
 
 The smallest controlled DebugView evidence is one consented sanitized homepage `page_view`. It contains no utility, personal, commercial, input or result data. Search submission is not represented as acceptance or indexing. Core Web Vitals may truthfully remain `insufficient-data`.
 

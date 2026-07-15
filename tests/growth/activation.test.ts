@@ -6,8 +6,14 @@ import type { GrowthActivationRecord } from "@/lib/growth/contracts";
 import { validateGrowthActivationRecord } from "@/lib/growth/validation";
 
 describe("Growth Activation record", () => {
-  it("records only factual pending activation evidence and preserves the Unit 2 baseline", () => {
+  it("records accepted legal evidence, pending external evidence and the frozen Unit 2 baseline", () => {
     expect(validateGrowthActivationRecord(activation as unknown as GrowthActivationRecord)).toEqual([]);
+    expect(activation.activationState).toBe("legally-approved");
+    expect(activation.legalPrivacy).toEqual({
+      approvalReference: "YT-PRIV-2026-07-15-01 / PT99T0-1300-BG",
+      jurisdictions: ["PT", "EU/EEA"],
+      status: "approved",
+    });
     expect(JSON.stringify(activation)).not.toMatch(/G-[A-Z0-9]{4,20}|token|credential|oauth|api.?key/i);
     expect(foundation.analytics.activation).toBe("disabled");
     expect(foundation.analytics.legalPrivacyApproval).toBe("pending");
@@ -17,7 +23,6 @@ describe("Growth Activation record", () => {
     expect(validateGrowthActivationRecord({ ...activation, unexpected: true })).toContain("activation-record-fields");
     expect(validateGrowthActivationRecord({ ...activation, activationState: "active" })).toEqual(
       expect.arrayContaining([
-        "activation-transition:legal",
         "activation-transition:external",
         "activation-transition:ready",
         "activation-transition:active",

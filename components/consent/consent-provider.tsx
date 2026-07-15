@@ -21,7 +21,10 @@ import {
   sendDeduplicatedPageView,
 } from "@/lib/analytics/page-view";
 import { parseConsentCookie, serializeConsentCookie } from "@/lib/consent/cookie";
-import { withdrawAnalyticsConsent } from "@/lib/consent/runtime";
+import {
+  deleteGoogleAnalyticsCookies,
+  withdrawAnalyticsConsent,
+} from "@/lib/consent/runtime";
 
 interface ConsentContextValue {
   analyticsAvailable: boolean;
@@ -118,6 +121,15 @@ export function ConsentProvider({
         clearProviderLifecycle: () => {
           adapter?.clear();
           adapterRef.current = null;
+        },
+        deleteProviderCookies: () => {
+          deleteGoogleAnalyticsCookies({
+            cookieHeader: document.cookie,
+            secure: configuration.secureCookie,
+            writeCookie: (value) => {
+              document.cookie = value;
+            },
+          });
         },
         disableAdapter: () => adapter?.disable(),
         providerLoaded: adapter?.lifecycle === "ready",

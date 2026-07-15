@@ -29,8 +29,9 @@ export default function PrivacyPage() {
       <h1>{definition.title}</h1>
       <p className="lede">
         This page describes Youtoola’s current data practices and the dormant
-        analytics controls prepared for a possible future launch. Qualified legal and
-        privacy review is still required before optional analytics can be activated.
+        analytics controls prepared for a possible future launch. The privacy design
+        has completed qualified review, but optional analytics remains off until the
+        separate configuration, REVIEW and SHIP gates are complete.
       </p>
 
       <section aria-labelledby="core-experience">
@@ -71,11 +72,12 @@ export default function PrivacyPage() {
           fully anonymous analytics.
         </p>
         <p>
-          Provider retention, provider-cookie treatment, international transfers, and
-          the final withdrawal wording require qualified review before activation. The
-          shortest retention compatible with the approved reporting cadence is the
-          current direction. Youtoola does not promise that withdrawing consent deletes
-          every provider cookie until that review is complete.
+          If analytics is activated, user and event data will be retained for 2 months.
+          Google Analytics involves transfers to Google LLC in the United States. The
+          approved safeguards use Standard Contractual Clauses and supplementary
+          measures as the durable fallback alongside Google’s Data Privacy Framework
+          certification. Withdrawing consent will stop future analytics and delete the
+          first-party <code>_ga</code> and <code>_ga_*</code> cookies Youtoola can control.
         </p>
       </section>
 
@@ -110,11 +112,27 @@ export default function PrivacyPage() {
         </p>
       </section>
 
+      <section aria-labelledby="controller-and-rights">
+        <h2 id="controller-and-rights">Controller, contact and rights</h2>
+        <p>
+          Plen Advogados, Av. Eng. Duarte Pacheco, Amoreiras Torre 2, 16.º Piso A,
+          1070-102 Lisboa, Portugal, is the data controller for Youtoola. Contact
+          <a href="mailto:privacy@youtoola.com"> privacy@youtoola.com</a> for privacy,
+          accessibility or correction requests.
+        </p>
+        <p>
+          The current launch scope is Portugal and the EU/EEA. You may ask to access,
+          rectify, erase, restrict, object to or port applicable personal data, withdraw
+          analytics consent, or complain to the Comissão Nacional de Proteção de Dados
+          or the supervisory authority where you live.
+        </p>
+      </section>
+
       <footer className="trust-page__review">
         <p><strong>Content owner:</strong> {definition.owner}</p>
         <p><strong>Policy version:</strong> 1</p>
         <p><strong>Reviewed:</strong> <time dateTime="2026-07-15">15 July 2026</time></p>
-        <p><strong>Review status:</strong> Qualified legal and privacy review required before analytics activation.</p>
+        <p><strong>Review status:</strong> Qualified privacy review recorded as YT-PRIV-2026-07-15-01. Analytics remains inactive.</p>
       </footer>
     </article>
   );

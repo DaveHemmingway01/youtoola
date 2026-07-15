@@ -1,6 +1,6 @@
 # ADR 0015: Controlled Growth Activation
 
-- Status: Accepted for BUILD; external activation pending
+- Status: Legal gate accepted; external activation pending
 - Date: 2026-07-15
 - Decision owner: Youtoola owner
 
@@ -10,7 +10,7 @@ Preserve Unit 2 as a frozen dormant baseline and represent Unit 3 in a separate 
 
 Track sanitized provider page views across App Router transitions using `usePathname`. Record deduplication only after the ready adapter reports a successful send. Preserve no buffering, retry, replay, raw URL data, referrer or automatic provider page views.
 
-Keep provider-cookie deletion or expiry conditional on qualified review. Keep Local and Preview provider-free, keep report-only CSP narrowly scoped, and preserve the free platform when analytics is unavailable or disabled.
+Qualified review `YT-PRIV-2026-07-15-01 / PT99T0-1300-BG` approves Portugal and the EU/EEA as the launch jurisdictions and requires `_ga` and `_ga_*` cookie expiry on withdrawal. Keep Local and Preview provider-free, keep report-only CSP narrowly scoped, and preserve the free platform when analytics is unavailable or disabled.
 
 ## Consequences
 

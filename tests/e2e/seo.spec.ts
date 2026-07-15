@@ -107,10 +107,14 @@ for (const path of ["/about", "/methodology"]) {
   });
 }
 
-test("privacy page reflects dormant analytics without making legal claims", async ({ page }) => {
+test("privacy page reflects dormant analytics and the accepted legal review", async ({ page }) => {
   await page.goto("/privacy");
   await expect(page.getByText("Optional Google Analytics 4 (GA4) is currently off.", { exact: false })).toBeVisible();
-  await expect(page.getByText("Qualified legal and privacy review required", { exact: false })).toBeVisible();
+  await expect(page.getByText("Qualified privacy review recorded", { exact: false })).toBeVisible();
+  await expect(page.getByRole("link", { name: "privacy@youtoola.com" })).toHaveAttribute(
+    "href",
+    "mailto:privacy@youtoola.com",
+  );
   await expect(page.locator("time[datetime='2026-07-15']")).toBeVisible();
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations.filter(({ impact }) => impact === "serious" || impact === "critical")).toEqual([]);
