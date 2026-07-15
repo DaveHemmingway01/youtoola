@@ -36,7 +36,9 @@ The environment file contains no required secrets. Leave `YOUTOOLA_ENV` empty fo
 | `npm run test:e2e:cross-browser` | Run the targeted Chromium, Firefox and WebKit review suite when the approved risk policy requires it. |
 | `npm run validate` | Run the complete offline pre-review validation suite. |
 | `npm run validate:architecture` | Validate registry, Knowledge Layer, SEO, Phase 8 and release architecture. |
+| `npm run validate:delivery` | Validate branch, environment, schema-v3 release, correction and follow-up delivery contracts. |
 | `npm run validate:release -- --record=<path>` | Validate one release record, or all records when no path is supplied. |
+| `npm run smoke:production` | Run the package-free, read-only Production route, SEO, header and frozen-brand smoke suite. |
 | `npm run validate:utility -- --slug=<slug>` | Validate a future utility definition, specification and golden vectors. |
 | `npm run security:scan` | Scan tracked files for committed environment files and high-confidence secret signatures. |
 | `npm run security:audit` | Run the offline high/critical dependency audit used by normal CI. |
@@ -97,10 +99,12 @@ Phase 7 SEO, entity, trust, canonical, sitemap and crawler governance is documen
 
 Phase 9 testing, release evidence, severity, flaky-test and rollback governance is documented in [`docs/architecture/testing-and-release-gates.md`](docs/architecture/testing-and-release-gates.md), [`docs/operations/release-validation.md`](docs/operations/release-validation.md) and [`docs/operations/rollback.md`](docs/operations/rollback.md). It adds no public route or Production behavior.
 
+Phase 10 delivery authority, branch rules, environment separation, schema-v3 evidence, deployment, secrets, domain and recovery operations are documented in [`docs/architecture/delivery-and-environments.md`](docs/architecture/delivery-and-environments.md), [`docs/decisions/0013-delivery-and-deployment-operations.md`](docs/decisions/0013-delivery-and-deployment-operations.md) and [`docs/operations/deployment.md`](docs/operations/deployment.md). It adds no public route, dependency or provider.
+
 ## Delivery
 
 Feature work uses an isolated branch and pull request. GitHub controls review and merge authority; the connected Vercel project creates Preview deployments for non-production branches and Production deployments only from approved `main` commits.
 
-Pull requests run the `Quality` and `End-to-end` GitHub Actions checks. Protected `main` also requires the Vercel deployment check. The owner must still review and approve the SHIP gate before merge.
+Pull requests run the `Quality` and `End-to-end` GitHub Actions checks. Protected `main` also requires the Vercel deployment check; Preview Comments is informational. The owner must still review and approve the SHIP gate before the squash-only merge. Retain source branches and never stack approved work on an unmerged feature branch.
 
 Never place secrets in tracked files. `.env.example` documents names and purposes only.

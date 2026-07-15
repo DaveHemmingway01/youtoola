@@ -1,4 +1,13 @@
-export const RELEASE_SCHEMA_VERSION = 2 as const;
+import {
+  FOLLOW_UP_PERIODS,
+  RELEASE_KINDS,
+  REQUIRED_CHECKS,
+  type FollowUpPeriod,
+  type ReleaseKind,
+  // @ts-expect-error Node's strip-types execution requires the runtime extension.
+} from "../delivery/contracts.ts";
+
+export const RELEASE_SCHEMA_VERSION = 3 as const;
 
 export const RELEASE_GATES = [
   "plan",
@@ -34,7 +43,12 @@ export const COMPARISON_MODES = [
 
 export const SEVERITIES = ["critical", "high", "medium", "low", "informational"] as const;
 export const RELEASE_STATUSES = ["candidate", "completed"] as const;
-export const EVIDENCE_STATUSES = ["passed", "approved"] as const;
+export const EVIDENCE_STATUSES = ["pending", "passed", "approved"] as const;
+export const FOLLOW_UP_STATUSES = [
+  "pending",
+  "complete",
+  "not-applicable",
+] as const;
 
 export type ReleaseGate = (typeof RELEASE_GATES)[number];
 export type RiskTag = (typeof RISK_TAGS)[number];
@@ -42,6 +56,7 @@ export type ComparisonMode = (typeof COMPARISON_MODES)[number];
 export type Severity = (typeof SEVERITIES)[number];
 export type ReleaseStatus = (typeof RELEASE_STATUSES)[number];
 export type EvidenceStatus = (typeof EVIDENCE_STATUSES)[number];
+export type FollowUpStatus = (typeof FOLLOW_UP_STATUSES)[number];
 
 export interface GateDefinition {
   approver: "Youtoola owner";
@@ -128,6 +143,7 @@ const BASE_EVIDENCE = [
   "owner-plan-approval",
   "clean-diff",
   "normal-ci",
+  "preview-verification",
   "rollback-plan",
   "release-report",
 ] as const;
@@ -227,15 +243,50 @@ export interface ProductionEvidence {
   smokeResults: readonly string[];
 }
 
+export interface RequiredCheckEvidence {
+  name: (typeof REQUIRED_CHECKS)[number];
+  reference: string | null;
+  status: "passed" | "pending";
+}
+
+export interface PreviewEvidence {
+  branchAlias: string;
+  deploymentCommit: string;
+  deploymentId: string;
+  noindex: true;
+  protected: true;
+  ready: true;
+  uniqueUrl: string;
+}
+
+export interface DeliveryEvidence {
+  branch: string;
+  preview: PreviewEvidence | null;
+  productionUnchangedBeforeMerge: true;
+  releaseKind: ReleaseKind;
+  requiredChecks: readonly RequiredCheckEvidence[];
+}
+
+export interface FollowUpReview {
+  completedDate: string | null;
+  dueDate: string | null;
+  evidence: readonly string[];
+  notApplicableReason: string | null;
+  owner: "Youtoola owner";
+  status: FollowUpStatus;
+}
+
 export interface ReleaseProvenance {
   durableReleaseCommit: string | null;
   mergeCommit: string | null;
   mergedAt: string | null;
   mergeMethod: "merge" | "rebase" | "squash" | null;
   pullRequest: string;
-  reviewedDate: string;
+  reviewedDate: string | null;
   reviewedHeadCommit: string;
   reviewedHeadRef: string;
+  sourceBranch: "origin/main";
+  sourceCommit: string;
 }
 
 export interface ProvenanceHistoryProbe {
@@ -245,9 +296,10 @@ export interface ProvenanceHistoryProbe {
 }
 
 export interface ReleaseRecord {
+  delivery: DeliveryEvidence;
   evidence: readonly EvidenceItem[];
   exceptions: readonly ReleaseException[];
-  followUpDates: Readonly<Record<"immediate" | "24-hours" | "7-days" | "28-days" | "monthly" | "quarterly", string | null>>;
+  followUpReviews: Readonly<Record<FollowUpPeriod, FollowUpReview>>;
   gateEvidence: Readonly<Record<ReleaseGate, GateEvidence>>;
   independentReview?: IndependentReview;
   phaseOrUtility: string;
@@ -255,6 +307,7 @@ export interface ReleaseRecord {
   production: ProductionEvidence | null;
   provenance: ReleaseProvenance;
   pullRequest: string;
+  recordKind: "release";
   recordId: string;
   recordVersion: typeof RELEASE_SCHEMA_VERSION;
   riskTags: readonly RiskTag[];
@@ -262,6 +315,26 @@ export interface ReleaseRecord {
   status: ReleaseStatus;
   summary: string;
   versions: { analyticsSchema?: number; calculation?: number; methodology?: number; releaseSchema: number };
+}
+
+export interface ReleaseCorrectionRecord {
+  approvedDate: string;
+  approver: "Youtoola owner";
+  correctsRecordId: string;
+  evidence: readonly string[];
+  planApproval: {
+    approvedDate: string;
+    approver: "Youtoola owner";
+    reference: string;
+  };
+  provenance: ReleaseProvenance;
+  pullRequest: string;
+  reason: string;
+  recordId: string;
+  recordKind: "correction";
+  recordVersion: typeof RELEASE_SCHEMA_VERSION;
+  status: ReleaseStatus;
+  summary: string;
 }
 
 export interface GoldenTolerance {
@@ -351,6 +424,292 @@ function productionUrl(value: unknown) {
   return url.origin === "https://www.youtoola.com" && !url.search && !url.hash;
 }
 
+function exactSha(value: unknown): value is string {
+  return typeof value === "string" && /^[a-f0-9]{40}$/.test(value);
+}
+
+function deploymentId(value: unknown): value is string {
+  return typeof value === "string" && /^dpl_[A-Za-z0-9]+$/.test(value);
+}
+
+function youtoolaPreviewUrl(value: unknown): value is string {
+  if (!httpsUrl(value)) return false;
+  const url = new URL(value as string);
+  return (
+    url.hostname.endsWith("-davincistudio.vercel.app") &&
+    url.pathname === "/" &&
+    !url.search &&
+    !url.hash
+  );
+}
+
+const branchPattern = /^(platform|utility|docs|hotfix)\/[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+function validateProvenanceShape(
+  provenance: Record<string, unknown>,
+  pullRequest: unknown,
+  status: unknown,
+  issues: string[],
+) {
+  exactKeys(
+    provenance,
+    [
+      "pullRequest",
+      "sourceBranch",
+      "sourceCommit",
+      "reviewedHeadCommit",
+      "reviewedHeadRef",
+      "reviewedDate",
+      "mergeMethod",
+      "mergeCommit",
+      "durableReleaseCommit",
+      "mergedAt",
+    ],
+    issues,
+    "provenance",
+  );
+  if (
+    !pullRequestUrl(provenance.pullRequest) ||
+    provenance.pullRequest !== pullRequest
+  ) {
+    issues.push("provenance:pull-request-mismatch");
+  }
+  if (provenance.sourceBranch !== "origin/main") {
+    issues.push("provenance:source-branch");
+  }
+  if (!exactSha(provenance.sourceCommit)) {
+    issues.push("provenance:source-commit");
+  }
+  if (!sha(provenance.reviewedHeadCommit)) {
+    issues.push("provenance:reviewed-head");
+  }
+  if (
+    !nonEmptyString(provenance.reviewedHeadRef) ||
+    !branchPattern.test(provenance.reviewedHeadRef) ||
+    /(?:\.\.|\/\/|@\{)/.test(provenance.reviewedHeadRef)
+  ) {
+    issues.push("provenance:reviewed-head-ref");
+  }
+  if (
+    provenance.reviewedHeadCommit === "pending-review" &&
+    provenance.reviewedDate !== null
+  ) {
+    issues.push("provenance:reviewed-date-contradiction");
+  } else if (
+    provenance.reviewedHeadCommit !== "pending-review" &&
+    !validDate(provenance.reviewedDate)
+  ) {
+    issues.push("provenance:reviewed-date");
+  }
+  if (status === "completed" && !validDate(provenance.reviewedDate)) {
+    issues.push("provenance:reviewed-date");
+  }
+}
+
+function validateDeliveryEvidence(
+  input: unknown,
+  provenance: Record<string, unknown> | null,
+  gateEvidence: unknown,
+  status: unknown,
+  issues: string[],
+) {
+  if (!isRecord(input)) {
+    issues.push("record:delivery");
+    return;
+  }
+  exactKeys(
+    input,
+    [
+      "branch",
+      "releaseKind",
+      "preview",
+      "requiredChecks",
+      "productionUnchangedBeforeMerge",
+    ],
+    issues,
+    "delivery",
+  );
+  if (!nonEmptyString(input.branch) || !branchPattern.test(input.branch)) {
+    issues.push("delivery:branch");
+  }
+  if (provenance && input.branch !== provenance.reviewedHeadRef) {
+    issues.push("delivery:branch-ref-mismatch");
+  }
+  if (!(RELEASE_KINDS as readonly unknown[]).includes(input.releaseKind)) {
+    issues.push("delivery:release-kind");
+  }
+  if (
+    input.releaseKind === "documentation-only" &&
+    typeof input.branch === "string" &&
+    !input.branch.startsWith("docs/")
+  ) {
+    issues.push("delivery:documentation-branch");
+  }
+  if (
+    input.releaseKind === "hotfix" &&
+    typeof input.branch === "string" &&
+    !input.branch.startsWith("hotfix/")
+  ) {
+    issues.push("delivery:hotfix-branch");
+  }
+  if (
+    typeof input.branch === "string" &&
+    input.branch.startsWith("hotfix/") &&
+    input.releaseKind !== "hotfix"
+  ) {
+    issues.push("delivery:hotfix-kind");
+  }
+  if (input.productionUnchangedBeforeMerge !== true) {
+    issues.push("delivery:production-unchanged");
+  }
+
+  const requiredChecks = new Map<string, Record<string, unknown>>();
+  if (!Array.isArray(input.requiredChecks)) {
+    issues.push("delivery:required-checks");
+  } else {
+    for (const raw of input.requiredChecks) {
+      if (!isRecord(raw)) {
+        issues.push("delivery:required-check");
+        continue;
+      }
+      exactKeys(raw, ["name", "status", "reference"], issues, "delivery-check");
+      if (!(REQUIRED_CHECKS as readonly unknown[]).includes(raw.name)) {
+        issues.push(`delivery:required-check-name:${String(raw.name)}`);
+        continue;
+      }
+      if (requiredChecks.has(String(raw.name))) {
+        issues.push(`delivery:required-check-duplicate:${String(raw.name)}`);
+      }
+      if (!(raw.status === "pending" || raw.status === "passed")) {
+        issues.push(`delivery:required-check-status:${String(raw.name)}`);
+      }
+      if (!(raw.reference === null || httpsUrl(raw.reference))) {
+        issues.push(`delivery:required-check-reference:${String(raw.name)}`);
+      }
+      if (raw.status === "passed" && !httpsUrl(raw.reference)) {
+        issues.push(`delivery:required-check-reference:${String(raw.name)}`);
+      }
+      requiredChecks.set(String(raw.name), raw);
+    }
+    for (const name of REQUIRED_CHECKS) {
+      if (!requiredChecks.has(name)) issues.push(`delivery:required-check-missing:${name}`);
+    }
+  }
+
+  if (input.preview !== null) {
+    if (!isRecord(input.preview)) {
+      issues.push("delivery:preview");
+    } else {
+      exactKeys(
+        input.preview,
+        [
+          "deploymentId",
+          "deploymentCommit",
+          "uniqueUrl",
+          "branchAlias",
+          "ready",
+          "protected",
+          "noindex",
+        ],
+        issues,
+        "delivery-preview",
+      );
+      if (!deploymentId(input.preview.deploymentId)) issues.push("delivery:preview-id");
+      if (!exactSha(input.preview.deploymentCommit)) issues.push("delivery:preview-commit");
+      if (!youtoolaPreviewUrl(input.preview.uniqueUrl)) issues.push("delivery:preview-url");
+      if (!youtoolaPreviewUrl(input.preview.branchAlias)) issues.push("delivery:preview-alias");
+      if (
+        input.preview.ready !== true ||
+        input.preview.protected !== true ||
+        input.preview.noindex !== true
+      ) {
+        issues.push("delivery:preview-protection");
+      }
+      if (
+        provenance &&
+        provenance.reviewedHeadCommit !== "pending-review" &&
+        input.preview.deploymentCommit !== provenance.reviewedHeadCommit
+      ) {
+        issues.push("delivery:preview-commit-mismatch");
+      }
+    }
+  }
+
+  const gates = isRecord(gateEvidence) ? gateEvidence : null;
+  const reviewApproved =
+    gates && isRecord(gates.review) && gates.review.status === "approved";
+  const shipApproved =
+    gates && isRecord(gates.ship) && gates.ship.status === "approved";
+  if (status === "completed" || reviewApproved || shipApproved) {
+    if (!isRecord(input.preview)) issues.push("delivery:preview-required");
+    for (const name of REQUIRED_CHECKS) {
+      if (requiredChecks.get(name)?.status !== "passed") {
+        issues.push(`delivery:required-check-not-passed:${name}`);
+      }
+    }
+  }
+}
+
+function validateFollowUpReviews(
+  input: unknown,
+  status: unknown,
+  issues: string[],
+) {
+  if (!isRecord(input)) {
+    issues.push("record:follow-up-reviews");
+    return;
+  }
+  exactKeys(input, FOLLOW_UP_PERIODS, issues, "follow-up-reviews");
+  for (const period of FOLLOW_UP_PERIODS) {
+    const raw = input[period];
+    if (!isRecord(raw)) {
+      issues.push(`follow-up:missing:${period}`);
+      continue;
+    }
+    exactKeys(
+      raw,
+      [
+        "dueDate",
+        "status",
+        "owner",
+        "completedDate",
+        "evidence",
+        "notApplicableReason",
+      ],
+      issues,
+      `follow-up:${period}`,
+    );
+    if (!(raw.dueDate === null || validDate(raw.dueDate))) {
+      issues.push(`follow-up:due-date:${period}`);
+    }
+    if (status === "completed" && !validDate(raw.dueDate)) {
+      issues.push(`follow-up:completed-due-date:${period}`);
+    }
+    if (!(FOLLOW_UP_STATUSES as readonly unknown[]).includes(raw.status)) {
+      issues.push(`follow-up:status:${period}`);
+    }
+    if (raw.owner !== "Youtoola owner") issues.push(`follow-up:owner:${period}`);
+    if (!Array.isArray(raw.evidence) || raw.evidence.some((value) => !nonEmptyString(value))) {
+      issues.push(`follow-up:evidence:${period}`);
+    }
+    if (raw.status === "pending") {
+      if (raw.completedDate !== null || raw.notApplicableReason !== null || (Array.isArray(raw.evidence) && raw.evidence.length > 0)) {
+        issues.push(`follow-up:pending-contradiction:${period}`);
+      }
+    }
+    if (raw.status === "complete") {
+      if (!validDate(raw.completedDate) || !Array.isArray(raw.evidence) || raw.evidence.length === 0 || raw.notApplicableReason !== null) {
+        issues.push(`follow-up:complete-evidence:${period}`);
+      }
+    }
+    if (raw.status === "not-applicable") {
+      if (!validDate(raw.completedDate) || !Array.isArray(raw.evidence) || raw.evidence.length === 0 || !nonEmptyString(raw.notApplicableReason)) {
+        issues.push(`follow-up:not-applicable-approval:${period}`);
+      }
+    }
+  }
+}
+
 export function requiredEvidenceForRiskTags(input: unknown): { issues: string[]; required: string[]; tags: RiskTag[] } {
   const issues: string[] = [];
   if (!Array.isArray(input) || input.length === 0) return { issues: ["risk-tags:missing"], required: [], tags: [] };
@@ -369,8 +728,12 @@ export function requiredEvidenceForRiskTags(input: unknown): { issues: string[];
 export function validateReleaseRecord(input: unknown, now = new Date()): string[] {
   const issues: string[] = [];
   if (!isRecord(input)) return ["record:invalid"];
-  exactKeys(input, ["recordVersion", "recordId", "status", "phaseOrUtility", "summary", "riskTags", "planApproval", "pullRequest", "provenance", "evidence", "exceptions", "rollbackPlan", "gateEvidence", "versions", "production", "followUpDates", "independentReview"], issues, "record");
+  if (input.recordKind === "correction") {
+    return validateReleaseCorrectionRecord(input, now);
+  }
+  exactKeys(input, ["recordVersion", "recordKind", "recordId", "status", "phaseOrUtility", "summary", "riskTags", "planApproval", "pullRequest", "provenance", "delivery", "evidence", "exceptions", "rollbackPlan", "gateEvidence", "versions", "production", "followUpReviews", "independentReview"], issues, "record");
   if (input.recordVersion !== RELEASE_SCHEMA_VERSION) issues.push("record:version");
+  if (input.recordKind !== "release") issues.push("record:kind");
   if (!nonEmptyString(input.recordId) || !/^[a-z0-9-]+$/.test(input.recordId)) issues.push("record:id");
   if (!nonEmptyString(input.phaseOrUtility)) issues.push("record:phase-or-utility");
   if (!nonEmptyString(input.summary)) issues.push("record:summary");
@@ -379,13 +742,7 @@ export function validateReleaseRecord(input: unknown, now = new Date()): string[
 
   const provenance = isRecord(input.provenance) ? input.provenance : null;
   if (!provenance) issues.push("record:provenance");
-  else {
-    exactKeys(provenance, ["pullRequest", "reviewedHeadCommit", "reviewedHeadRef", "reviewedDate", "mergeMethod", "mergeCommit", "durableReleaseCommit", "mergedAt"], issues, "provenance");
-    if (!pullRequestUrl(provenance.pullRequest) || provenance.pullRequest !== input.pullRequest) issues.push("provenance:pull-request-mismatch");
-    if (!sha(provenance.reviewedHeadCommit)) issues.push("provenance:reviewed-head");
-    if (!nonEmptyString(provenance.reviewedHeadRef) || !/^[a-z0-9](?:[a-z0-9._/-]*[a-z0-9])?$/.test(provenance.reviewedHeadRef) || /(?:\.\.|\/\/|@\{)/.test(provenance.reviewedHeadRef)) issues.push("provenance:reviewed-head-ref");
-    if (!validDate(provenance.reviewedDate)) issues.push("provenance:reviewed-date");
-  }
+  else validateProvenanceShape(provenance, input.pullRequest, input.status, issues);
 
   const selection = requiredEvidenceForRiskTags(input.riskTags);
   issues.push(...selection.issues);
@@ -440,13 +797,27 @@ export function validateReleaseRecord(input: unknown, now = new Date()): string[
     if (raw.status === "approved" && raw.approver !== "Youtoola owner") issues.push(`gate:approver:${gate}`);
     if (!Array.isArray(raw.evidence) || raw.evidence.some((value) => !nonEmptyString(value))) issues.push(`gate:evidence:${gate}`);
     }
+    const reviewGate = input.gateEvidence.review;
+    const shipGate = input.gateEvidence.ship;
+    if (
+      ((isRecord(reviewGate) && reviewGate.status === "approved") ||
+        (isRecord(shipGate) && shipGate.status === "approved")) &&
+      [...evidenceById.values()].some(({ status }) => status === "pending")
+    ) {
+      issues.push("record:pending-evidence");
+    }
   }
 
+  validateDeliveryEvidence(
+    input.delivery,
+    provenance,
+    input.gateEvidence,
+    input.status,
+    issues,
+  );
+
   if (!isRecord(input.versions) || input.versions.releaseSchema !== RELEASE_SCHEMA_VERSION) issues.push("record:versions");
-  if (!isRecord(input.followUpDates)) issues.push("record:follow-up-dates");
-  else for (const key of ["immediate", "24-hours", "7-days", "28-days", "monthly", "quarterly"] as const) {
-    if (!(input.followUpDates[key] === null || validDate(input.followUpDates[key]))) issues.push(`record:follow-up-date:${key}`);
-  }
+  validateFollowUpReviews(input.followUpReviews, input.status, issues);
 
   if (selection.tags.includes("calculation-change")) {
     const versions = isRecord(input.versions) ? input.versions : {};
@@ -465,8 +836,9 @@ export function validateReleaseRecord(input: unknown, now = new Date()): string[
     if (input.production !== null) issues.push("record:candidate-production-contradiction");
     if (provenance && (provenance.mergeMethod !== null || provenance.mergeCommit !== null || provenance.durableReleaseCommit !== null || provenance.mergedAt !== null)) issues.push("provenance:candidate-merge-contradiction");
   } else if (input.status === "completed") {
+    if (evidenceById.size > 0 && [...evidenceById.values()].some(({ status }) => status === "pending")) issues.push("record:pending-evidence");
     if (provenance) {
-      if (!(provenance.mergeMethod === "merge" || provenance.mergeMethod === "rebase" || provenance.mergeMethod === "squash")) issues.push("provenance:merge-method");
+      if (provenance.mergeMethod !== "squash") issues.push("provenance:merge-method");
       if (!sha(provenance.reviewedHeadCommit) || provenance.reviewedHeadCommit === "pending-review") issues.push("provenance:reviewed-head");
       if (!sha(provenance.mergeCommit) || provenance.mergeCommit === "pending-review") issues.push("provenance:merge-commit");
       if (!sha(provenance.durableReleaseCommit) || provenance.durableReleaseCommit === "pending-review") issues.push("provenance:durable-release-commit");
@@ -481,7 +853,7 @@ export function validateReleaseRecord(input: unknown, now = new Date()): string[
       if (!sha(input.production.deploymentCommit) || input.production.deploymentCommit === "pending-review") issues.push("production:deployment-commit");
       if (input.production.mergeCommit !== input.production.deploymentCommit) issues.push("production:commit-mismatch");
       if (provenance && (input.production.mergeCommit !== provenance.mergeCommit || input.production.deploymentCommit !== provenance.durableReleaseCommit)) issues.push("production:provenance-mismatch");
-      if (typeof input.production.deploymentId !== "string" || !/^dpl_[A-Za-z0-9]+$/.test(input.production.deploymentId) || typeof input.production.rollbackDeployment !== "string" || !/^dpl_[A-Za-z0-9]+$/.test(input.production.rollbackDeployment)) issues.push("production:deployment-evidence");
+      if (!deploymentId(input.production.deploymentId) || !deploymentId(input.production.rollbackDeployment)) issues.push("production:deployment-evidence");
       if (!Array.isArray(input.production.liveUrls) || input.production.liveUrls.length === 0 || input.production.liveUrls.some((url) => !productionUrl(url))) issues.push("production:live-urls");
       if (!Array.isArray(input.production.smokeResults) || input.production.smokeResults.length === 0 || input.production.smokeResults.some((result) => !nonEmptyString(result))) issues.push("production:smoke-results");
       if (!validDate(input.production.releaseDate)) issues.push("production:release-date");
@@ -489,7 +861,13 @@ export function validateReleaseRecord(input: unknown, now = new Date()): string[
       if (provenance && validTimestamp(provenance.mergedAt) && validTimestamp(input.production.deployedAt) && Date.parse(provenance.mergedAt) > Date.parse(input.production.deployedAt)) issues.push("provenance:chronology");
       if (validDate(input.production.releaseDate) && validTimestamp(input.production.deployedAt) && input.production.releaseDate !== input.production.deployedAt.slice(0, 10)) issues.push("production:release-date-mismatch");
     }
-    if (isRecord(input.followUpDates) && !validDate(input.followUpDates.immediate)) issues.push("record:immediate-follow-up");
+    if (
+      isRecord(input.followUpReviews) &&
+      (!isRecord(input.followUpReviews.immediate) ||
+        input.followUpReviews.immediate.status !== "complete")
+    ) {
+      issues.push("record:immediate-follow-up");
+    }
     if (isRecord(input.gateEvidence)) {
       for (const gate of ["plan", "review", "ship"] as const) if (isRecord(input.gateEvidence[gate]) && input.gateEvidence[gate].status !== "approved") issues.push(`gate:not-approved:${gate}`);
       for (const gate of ["build", "post-deployment"] as const) if (isRecord(input.gateEvidence[gate]) && !(input.gateEvidence[gate].status === "complete" || input.gateEvidence[gate].status === "approved")) issues.push(`gate:not-complete:${gate}`);
@@ -498,10 +876,99 @@ export function validateReleaseRecord(input: unknown, now = new Date()): string[
   return [...new Set(issues)].sort();
 }
 
+function validateReleaseCorrectionRecord(
+  input: Record<string, unknown>,
+  now: Date,
+): string[] {
+  const issues: string[] = [];
+  exactKeys(
+    input,
+    [
+      "recordVersion",
+      "recordKind",
+      "recordId",
+      "status",
+      "correctsRecordId",
+      "summary",
+      "reason",
+      "approvedDate",
+      "approver",
+      "planApproval",
+      "pullRequest",
+      "provenance",
+      "evidence",
+    ],
+    issues,
+    "correction",
+  );
+  if (input.recordVersion !== RELEASE_SCHEMA_VERSION) issues.push("record:version");
+  if (input.recordKind !== "correction") issues.push("record:kind");
+  if (!nonEmptyString(input.recordId) || !/^[a-z0-9-]+$/.test(input.recordId)) issues.push("record:id");
+  if (!nonEmptyString(input.correctsRecordId) || input.correctsRecordId === input.recordId) issues.push("correction:target");
+  if (!nonEmptyString(input.summary) || !nonEmptyString(input.reason)) issues.push("correction:content");
+  if (input.approver !== "Youtoola owner" || !validDate(input.approvedDate)) issues.push("correction:approval");
+  if (!(RELEASE_STATUSES as readonly unknown[]).includes(input.status)) issues.push("record:status");
+  if (!pullRequestUrl(input.pullRequest)) issues.push("record:pull-request");
+  if (!Array.isArray(input.evidence) || input.evidence.length === 0 || input.evidence.some((value) => !nonEmptyString(value))) issues.push("correction:evidence");
+  if (!isRecord(input.planApproval)) issues.push("record:plan-approval");
+  else if (input.planApproval.approver !== "Youtoola owner" || !validDate(input.planApproval.approvedDate) || !reviewIsFresh(String(input.planApproval.approvedDate), ["documentation-only"], now) || !nonEmptyString(input.planApproval.reference)) issues.push("record:plan-approval");
+  const provenance = isRecord(input.provenance) ? input.provenance : null;
+  if (!provenance) issues.push("record:provenance");
+  else {
+    validateProvenanceShape(provenance, input.pullRequest, input.status, issues);
+    if (input.status === "candidate") {
+      if (provenance.mergeMethod !== null || provenance.mergeCommit !== null || provenance.durableReleaseCommit !== null || provenance.mergedAt !== null) issues.push("provenance:candidate-merge-contradiction");
+    } else if (input.status === "completed") {
+      if (provenance.mergeMethod !== "squash") issues.push("provenance:merge-method");
+      if (!exactSha(provenance.reviewedHeadCommit)) issues.push("provenance:reviewed-head");
+      if (!exactSha(provenance.mergeCommit)) issues.push("provenance:merge-commit");
+      if (!exactSha(provenance.durableReleaseCommit)) issues.push("provenance:durable-release-commit");
+      if (provenance.mergeCommit !== provenance.durableReleaseCommit) issues.push("provenance:durable-commit-mismatch");
+      if (!validTimestamp(provenance.mergedAt)) issues.push("provenance:merged-at");
+    }
+  }
+  return [...new Set(issues)].sort();
+}
+
+export function getOverdueFollowUpReviews(
+  input: unknown,
+  now = new Date(),
+): FollowUpPeriod[] {
+  if (!isRecord(input) || input.recordKind !== "release" || input.status !== "completed" || !isRecord(input.followUpReviews)) return [];
+  const followUpReviews = input.followUpReviews;
+  const today = now.toISOString().slice(0, 10);
+  return FOLLOW_UP_PERIODS.filter((period) => {
+    const review = followUpReviews[period];
+    return isRecord(review) && review.status === "pending" && validDate(review.dueDate) && review.dueDate < today;
+  });
+}
+
+export function validateCorrectionReferences(records: readonly unknown[]): string[] {
+  const issues: string[] = [];
+  const recordsById = new Map<string, Record<string, unknown>>();
+  for (const raw of records) {
+    if (!isRecord(raw) || !nonEmptyString(raw.recordId)) continue;
+    if (recordsById.has(raw.recordId)) issues.push(`record:duplicate-id:${raw.recordId}`);
+    recordsById.set(raw.recordId, raw);
+  }
+  for (const record of recordsById.values()) {
+    if (record.recordKind !== "correction") continue;
+    const target = recordsById.get(String(record.correctsRecordId));
+    if (!target) issues.push(`correction:missing-target:${String(record.correctsRecordId)}`);
+    else if (target.recordKind !== "release") issues.push(`correction:target-not-release:${String(record.correctsRecordId)}`);
+  }
+  return [...new Set(issues)].sort();
+}
+
 export function validateReleaseProvenanceHistory(input: unknown, probe: ProvenanceHistoryProbe): string[] {
   if (!isRecord(input) || !isRecord(input.provenance)) return [];
   const issues: string[] = [];
   const provenance = input.provenance;
+  const sourceCommit = provenance.sourceCommit;
+  if (typeof sourceCommit === "string" && exactSha(sourceCommit)) {
+    if (!probe.commitExists(sourceCommit)) issues.push("provenance:source-commit-not-found");
+    if (!probe.isAncestor(sourceCommit, "HEAD")) issues.push("provenance:source-commit-not-in-main-history");
+  }
   const reviewedHead = provenance.reviewedHeadCommit;
   if (typeof reviewedHead === "string" && reviewedHead !== "pending-review") {
     if (!probe.commitExists(reviewedHead)) issues.push("provenance:reviewed-head-not-found");
@@ -510,6 +977,9 @@ export function validateReleaseProvenanceHistory(input: unknown, probe: Provenan
       const remoteRef = `refs/remotes/origin/${provenance.reviewedHeadRef}`;
       if (!probe.refExists(remoteRef)) issues.push("provenance:reviewed-head-ref-not-found");
       else if (!probe.isAncestor(reviewedHead, remoteRef)) issues.push("provenance:reviewed-head-ref-mismatch");
+    }
+    if (typeof sourceCommit === "string" && exactSha(sourceCommit) && !probe.isAncestor(sourceCommit, reviewedHead)) {
+      issues.push("provenance:source-reviewed-chronology");
     }
   }
   if (input.status === "completed" && typeof provenance.durableReleaseCommit === "string") {
