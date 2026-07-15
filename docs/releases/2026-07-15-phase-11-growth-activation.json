@@ -1,0 +1,100 @@
+{
+  "recordVersion": 3,
+  "recordKind": "release",
+  "recordId": "2026-07-15-phase-11-growth-activation",
+  "status": "candidate",
+  "phaseOrUtility": "Phase 11 Unit 3",
+  "summary": "Growth Activation readiness controls with route-aware successful-send page-view tracking; legal, external and Production activation evidence remain pending.",
+  "riskTags": [
+    "analytics-consent",
+    "security-privacy",
+    "platform-architecture",
+    "public-content"
+  ],
+  "planApproval": {
+    "approvedDate": "2026-07-15",
+    "approver": "Youtoola owner",
+    "reference": "APPROVE PLAN: Phase 11 Unit 3 Growth Activation with clarifications"
+  },
+  "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/19",
+  "provenance": {
+    "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/19",
+    "sourceBranch": "origin/main",
+    "sourceCommit": "2163f1b77ace3971eb87f677616965402f73f3a8",
+    "reviewedHeadCommit": "pending-review",
+    "reviewedHeadRef": "platform/growth-activation",
+    "reviewedDate": null,
+    "mergeMethod": null,
+    "mergeCommit": null,
+    "durableReleaseCommit": null,
+    "mergedAt": null
+  },
+  "delivery": {
+    "branch": "platform/growth-activation",
+    "releaseKind": "normal",
+    "preview": null,
+    "productionUnchangedBeforeMerge": true,
+    "requiredChecks": [
+      { "name": "Quality", "status": "pending", "reference": null },
+      { "name": "End-to-end", "status": "pending", "reference": null },
+      { "name": "Vercel", "status": "pending", "reference": null }
+    ]
+  },
+  "evidence": [
+    { "id": "accessibility-review", "reference": "Existing non-modal consent accessibility contracts remain in the passing 63-test Chromium suite; owner REVIEW remains pending.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "analytics-contract-tests", "reference": "Page-view readiness, successful-send deduplication and existing analytics contracts passed in the 304-test local suite.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "clean-diff", "reference": "git diff --check passed and scope inspection found no utility, registry, sitemap, crawler, brand or dependency change.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "consent-fail-closed-tests", "reference": "Consent remains explicit, Production-only and provider-free in Local and Preview; withdrawal contracts remain unchanged.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "content-review", "reference": "BUILD documentation states that legal, contact, GA4, Search Console, Bing, sitemap-console and Production evidence are pending.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "contract-tests", "reference": "Growth activation, foundation, monitoring and dashboard contract tests passed locally.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "debug-route-tests", "reference": "The protected design-system review route and unavailable Production-mode behavior remain covered by passing tests.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "dependency-audit", "reference": "npm audit reported zero vulnerabilities; no dependency changed.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "dependency-review", "reference": "package-lock.json and dependency declarations are unchanged.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "environment-transmission-tests", "reference": "Local E2E and protected Preview inspection showed no Measurement ID or Google provider request.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "environment-validation", "reference": "Production-only analytics configuration and Local/Preview rejection contracts remain validated.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "negative-tests", "reference": "Activation validation rejects unknown fields and premature active and activation-ready transitions.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "normal-ci", "reference": "Local lint, strict type-check, 304 unit tests, 63 Chromium tests and Production build passed; hosted exact-head checks remain delivery fields pending.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "owner-plan-approval", "reference": "APPROVE PLAN: Phase 11 Unit 3 Growth Activation with clarifications", "reviewedDate": "2026-07-15", "status": "approved" },
+    { "id": "payload-limit-tests", "reference": "Existing bounded analytics payload contracts remain green; Unit 3 creates no utility event.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "preview-verification", "reference": "Draft PR #19 branch Preview is authentication-protected, noindexed and provider-free; exact final-head evidence remains required before REVIEW.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "privacy-review", "reference": "Repository privacy review confirms qualified legal approval and provider-cookie treatment remain pending; this is not legal approval.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "prototype-pollution-tests", "reference": "Existing analytics plain-object and unknown-field validation remains in the passing suite.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "provider-boundary-review", "reference": "Direct gtag.js remains isolated to the existing adapter; no provider code or identifier was added.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "public-boundary-regression", "reference": "No utility, registry, public route, sitemap, crawler, brand or monetisation boundary changed.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "redirect-allowlist-tests", "reference": "Existing redirect and canonical allowlist tests remain green.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "release-report", "reference": "BUILD report records a dormant candidate and pending owner REVIEW, legal approval, external configuration and SHIP gates.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "rollback-plan", "reference": "Disable both Production analytics variables, verify provider silence and align source through protected main; current Ready Production remains the target until SHIP evidence exists.", "reviewedDate": "2026-07-15", "status": "approved" },
+    { "id": "safe-serialization-tests", "reference": "Sanitized page views retain canonical allowlisted URLs, authored titles and no query, fragment or referrer.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "secret-leakage-tests", "reference": "Activation records contain no Measurement ID, account identity, credential, token or recovery material.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "secret-scan", "reference": "Repository secret scan passed before candidate record creation.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "security-header-tests", "reference": "Preview retains report-only provider-free CSP and noindex headers; no enforced CSP change exists.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "security-review", "reference": "BUILD review found no new provider, credential, external request, persistence or activation path.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "sensitive-data-tests", "reference": "Existing sensitive analytics field rejection remains green and Unit 3 creates no synthetic utility event.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "seo-validation", "reference": "Public routes, canonicals, sitemap membership, crawler policy and indexability behavior are unchanged.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "storage-and-replay-tests", "reference": "Successful-send page-view state is ephemeral; no buffer, retry, replay or storage was introduced.", "reviewedDate": "2026-07-15", "status": "passed" }
+  ],
+  "exceptions": [],
+  "rollbackPlan": {
+    "method": "Disable both Production analytics variables, verify provider silence, then revert the Unit 3 merge through protected main if activation defects occur.",
+    "owner": "Youtoola owner",
+    "target": "current-production"
+  },
+  "gateEvidence": {
+    "plan": { "status": "approved", "approver": "Youtoola owner", "evidence": ["APPROVE PLAN: Phase 11 Unit 3 Growth Activation with clarifications"] },
+    "build": { "status": "complete", "approver": null, "evidence": ["Two scoped implementation commits and complete local validation"] },
+    "review": { "status": "pending", "approver": null, "evidence": [] },
+    "ship": { "status": "pending", "approver": null, "evidence": [] },
+    "post-deployment": { "status": "pending", "approver": null, "evidence": [] },
+    "post-launch-review": { "status": "pending", "approver": null, "evidence": [] }
+  },
+  "versions": { "releaseSchema": 3, "analyticsSchema": 1 },
+  "production": null,
+  "followUpReviews": {
+    "immediate": { "dueDate": null, "status": "pending", "owner": "Youtoola owner", "completedDate": null, "evidence": [], "notApplicableReason": null },
+    "24-hour": { "dueDate": null, "status": "pending", "owner": "Youtoola owner", "completedDate": null, "evidence": [], "notApplicableReason": null },
+    "7-day": { "dueDate": null, "status": "pending", "owner": "Youtoola owner", "completedDate": null, "evidence": [], "notApplicableReason": null },
+    "28-day": { "dueDate": null, "status": "pending", "owner": "Youtoola owner", "completedDate": null, "evidence": [], "notApplicableReason": null },
+    "monthly": { "dueDate": null, "status": "pending", "owner": "Youtoola owner", "completedDate": null, "evidence": [], "notApplicableReason": null },
+    "quarterly": { "dueDate": null, "status": "pending", "owner": "Youtoola owner", "completedDate": null, "evidence": [], "notApplicableReason": null }
+  }
+}
