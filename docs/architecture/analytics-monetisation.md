@@ -1,6 +1,6 @@
 # Analytics, Experimentation and Monetisation Architecture
 
-Phase 8 establishes contracts only. It adds no provider, measurement ID, network request, cookie, storage, database, active commercial output, experiment assignment, or public-route JavaScript.
+Phase 8 established contracts only. Phase 11 Unit 2 adds dormant consent and provider infrastructure, metadata and validation, but no configured provider, identifier, network request, automatic cookie, database, active commercial output or experiment assignment.
 
 ## Analytics boundary
 

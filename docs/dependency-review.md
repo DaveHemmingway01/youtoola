@@ -63,6 +63,8 @@ Zod, form libraries, decimal libraries, date libraries, sharing/export libraries
 
 Analytics, experiment and commercial contracts use existing TypeScript, React and Vitest tooling. No provider SDK, tag manager, consent platform, experiment service, storage library, commercial integration, runtime dependency or paid service is added. GA4 and all provider activation remain deferred to Phase 11.
 
+Phase 11 Unit 2 retains the same package-free decision. Consent, direct dormant provider integration, configuration validation, social metadata, report-only CSP and weekly smoke monitoring use React, browser APIs, Node.js and the existing test toolchain. No analytics SDK, consent manager, monitor or lockfile change is justified before activation evidence exists.
+
 ## Phase 7 dependency decision
 
 Phase 7 adds no package. Native Next.js metadata routes, repository-owned TypeScript contracts, deterministic JSON serialization, Vitest and Playwright satisfy canonical, metadata, sitemap, structured-data and trust-page requirements.

@@ -1,0 +1,394 @@
+{
+  "recordVersion": 3,
+  "recordKind": "release",
+  "recordId": "2026-07-15-phase-11-growth-foundation",
+  "status": "candidate",
+  "phaseOrUtility": "Phase 11 Unit 2",
+  "summary": "Dormant Growth Foundation with consent, provider gating, social metadata, privacy, report-only CSP, configuration validation and monitoring; no analytics activation.",
+  "riskTags": [
+    "analytics-consent",
+    "metadata-indexing",
+    "security-privacy",
+    "visual-interface",
+    "platform-architecture",
+    "public-content"
+  ],
+  "planApproval": {
+    "approvedDate": "2026-07-15",
+    "approver": "Youtoola owner",
+    "reference": "APPROVE PLAN: Youtoola Phase 11 Unit 2 Growth Foundation"
+  },
+  "pullRequest": "pending",
+  "provenance": {
+    "pullRequest": "pending",
+    "sourceBranch": "origin/main",
+    "sourceCommit": "47821635c82153673e790a437b0cc5be09fe8e77",
+    "reviewedHeadCommit": "pending-review",
+    "reviewedHeadRef": "platform/growth-foundation",
+    "reviewedDate": null,
+    "mergeMethod": null,
+    "mergeCommit": null,
+    "durableReleaseCommit": null,
+    "mergedAt": null
+  },
+  "delivery": {
+    "branch": "platform/growth-foundation",
+    "releaseKind": "normal",
+    "preview": null,
+    "productionUnchangedBeforeMerge": true,
+    "requiredChecks": [
+      {
+        "name": "Quality",
+        "status": "pending",
+        "reference": null
+      },
+      {
+        "name": "End-to-end",
+        "status": "pending",
+        "reference": null
+      },
+      {
+        "name": "Vercel",
+        "status": "pending",
+        "reference": null
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "id": "accessibility-review",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "analytics-contract-tests",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "axe-scan",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "browser-tests",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "clean-diff",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "component-tests",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "consent-fail-closed-tests",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "content-review",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "contract-tests",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "crawler-validation",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "debug-route-tests",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "dependency-audit",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "dependency-review",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "environment-transmission-tests",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "environment-validation",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "manual-keyboard-review",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "negative-tests",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "normal-ci",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "owner-plan-approval",
+      "reference": "APPROVE PLAN: Youtoola Phase 11 Unit 2 Growth Foundation",
+      "reviewedDate": "2026-07-15",
+      "status": "approved"
+    },
+    {
+      "id": "payload-limit-tests",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "preview-verification",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "privacy-review",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "production-smoke-plan",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "prototype-pollution-tests",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "provider-boundary-review",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "public-boundary-regression",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "redirect-allowlist-tests",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "release-report",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "responsive-review",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "rollback-plan",
+      "reference": "Ready Production deployment dpl_399VeuQ5o4dpJW3x5fkEp8cvZXhF and protected-main revert plan.",
+      "reviewedDate": "2026-07-15",
+      "status": "approved"
+    },
+    {
+      "id": "safe-serialization-tests",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "secret-leakage-tests",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "secret-scan",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "security-header-tests",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "security-review",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "sensitive-data-tests",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "seo-validation",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "storage-and-replay-tests",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "structured-data-validation",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    },
+    {
+      "id": "visual-review",
+      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reviewedDate": "2026-07-15",
+      "status": "pending"
+    }
+  ],
+  "exceptions": [],
+  "rollbackPlan": {
+    "method": "Restore the current Ready Vercel deployment, then revert the Unit 2 squash through protected main.",
+    "owner": "Youtoola owner",
+    "target": "dpl_399VeuQ5o4dpJW3x5fkEp8cvZXhF"
+  },
+  "gateEvidence": {
+    "plan": {
+      "status": "approved",
+      "approver": "Youtoola owner",
+      "evidence": [
+        "APPROVE PLAN: Youtoola Phase 11 Unit 2 Growth Foundation"
+      ]
+    },
+    "build": {
+      "status": "pending",
+      "approver": null,
+      "evidence": []
+    },
+    "review": {
+      "status": "pending",
+      "approver": null,
+      "evidence": []
+    },
+    "ship": {
+      "status": "pending",
+      "approver": null,
+      "evidence": []
+    },
+    "post-deployment": {
+      "status": "pending",
+      "approver": null,
+      "evidence": []
+    },
+    "post-launch-review": {
+      "status": "pending",
+      "approver": null,
+      "evidence": []
+    }
+  },
+  "versions": {
+    "releaseSchema": 3,
+    "analyticsSchema": 1
+  },
+  "production": null,
+  "followUpReviews": {
+    "immediate": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "24-hour": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "7-day": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "28-day": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "monthly": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "quarterly": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    }
+  }
+}

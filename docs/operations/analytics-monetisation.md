@@ -1,11 +1,11 @@
 # Analytics and Monetisation Operations
 
-## Phase 8 operating state
+## Phase 11 Unit 2 operating state
 
 - Local: provider absent, transmission blocked, protected in-memory inspector allowed.
 - Preview: Production provider and measurement ID absent, transmission blocked, protected noindexed inspector allowed.
-- Production: provider absent, transmission blocked, inspector absent, commercial output absent.
-- Consent: defaults to `unknown`; no banner, storage, queue, buffer, or replay.
+- Production: provider adapter is dormant, configuration is disabled, transmission is blocked, inspector is absent and commercial output is absent.
+- Consent: defaults to `unknown`; no automatic banner or cookie while analytics is dormant, and no queue, buffer or replay exists. Footer preferences explain the dormant state.
 - Experiments: definition validation only; no assignment.
 
 Run `npm run architecture:validate` for the contract suite. It is offline and is required by Quality CI.
