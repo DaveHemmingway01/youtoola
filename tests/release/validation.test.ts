@@ -78,6 +78,10 @@ function candidate(tags: ReleaseRecord["riskTags"] = ["platform-architecture"]):
 function completed(): ReleaseRecord {
   const record = candidate();
   const durableCommit = "a".repeat(40);
+  record.rollbackPlan = {
+    ...record.rollbackPlan,
+    target: "dpl_previous",
+  };
   record.status = "completed";
   record.pullRequest = "https://github.com/DaveHemmingway01/youtoola/pull/11";
   record.provenance = {
@@ -290,6 +294,12 @@ describe("release record validation", () => {
       "production:provenance-mismatch",
     ]));
 
+    const fabricatedRollback = completed();
+    fabricatedRollback.production!.rollbackDeployment = "dpl_fabricated";
+    expect(validateReleaseRecord(fabricatedRollback, today)).toContain(
+      "production:rollback-mismatch",
+    );
+
     const incomplete = completed();
     incomplete.production = null;
     expect(validateReleaseRecord(incomplete, today)).toContain("record:production-evidence");
@@ -327,7 +337,7 @@ describe("release record validation", () => {
       ...record.followUpReviews,
       "7-day": {
         ...record.followUpReviews["7-day"],
-        completedDate: "2026-07-15",
+        completedDate: "2026-07-14",
         evidence: ["Owner approved no indexing evidence before Phase 11."],
         notApplicableReason: "Search Console is intentionally deferred to Phase 11.",
         status: "not-applicable",
@@ -345,6 +355,22 @@ describe("release record validation", () => {
     };
     expect(validateReleaseRecord(record, today)).toContain(
       "follow-up:not-applicable-approval:7-day",
+    );
+  });
+
+  it("rejects invented completion evidence dated after validation", () => {
+    const record = completed();
+    record.followUpReviews = {
+      ...record.followUpReviews,
+      "24-hour": {
+        ...record.followUpReviews["24-hour"],
+        completedDate: "2026-07-15",
+        evidence: ["Invented future result."],
+        status: "complete",
+      },
+    };
+    expect(validateReleaseRecord(record, today)).toContain(
+      "follow-up:future-completion:24-hour",
     );
   });
 

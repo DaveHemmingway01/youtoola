@@ -43,7 +43,7 @@ After Phase 11, add acquisition, completion, validation, consent, continuation a
 
 Completed history is not silently rewritten. Add a schema-v3 `correction` record with the original record ID, owner approval, reason, evidence and valid provenance. Missing targets, correction-to-correction chains, fabricated deployment facts and incomplete completed records fail closed.
 
-A narrowly scoped `docs/release-record/<scope>` branch may complete an already approved release without creating a second application candidate. Any runtime, configuration or unrelated documentation change removes that exemption.
+A narrowly scoped `docs/<scope>-release-record` branch may complete an already approved release without creating a second application candidate. Any runtime, configuration or unrelated documentation change removes that exemption.
 
 ## Failure behavior
 
