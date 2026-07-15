@@ -35,9 +35,9 @@
     "branch": "platform/growth-foundation",
     "releaseKind": "normal",
     "preview": {
-      "deploymentId": "dpl_5qA8hyC78sY87vxWFCzzx7HujKfB",
-      "deploymentCommit": "cf282d22bac751ca4703e416d19c766a4a3a64f7",
-      "uniqueUrl": "https://youtoola-qtmpwrbc1-davincistudio.vercel.app/",
+      "deploymentId": "dpl_8CjiZ39uPF18uX3pFU8yVEQyqLEM",
+      "deploymentCommit": "4f5b59de2ca11d85f928df4aaa13a68299c8af1f",
+      "uniqueUrl": "https://youtoola-cesz6dd2s-davincistudio.vercel.app/",
       "branchAlias": "https://youtoola-git-platform-growth-foundation-davincistudio.vercel.app/",
       "ready": true,
       "protected": true,
@@ -48,17 +48,17 @@
       {
         "name": "Quality",
         "status": "passed",
-        "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29412144285/job/87341496887"
+        "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29415247150/job/87351634089"
       },
       {
         "name": "End-to-end",
         "status": "passed",
-        "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29412144285/job/87341496952"
+        "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29415247150/job/87351634144"
       },
       {
         "name": "Vercel",
         "status": "passed",
-        "reference": "https://vercel.com/davincistudio/youtoola/5qA8hyC78sY87vxWFCzzx7HujKfB"
+        "reference": "https://vercel.com/davincistudio/youtoola/8CjiZ39uPF18uX3pFU8yVEQyqLEM"
       }
     ]
   },
@@ -167,7 +167,7 @@
     },
     {
       "id": "normal-ci",
-      "reference": "Quality and End-to-end passed for branch head cf282d22bac751ca4703e416d19c766a4a3a64f7.",
+      "reference": "Quality and End-to-end passed for branch head 4f5b59de2ca11d85f928df4aaa13a68299c8af1f.",
       "reviewedDate": "2026-07-15",
       "status": "passed"
     },
@@ -185,7 +185,7 @@
     },
     {
       "id": "preview-verification",
-      "reference": "Protected noindexed Preview dpl_5qA8hyC78sY87vxWFCzzx7HujKfB for branch head cf282d22bac751ca4703e416d19c766a4a3a64f7.",
+      "reference": "Protected noindexed Preview dpl_8CjiZ39uPF18uX3pFU8yVEQyqLEM for branch head 4f5b59de2ca11d85f928df4aaa13a68299c8af1f.",
       "reviewedDate": "2026-07-15",
       "status": "passed"
     },
