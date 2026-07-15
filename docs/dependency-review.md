@@ -75,4 +75,10 @@ Phase 9 adds no package or lockfile change. Release contracts and validators use
 
 No test-management platform, visual-regression SaaS, release-management service, external security scanner or cloud-browser service is justified. The repository remains small enough to run the full suite. GitHub failure artifacts are retained for 14 days and add no Production code or provider dependency.
 
+## Phase 10 dependency decision
+
+Phase 10 adds no package or lockfile change. Branch, environment, release-record and Production-smoke validation use Node.js, TypeScript, native `fetch`, `node:crypto`, Git, the existing Vitest suite, GitHub Actions and the existing Vercel integration.
+
+A deployment CLI wrapper, release platform, secret manager SDK, uptime SaaS, workflow orchestrator, staging project or backup service would add cost and operational surface without resolving a demonstrated failure. GitHub and Vercel remain the approved low-cost delivery system; more infrastructure requires measured need and owner approval.
+
 Every future dependency review must record purpose, alternatives, runtime or development classification, bundle effect, licence, maintenance status, transitive risk, update policy, necessity and removal path.

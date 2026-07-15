@@ -31,6 +31,16 @@ The utility creates the value and attracts the user. Traffic is later monetised 
 
 Utility quality, speed and trust always come before monetisation.
 
+## Delivery operations
+
+- Start approved work from current `origin/main` on `platform/`, `utility/`, `fix/`, `docs/`, `brand/` or owner-authorised `hotfix/`; never stack on an unmerged feature branch.
+- Use protected pull requests and squash-only merges. Retain merged source branches as release provenance.
+- `Quality`, `End-to-end` and `Vercel` are required. Preview Comments is informational. Automation reports evidence but never grants PLAN, REVIEW or SHIP approval.
+- Vercel Git integration is the only normal Production path. Never use `vercel --prod`, force-push or bypass protected `main`.
+- Preview must remain authentication-protected and `noindex, nofollow`. Production-only integrations and credentials must not exist in Local or Preview.
+- Create and validate the applicable release record, verify a Ready rollback target, and use factual evidence only. Correct historic evidence through an approved correction record; do not rewrite it silently.
+- Only the Youtoola owner may authorise SHIP, hotfixes, rollbacks, environment/secret changes or emergency exceptions.
+
 
 ## 2. Commercial North Star
 

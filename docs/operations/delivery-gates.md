@@ -34,4 +34,8 @@ Review immediate, 24-hour, 7-day, 28-day, monthly and quarterly evidence. Before
 
 GitHub controls approval and merge. Vercel executes deployments. Codex must never claim success without verifying the resulting state.
 
-See `docs/architecture/testing-and-release-gates.md`, `docs/operations/release-validation.md` and `docs/operations/rollback.md` for the binding Phase 9 evidence and failure rules.
+Only squash merge is approved. Source branches are retained, Actions are pinned to full SHAs, and superseded-run cancellation applies to pull requests only. `Quality`, `End-to-end` and `Vercel` remain required; Preview Comments is informational. The owner is the approval, hotfix and rollback authority.
+
+Schema-v3 records make Preview, required checks and every follow-up period explicit. Normal validation reports overdue follow-ups; SHIP validation fails while any required follow-up is overdue. Historic factual errors use approved correction records rather than silent mutation.
+
+See `docs/architecture/testing-and-release-gates.md`, `docs/architecture/delivery-and-environments.md`, `docs/operations/deployment.md`, `docs/operations/release-validation.md` and `docs/operations/rollback.md` for the binding evidence and failure rules.
