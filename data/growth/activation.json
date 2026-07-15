@@ -9,8 +9,8 @@
     "jurisdictions": []
   },
   "privacyContact": {
-    "status": "pending",
-    "address": null
+    "status": "operational",
+    "address": "privacy@youtoola.com"
   },
   "analytics": {
     "provider": "Google Analytics 4",
