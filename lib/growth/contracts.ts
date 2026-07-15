@@ -75,30 +75,50 @@ export interface GrowthActivationRecord {
   activationState: GrowthActivationState;
   analytics: Readonly<{
     configuration: Readonly<{
-      accountDisplayName: string | null;
+      accountDisplayName: "Youtoola";
       evidenceReference: string;
       measurementIdFingerprint: string;
-      propertyDisplayName: string | null;
-      propertyId: string | null;
+      propertyDisplayName: "Youtoola Production";
+      propertyId: "545783566";
+      reportingCurrency: "EUR";
+      reportingTimeZone: "Europe/Lisbon";
       streamDisplayName: string;
       streamId: string;
       streamUrl: "https://www.youtoola.com";
     }>;
     customDimensions: readonly string[];
+    customDimensionConfiguration: "not-configured" | "verified";
+    debugView: "pending" | "verified";
     keyEvents: readonly ["tool_complete"];
+    keyEventConfiguration: "not-configured" | "verified";
     measurementIdStatus: "configured" | "not-configured";
     productionVariables: "configured" | "not-configured";
     provider: "Google Analytics 4";
-    retentionMonths: 2;
+    retention: Readonly<{
+      eventDataMonths: 2;
+      resetOnNewUserActivity: false;
+      userDataMonths: 2;
+    }>;
     sanitizedPageView: "approved" | "build-ready" | "verified";
     settingsVerification: "pending" | "verified";
     settings: Readonly<{
+      adsLinks: false;
       advertisingFeatures: false;
       automaticPageViews: false;
+      browserHistoryPageViews: false;
       crossDomainMeasurement: false;
-      enhancedMeasurement: false;
+      dataSharing: false;
+      enhancedMeasurementStatus: "page-view-category-google-locked-on-optional-events-off";
       googleSignals: false;
       measurementProtocol: false;
+      optionalEnhancedMeasurementEvents: Readonly<{
+        fileDownloads: false;
+        formInteractions: false;
+        outboundClicks: false;
+        scrolls: false;
+        siteSearch: false;
+        videoEngagement: false;
+      }>;
       userId: false;
     }>;
     status: "configured" | "disabled" | "not-configured" | "partially-configured" | "verified";

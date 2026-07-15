@@ -6,7 +6,7 @@ import type { GrowthActivationRecord } from "@/lib/growth/contracts";
 import { validateGrowthActivationRecord } from "@/lib/growth/validation";
 
 describe("Growth Activation record", () => {
-  it("records accepted legal and partial GA4 evidence while external activation remains pending", () => {
+  it("records accepted legal and verified GA4 configuration while activation remains dormant", () => {
     expect(validateGrowthActivationRecord(activation as unknown as GrowthActivationRecord)).toEqual([]);
     expect(activation.activationState).toBe("legally-approved");
     expect(activation.legalPrivacy).toEqual({
@@ -40,17 +40,33 @@ describe("Growth Activation record", () => {
       status: "partially-configured",
       measurementIdStatus: "configured",
       productionVariables: "not-configured",
-      settingsVerification: "pending",
+      settingsVerification: "verified",
+      customDimensionConfiguration: "not-configured",
+      keyEventConfiguration: "not-configured",
+      debugView: "pending",
       configuration: {
-        accountDisplayName: null,
-        propertyDisplayName: null,
-        propertyId: null,
+        accountDisplayName: "Youtoola",
+        propertyDisplayName: "Youtoola Production",
+        propertyId: "545783566",
+        reportingCurrency: "EUR",
+        reportingTimeZone: "Europe/Lisbon",
         streamDisplayName: "Youtoola",
         streamId: "15263953983",
         streamUrl: "https://www.youtoola.com",
         measurementIdFingerprint: "sha256:96718192b2e08dc78eec82cd444dbdf359b3d6bbcf550c1ae0a96f81b10fe67b",
       },
     });
+    expect(activation.analytics.retention).toEqual({
+      eventDataMonths: 2,
+      userDataMonths: 2,
+      resetOnNewUserActivity: false,
+    });
+    expect(activation.analytics.settings).toMatchObject({
+      automaticPageViews: false,
+      browserHistoryPageViews: false,
+      enhancedMeasurementStatus: "page-view-category-google-locked-on-optional-events-off",
+    });
+    expect(Object.values(activation.analytics.settings.optionalEnhancedMeasurementEvents).every((value) => value === false)).toBe(true);
     expect(activation.evidence.externalConfiguration).toBe("pending");
     expect(JSON.stringify(activation)).not.toMatch(/token|credential|oauth|api.?key/i);
     expect(foundation.analytics.activation).toBe("disabled");
@@ -94,13 +110,17 @@ describe("Growth Activation record", () => {
     expect(validateGrowthActivationRecord(wrongSitemapCount)).toContain("activation-sitemap-google-urls");
   });
 
-  it("rejects unsupported GA4 identity and completed-settings claims", () => {
+  it("rejects unsupported GA4 identity and contradictory settings evidence", () => {
     const unsupportedProperty = structuredClone(activation);
     unsupportedProperty.analytics.configuration.propertyId = "123456789" as never;
-    expect(validateGrowthActivationRecord(unsupportedProperty)).toContain("unverified-analytics-property-id");
+    expect(validateGrowthActivationRecord(unsupportedProperty)).toContain("analytics-property-id");
 
-    const prematureSettings = structuredClone(activation);
-    prematureSettings.analytics.settingsVerification = "verified" as never;
-    expect(validateGrowthActivationRecord(prematureSettings)).toContain("analytics-partial-configuration");
+    const automaticHistory = structuredClone(activation);
+    automaticHistory.analytics.settings.browserHistoryPageViews = true as never;
+    expect(validateGrowthActivationRecord(automaticHistory)).toContain("prohibited-analytics-setting");
+
+    const optionalScrolls = structuredClone(activation);
+    optionalScrolls.analytics.settings.optionalEnhancedMeasurementEvents.scrolls = true as never;
+    expect(validateGrowthActivationRecord(optionalScrolls)).toContain("prohibited-enhanced-measurement-event");
   });
 });

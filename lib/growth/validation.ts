@@ -282,7 +282,7 @@ export function validateGrowthActivationRecord(input: unknown) {
 
   const analytics = expectRecord(
     record.analytics,
-    ["configuration", "customDimensions", "keyEvents", "measurementIdStatus", "productionVariables", "provider", "retentionMonths", "sanitizedPageView", "settings", "settingsVerification", "status"],
+    ["configuration", "customDimensionConfiguration", "customDimensions", "debugView", "keyEventConfiguration", "keyEvents", "measurementIdStatus", "productionVariables", "provider", "retention", "sanitizedPageView", "settings", "settingsVerification", "status"],
     "activation-analytics-fields",
     issues,
   );
@@ -291,9 +291,11 @@ export function validateGrowthActivationRecord(input: unknown) {
     if (!["configured", "disabled", "not-configured", "partially-configured", "verified"].includes(analytics.status as string)) issues.push("activation-analytics-status");
     if (!["configured", "not-configured"].includes(analytics.measurementIdStatus as string)) issues.push("measurement-id-status");
     if (!["configured", "not-configured"].includes(analytics.productionVariables as string)) issues.push("production-variables-status");
-    if (analytics.retentionMonths !== 2) issues.push("analytics-retention");
     if (!["pending", "verified"].includes(analytics.settingsVerification as string)) issues.push("analytics-settings-verification");
     if (!["approved", "build-ready", "verified"].includes(analytics.sanitizedPageView as string)) issues.push("sanitized-page-view-status");
+    if (!["not-configured", "verified"].includes(analytics.customDimensionConfiguration as string)) issues.push("custom-dimension-configuration-status");
+    if (!["not-configured", "verified"].includes(analytics.keyEventConfiguration as string)) issues.push("key-event-configuration-status");
+    if (!["pending", "verified"].includes(analytics.debugView as string)) issues.push("debug-view-status");
     if (!Array.isArray(analytics.keyEvents) || analytics.keyEvents.join(",") !== "tool_complete") issues.push("activation-key-events");
     if (!Array.isArray(analytics.customDimensions) ||
       analytics.customDimensions.some((value) => typeof value !== "string" || !allowedCustomDimensions.has(value)) ||
@@ -302,33 +304,62 @@ export function validateGrowthActivationRecord(input: unknown) {
     }
     const configuration = expectRecord(
       analytics.configuration,
-      ["accountDisplayName", "evidenceReference", "measurementIdFingerprint", "propertyDisplayName", "propertyId", "streamDisplayName", "streamId", "streamUrl"],
+      ["accountDisplayName", "evidenceReference", "measurementIdFingerprint", "propertyDisplayName", "propertyId", "reportingCurrency", "reportingTimeZone", "streamDisplayName", "streamId", "streamUrl"],
       "analytics-configuration-fields",
       issues,
     );
     if (configuration) {
-      if (configuration.accountDisplayName !== null) issues.push("unverified-analytics-account-name");
-      if (configuration.propertyDisplayName !== null) issues.push("unverified-analytics-property-name");
-      if (configuration.propertyId !== null) issues.push("unverified-analytics-property-id");
+      if (configuration.accountDisplayName !== "Youtoola") issues.push("analytics-account-name");
+      if (configuration.propertyDisplayName !== "Youtoola Production") issues.push("analytics-property-name");
+      if (configuration.propertyId !== "545783566") issues.push("analytics-property-id");
+      if (configuration.reportingTimeZone !== "Europe/Lisbon") issues.push("analytics-reporting-time-zone");
+      if (configuration.reportingCurrency !== "EUR") issues.push("analytics-reporting-currency");
       if (configuration.streamDisplayName !== "Youtoola") issues.push("analytics-stream-name");
       if (configuration.streamId !== "15263953983") issues.push("analytics-stream-id");
       if (configuration.streamUrl !== "https://www.youtoola.com") issues.push("analytics-stream-url");
       if (configuration.measurementIdFingerprint !== "sha256:96718192b2e08dc78eec82cd444dbdf359b3d6bbcf550c1ae0a96f81b10fe67b") issues.push("analytics-measurement-id-fingerprint");
-      if (typeof configuration.evidenceReference !== "string" || !configuration.evidenceReference.includes("7a684274b68f8bf0b56d74ce47791e7a369bb0e400627a328ffac04628743ee4")) {
+      if (typeof configuration.evidenceReference !== "string" ||
+        !configuration.evidenceReference.includes("7a684274b68f8bf0b56d74ce47791e7a369bb0e400627a328ffac04628743ee4") ||
+        !configuration.evidenceReference.includes("docs/operations/growth-infrastructure.md")) {
         issues.push("analytics-evidence-reference");
       }
     }
+    const retention = expectRecord(
+      analytics.retention,
+      ["eventDataMonths", "resetOnNewUserActivity", "userDataMonths"],
+      "analytics-retention-fields",
+      issues,
+    );
+    if (retention && (retention.eventDataMonths !== 2 || retention.userDataMonths !== 2 || retention.resetOnNewUserActivity !== false)) {
+      issues.push("analytics-retention");
+    }
     if (analytics.status === "partially-configured" &&
-      (analytics.measurementIdStatus !== "configured" || analytics.settingsVerification !== "pending")) {
+      (analytics.measurementIdStatus !== "configured" || analytics.productionVariables !== "not-configured" || analytics.debugView !== "pending")) {
       issues.push("analytics-partial-configuration");
     }
     const settings = expectRecord(
       analytics.settings,
-      ["advertisingFeatures", "automaticPageViews", "crossDomainMeasurement", "enhancedMeasurement", "googleSignals", "measurementProtocol", "userId"],
+      ["adsLinks", "advertisingFeatures", "automaticPageViews", "browserHistoryPageViews", "crossDomainMeasurement", "dataSharing", "enhancedMeasurementStatus", "googleSignals", "measurementProtocol", "optionalEnhancedMeasurementEvents", "userId"],
       "analytics-settings-fields",
       issues,
     );
-    if (settings && Object.values(settings).some((value) => value !== false)) issues.push("prohibited-analytics-setting");
+    if (settings) {
+      for (const key of ["adsLinks", "advertisingFeatures", "automaticPageViews", "browserHistoryPageViews", "crossDomainMeasurement", "dataSharing", "googleSignals", "measurementProtocol", "userId"] as const) {
+        if (settings[key] !== false) issues.push("prohibited-analytics-setting");
+      }
+      if (settings.enhancedMeasurementStatus !== "page-view-category-google-locked-on-optional-events-off") {
+        issues.push("enhanced-measurement-status");
+      }
+      const optionalEvents = expectRecord(
+        settings.optionalEnhancedMeasurementEvents,
+        ["fileDownloads", "formInteractions", "outboundClicks", "scrolls", "siteSearch", "videoEngagement"],
+        "optional-enhanced-measurement-fields",
+        issues,
+      );
+      if (optionalEvents && Object.values(optionalEvents).some((value) => value !== false)) {
+        issues.push("prohibited-enhanced-measurement-event");
+      }
+    }
   }
 
   for (const [key, issue] of [["searchConsole", "search-console"], ["bing", "bing"]] as const) {
