@@ -2,7 +2,24 @@
 
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+const navigation = vi.hoisted(() => ({ pathname: "/" }));
+const provider = vi.hoisted(() => ({
+  adapter: {
+    clear: vi.fn(),
+    configured: true,
+    disable: vi.fn(),
+    lifecycle: "ready" as const,
+    load: vi.fn(async () => "ready" as const),
+    track: vi.fn(() => "accepted" as const),
+    trackPageView: vi.fn(() => true),
+    updateDenied: vi.fn(),
+  },
+}));
+
+vi.mock("next/navigation", () => ({ usePathname: () => navigation.pathname }));
+vi.mock("@/lib/analytics/ga4-adapter", () => ({ createGa4Adapter: () => provider.adapter }));
 
 import { ConsentProvider } from "@/components/consent/consent-provider";
 import { PrivacyPreferencesButton } from "@/components/consent/privacy-preferences-button";
@@ -10,6 +27,9 @@ import { PrivacyPreferencesButton } from "@/components/consent/privacy-preferenc
 afterEach(() => {
   cleanup();
   document.cookie = "youtoola_consent=; Max-Age=0; Path=/";
+  navigation.pathname = "/";
+  window.history.replaceState({}, "", "/");
+  vi.clearAllMocks();
 });
 
 describe("consent interface", () => {
@@ -61,5 +81,40 @@ describe("consent interface", () => {
     close.focus();
     await user.tab();
     expect(document.activeElement).not.toBe(close);
+  });
+
+  it("tracks recognized App Router transitions once after provider readiness", async () => {
+    document.cookie = "youtoola_consent=v1:analytics-granted; Path=/";
+    const view = render(
+      <ConsentProvider configuration={{ analyticsAvailable: true, measurementId: "provider-id", secureCookie: true }}>
+        <p>Content</p>
+      </ConsentProvider>,
+    );
+
+    await waitFor(() => expect(provider.adapter.trackPageView).toHaveBeenCalledTimes(1));
+    expect(provider.adapter.trackPageView).toHaveBeenLastCalledWith({
+      page_location: "https://www.youtoola.com",
+      page_title: "Youtoola — Useful tools. No account. No nonsense.",
+    });
+
+    navigation.pathname = "/tools";
+    window.history.pushState({}, "", "/tools?private=value#result");
+    view.rerender(
+      <ConsentProvider configuration={{ analyticsAvailable: true, measurementId: "provider-id", secureCookie: true }}>
+        <p>Content</p>
+      </ConsentProvider>,
+    );
+    await waitFor(() => expect(provider.adapter.trackPageView).toHaveBeenCalledTimes(2));
+    expect(provider.adapter.trackPageView).toHaveBeenLastCalledWith({
+      page_location: "https://www.youtoola.com/tools",
+      page_title: "Practical Online Tools",
+    });
+
+    view.rerender(
+      <ConsentProvider configuration={{ analyticsAvailable: true, measurementId: "provider-id", secureCookie: true }}>
+        <p>Content</p>
+      </ConsentProvider>,
+    );
+    expect(provider.adapter.trackPageView).toHaveBeenCalledTimes(2);
   });
 });

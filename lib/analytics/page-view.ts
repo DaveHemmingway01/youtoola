@@ -34,13 +34,25 @@ export function createSanitizedPageView(value: string): SanitizedPageView | null
 export class PageViewDeduplicator {
   #current: string | null = null;
 
-  accept(pageView: SanitizedPageView) {
-    if (this.#current === pageView.page_location) return false;
+  has(pageView: SanitizedPageView) {
+    return this.#current === pageView.page_location;
+  }
+
+  record(pageView: SanitizedPageView) {
     this.#current = pageView.page_location;
-    return true;
   }
 
   clear() {
     this.#current = null;
   }
+}
+
+export function sendDeduplicatedPageView(
+  deduplicator: PageViewDeduplicator,
+  pageView: SanitizedPageView,
+  send: (value: SanitizedPageView) => boolean,
+) {
+  if (deduplicator.has(pageView) || !send(pageView)) return false;
+  deduplicator.record(pageView);
+  return true;
 }
