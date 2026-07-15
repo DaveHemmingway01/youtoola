@@ -18,9 +18,9 @@
     "approver": "Youtoola owner",
     "reference": "APPROVE PLAN: Youtoola Phase 11 Unit 2 Growth Foundation"
   },
-  "pullRequest": "pending",
+  "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/17",
   "provenance": {
-    "pullRequest": "pending",
+    "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/17",
     "sourceBranch": "origin/main",
     "sourceCommit": "47821635c82153673e790a437b0cc5be09fe8e77",
     "reviewedHeadCommit": "pending-review",
@@ -34,23 +34,31 @@
   "delivery": {
     "branch": "platform/growth-foundation",
     "releaseKind": "normal",
-    "preview": null,
+    "preview": {
+      "deploymentId": "dpl_5qA8hyC78sY87vxWFCzzx7HujKfB",
+      "deploymentCommit": "cf282d22bac751ca4703e416d19c766a4a3a64f7",
+      "uniqueUrl": "https://youtoola-qtmpwrbc1-davincistudio.vercel.app/",
+      "branchAlias": "https://youtoola-git-platform-growth-foundation-davincistudio.vercel.app/",
+      "ready": true,
+      "protected": true,
+      "noindex": true
+    },
     "productionUnchangedBeforeMerge": true,
     "requiredChecks": [
       {
         "name": "Quality",
-        "status": "pending",
-        "reference": null
+        "status": "passed",
+        "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29412144285/job/87341496887"
       },
       {
         "name": "End-to-end",
-        "status": "pending",
-        "reference": null
+        "status": "passed",
+        "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29412144285/job/87341496952"
       },
       {
         "name": "Vercel",
-        "status": "pending",
-        "reference": null
+        "status": "passed",
+        "reference": "https://vercel.com/davincistudio/youtoola/5qA8hyC78sY87vxWFCzzx7HujKfB"
       }
     ]
   },
@@ -159,9 +167,9 @@
     },
     {
       "id": "normal-ci",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Quality and End-to-end passed for branch head cf282d22bac751ca4703e416d19c766a4a3a64f7.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "owner-plan-approval",
@@ -177,9 +185,9 @@
     },
     {
       "id": "preview-verification",
-      "reference": "Pending BUILD, CI or owner review evidence.",
+      "reference": "Protected noindexed Preview dpl_5qA8hyC78sY87vxWFCzzx7HujKfB for branch head cf282d22bac751ca4703e416d19c766a4a3a64f7.",
       "reviewedDate": "2026-07-15",
-      "status": "pending"
+      "status": "passed"
     },
     {
       "id": "privacy-review",
