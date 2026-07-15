@@ -2,7 +2,7 @@
   "recordVersion": 3,
   "recordKind": "release",
   "recordId": "2026-07-15-phase-11-growth-foundation",
-  "status": "candidate",
+  "status": "completed",
   "phaseOrUtility": "Phase 11 Unit 2",
   "summary": "Dormant Growth Foundation with consent, provider gating, social metadata, privacy, report-only CSP, configuration validation and monitoring; no analytics activation.",
   "riskTags": [
@@ -26,10 +26,10 @@
     "reviewedHeadCommit": "838555791e3c0eb5ed901328121f6f973648abf5",
     "reviewedHeadRef": "platform/growth-foundation",
     "reviewedDate": "2026-07-15",
-    "mergeMethod": null,
-    "mergeCommit": null,
-    "durableReleaseCommit": null,
-    "mergedAt": null
+    "mergeMethod": "squash",
+    "mergeCommit": "7fe671c4dc65cf5dbe3cbcf30b65488702d741d9",
+    "durableReleaseCommit": "7fe671c4dc65cf5dbe3cbcf30b65488702d741d9",
+    "mergedAt": "2026-07-15T13:13:10.000Z"
   },
   "delivery": {
     "branch": "platform/growth-foundation",
@@ -306,7 +306,7 @@
   ],
   "exceptions": [],
   "rollbackPlan": {
-    "method": "Restore the current Ready Vercel deployment, then revert the Unit 2 squash through protected main.",
+    "method": "Restore the previous Ready Vercel deployment, then revert the Unit 2 squash through protected main.",
     "owner": "Youtoola owner",
     "target": "dpl_399VeuQ5o4dpJW3x5fkEp8cvZXhF"
   },
@@ -319,9 +319,12 @@
       ]
     },
     "build": {
-      "status": "pending",
+      "status": "complete",
       "approver": null,
-      "evidence": []
+      "evidence": [
+        "PR #17 implementation, review fixes and exact-head required checks",
+        "299 unit tests and 61 Chromium end-to-end tests"
+      ]
     },
     "review": {
       "status": "approved",
@@ -331,14 +334,21 @@
       ]
     },
     "ship": {
-      "status": "pending",
-      "approver": null,
-      "evidence": []
+      "status": "approved",
+      "approver": "Youtoola owner",
+      "evidence": [
+        "APPROVE SHIP: Phase 11 Unit 2 for final approved PR head 85d872616ff69b87b1a7ba638c9b0b415b2237e0",
+        "Runtime REVIEW remained attached to implementation head 838555791e3c0eb5ed901328121f6f973648abf5",
+        "PR #17 squash merge 7fe671c4dc65cf5dbe3cbcf30b65488702d741d9"
+      ]
     },
     "post-deployment": {
-      "status": "pending",
+      "status": "complete",
       "approver": null,
-      "evidence": []
+      "evidence": [
+        "Vercel Production deployment dpl_FYnpT3J6az3PBoeUQeSQbJud7aE7",
+        "Immediate Production and Growth smoke verification on 2026-07-15"
+      ]
     },
     "post-launch-review": {
       "status": "pending",
@@ -350,18 +360,43 @@
     "releaseSchema": 3,
     "analyticsSchema": 1
   },
-  "production": null,
+  "production": {
+    "mergeCommit": "7fe671c4dc65cf5dbe3cbcf30b65488702d741d9",
+    "deploymentId": "dpl_FYnpT3J6az3PBoeUQeSQbJud7aE7",
+    "deploymentCommit": "7fe671c4dc65cf5dbe3cbcf30b65488702d741d9",
+    "deployedAt": "2026-07-15T13:13:13.038Z",
+    "liveUrls": [
+      "https://www.youtoola.com",
+      "https://www.youtoola.com/tools",
+      "https://www.youtoola.com/about",
+      "https://www.youtoola.com/methodology",
+      "https://www.youtoola.com/privacy"
+    ],
+    "smokeResults": [
+      "The five approved public routes returned HTTP 200; /fuel-trip-calculator and /design-system-review returned HTTP 404; the apex returned HTTP 308 to https://www.youtoola.com/.",
+      "All five public routes used the approved 1200x630 image/png Open Graph asset, approved alt text and Twitter summary_large_image metadata.",
+      "The report-only CSP and existing security headers were present; no enforcing CSP was present.",
+      "The footer Privacy preferences control described dormant analytics accurately; no automatic notice, consent cookie, analytics cookie, local storage or session storage appeared.",
+      "No Measurement ID, Google Analytics, Google Tag Manager, Microsoft Clarity or commercial provider script or request appeared.",
+      "Sitemap membership, crawler policy, Production indexability and all frozen brand hashes remained unchanged.",
+      "Production and Growth smoke commands passed."
+    ],
+    "rollbackDeployment": "dpl_399VeuQ5o4dpJW3x5fkEp8cvZXhF",
+    "releaseDate": "2026-07-15"
+  },
   "followUpReviews": {
     "immediate": {
-      "dueDate": null,
-      "status": "pending",
+      "dueDate": "2026-07-15",
+      "status": "complete",
       "owner": "Youtoola owner",
-      "completedDate": null,
-      "evidence": [],
+      "completedDate": "2026-07-15",
+      "evidence": [
+        "Production deployment dpl_FYnpT3J6az3PBoeUQeSQbJud7aE7 immediate Production and Growth smoke verification"
+      ],
       "notApplicableReason": null
     },
     "24-hour": {
-      "dueDate": null,
+      "dueDate": "2026-07-16",
       "status": "pending",
       "owner": "Youtoola owner",
       "completedDate": null,
@@ -369,7 +404,7 @@
       "notApplicableReason": null
     },
     "7-day": {
-      "dueDate": null,
+      "dueDate": "2026-07-22",
       "status": "pending",
       "owner": "Youtoola owner",
       "completedDate": null,
@@ -377,7 +412,7 @@
       "notApplicableReason": null
     },
     "28-day": {
-      "dueDate": null,
+      "dueDate": "2026-08-12",
       "status": "pending",
       "owner": "Youtoola owner",
       "completedDate": null,
@@ -385,7 +420,7 @@
       "notApplicableReason": null
     },
     "monthly": {
-      "dueDate": null,
+      "dueDate": "2026-08-15",
       "status": "pending",
       "owner": "Youtoola owner",
       "completedDate": null,
@@ -393,7 +428,7 @@
       "notApplicableReason": null
     },
     "quarterly": {
-      "dueDate": null,
+      "dueDate": "2026-10-15",
       "status": "pending",
       "owner": "Youtoola owner",
       "completedDate": null,
