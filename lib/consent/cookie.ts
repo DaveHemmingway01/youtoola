@@ -30,6 +30,9 @@ export function serializeConsentCookie(
   state: SerializableConsentState,
   { secure }: { secure: boolean },
 ) {
+  if (state !== "denied" && state !== "analytics-granted") {
+    throw new Error("Only denied or analytics-granted consent may be serialized.");
+  }
   const attributes = [
     `${CONSENT_COOKIE_NAME}=${CONSENT_POLICY_VERSION}:${state}`,
     `Max-Age=${CONSENT_COOKIE_MAX_AGE_SECONDS}`,

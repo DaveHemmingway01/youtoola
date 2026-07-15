@@ -26,6 +26,8 @@ All five public routes use the frozen absolute default Open Graph image and Twit
 
 Every route receives `Content-Security-Policy-Report-Only`. It is intentionally non-enforcing, includes no reporting endpoint and contains no provider origins while analytics is dormant. `unsafe-inline` is required by the current framework output and limits the policy's protective value. Enforced CSP remains deferred. Local and Preview may never add provider origins.
 
+Only a validated enabled Production analytics configuration may add the exact adapter-owned Google script and connection origins to the report-only policy. No wildcard provider origin is permitted.
+
 ## Operating state
 
 The version-controlled growth records are secret-free definitions. Analytics, Search Console, Bing and sitemap console submission are not configured; legal/privacy approval is pending; dashboard and weekly monitoring are definition-only. The non-required Monday 07:00 UTC workflow runs direct, read-only, package-free Production checks from current `main` and does not call provider or hosting APIs.

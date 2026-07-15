@@ -1,15 +1,20 @@
 import type { NextConfig } from "next";
 
 import { getDesignSystemReviewRewrites } from "./lib/design-system-review";
+import { GA4_CSP_ORIGINS } from "./lib/analytics/ga4-adapter";
+import { resolveGa4Configuration } from "./lib/analytics/ga4-configuration";
 import { isIndexingAllowed } from "./lib/environment";
 import { createReportOnlyContentSecurityPolicy } from "./lib/security/content-security-policy";
 
 const indexingAllowed = isIndexingAllowed();
+const ga4Configuration = resolveGa4Configuration();
 
 const securityHeaders = [
   {
     key: "Content-Security-Policy-Report-Only",
-    value: createReportOnlyContentSecurityPolicy(),
+    value: createReportOnlyContentSecurityPolicy({
+      providerOrigins: ga4Configuration.enabled ? GA4_CSP_ORIGINS : undefined,
+    }),
   },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-Content-Type-Options", value: "nosniff" },

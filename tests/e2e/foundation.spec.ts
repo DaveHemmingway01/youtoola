@@ -48,6 +48,34 @@ test("keeps dormant privacy preferences provider-free and storage-free", async (
   expect(providerRequests).toEqual([]);
 });
 
+test("keeps dormant privacy preferences usable at 320px and 200% text", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto("/");
+  await page.evaluate(() => {
+    document.documentElement.style.fontSize = "200%";
+  });
+  await page.getByRole("button", { name: "Privacy preferences" }).click();
+  const preferences = page.getByRole("region", { name: "Privacy preferences" });
+  await expect(preferences).toBeVisible();
+  await expect(page.getByRole("button", { name: "Close preferences" })).toBeVisible();
+  const bounds = await preferences.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return {
+      bottom: rect.bottom,
+      top: rect.top,
+      viewportHeight: window.innerHeight,
+      viewportWidth: window.innerWidth,
+      width: rect.width,
+    };
+  });
+  expect(bounds.top).toBeGreaterThanOrEqual(0);
+  expect(bounds.bottom).toBeLessThanOrEqual(bounds.viewportHeight);
+  expect(bounds.width).toBeLessThanOrEqual(bounds.viewportWidth);
+  expect(await page.evaluate(
+    () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+  )).toBe(false);
+});
+
 test("returns the custom not-found page with a 404 status", async ({ page }) => {
   const response = await page.goto("/missing-foundation-route");
 

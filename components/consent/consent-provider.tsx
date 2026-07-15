@@ -26,6 +26,15 @@ interface ConsentContextValue {
 
 const ConsentContext = createContext<ConsentContextValue | null>(null);
 
+function describeConsentState(state: AnalyticsConsentState) {
+  if (state === "analytics-granted") return "Optional analytics is accepted.";
+  if (state === "denied") return "Optional analytics is rejected.";
+  if (state === "marketing-granted") {
+    return "Marketing consent is unavailable; optional analytics is off.";
+  }
+  return "No analytics choice has been saved.";
+}
+
 export function useConsentPreferences() {
   const value = useContext(ConsentContext);
   if (!value) throw new Error("Consent preferences must be used inside ConsentProvider.");
@@ -168,6 +177,9 @@ export function ConsentProvider({
                 ? "Optional analytics is available and only runs after you accept."
                 : "Optional analytics is currently off. No analytics provider is active."}
             </p>
+            {configuration.analyticsAvailable ? (
+              <p><strong>Current choice:</strong> {describeConsentState(state)}</p>
+            ) : null}
             {!configuration.analyticsAvailable ? (
               <p>No preference cookie is needed while analytics is unavailable.</p>
             ) : null}

@@ -48,6 +48,20 @@ describe("first-party provider adapter", () => {
     expect(adapter.track(event)).toBe("provider-failure");
   });
 
+  it("deduplicates concurrent and repeated provider loads", async () => {
+    vi.spyOn(window.navigator, "onLine", "get").mockReturnValue(true);
+    const adapter = createGa4Adapter({ measurementId: "provider-id", timeoutMilliseconds: 1000 });
+    const firstLoad = adapter.load();
+
+    expect(await adapter.load()).toBe("loading");
+    expect(document.querySelectorAll("script#youtoola-ga4")).toHaveLength(1);
+
+    document.querySelector("script#youtoola-ga4")!.dispatchEvent(new Event("load"));
+    expect(await firstLoad).toBe("ready");
+    expect(await adapter.load()).toBe("ready");
+    expect(document.querySelectorAll("script#youtoola-ga4")).toHaveLength(1);
+  });
+
   it("isolates provider failure and timeout without retry", async () => {
     const failed = createGa4Adapter({ measurementId: "provider-id" });
     const failure = failed.load();

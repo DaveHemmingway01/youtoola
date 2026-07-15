@@ -44,6 +44,8 @@ describe("consent interface", () => {
     expect(screen.getByRole("link", { name: "Read Privacy" }).getAttribute("href")).toBe("/privacy");
     await user.click(reject);
     expect(screen.getByText("Optional analytics rejected.")).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Privacy preferences" }));
+    expect(screen.getByText("Optional analytics is rejected.")).toBeTruthy();
   });
 
   it("does not trap Tab inside preferences", async () => {

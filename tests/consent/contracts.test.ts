@@ -29,6 +29,9 @@ describe("consent cookie contract", () => {
       "youtoola_consent=v1:analytics-granted; Max-Age=15552000; Path=/; SameSite=Lax; Secure",
     );
     expect(serializeConsentCookie("denied", { secure: true })).not.toMatch(/Domain|HttpOnly|timestamp|user/i);
+    expect(() =>
+      serializeConsentCookie("marketing-granted" as never, { secure: true }),
+    ).toThrow(/Only denied or analytics-granted/);
   });
 });
 

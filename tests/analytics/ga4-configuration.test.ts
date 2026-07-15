@@ -21,6 +21,24 @@ describe("server-owned analytics configuration", () => {
     expect(() => resolveGa4Configuration({ YOUTOOLA_ENV: "production", YOUTOOLA_ANALYTICS_ENABLED: "true", YOUTOOLA_GA4_MEASUREMENT_ID: "g-lower" })).toThrow(/valid bounded/);
   });
 
+  it("enforces the exact measurement identifier boundary", () => {
+    for (const measurementId of [`G-${"A".repeat(4)}`, `G-${"A".repeat(20)}`]) {
+      expect(resolveGa4Configuration({
+        YOUTOOLA_ENV: "production",
+        YOUTOOLA_ANALYTICS_ENABLED: "true",
+        YOUTOOLA_GA4_MEASUREMENT_ID: measurementId,
+      }).enabled).toBe(true);
+    }
+
+    for (const measurementId of [`G-${"A".repeat(3)}`, `G-${"A".repeat(21)}`, "G-AB-CD"]) {
+      expect(() => resolveGa4Configuration({
+        YOUTOOLA_ENV: "production",
+        YOUTOOLA_ANALYTICS_ENABLED: "true",
+        YOUTOOLA_GA4_MEASUREMENT_ID: measurementId,
+      })).toThrow(/valid bounded/);
+    }
+  });
+
   it("warns but remains disabled when Production has a residual identifier", () => {
     const configuration = resolveGa4Configuration({ YOUTOOLA_ENV: "production", YOUTOOLA_GA4_MEASUREMENT_ID: syntheticValidIdentifier });
     expect(configuration.enabled).toBe(false);
