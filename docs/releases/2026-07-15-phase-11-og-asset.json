@@ -1,0 +1,224 @@
+{
+  "recordVersion": 3,
+  "recordKind": "release",
+  "recordId": "2026-07-15-phase-11-og-asset",
+  "status": "candidate",
+  "phaseOrUtility": "Phase 11 Unit 1",
+  "summary": "Deterministic default Open Graph asset candidate with no metadata or Production integration.",
+  "riskTags": [
+    "visual-interface"
+  ],
+  "planApproval": {
+    "approvedDate": "2026-07-15",
+    "approver": "Youtoola owner",
+    "reference": "APPROVE PLAN: Youtoola Phase 11 Unit 1 Open Graph asset"
+  },
+  "pullRequest": "pending",
+  "provenance": {
+    "pullRequest": "pending",
+    "sourceBranch": "origin/main",
+    "sourceCommit": "7ce3ac9b41b8f9a62588a38f17559cccb94907e4",
+    "reviewedHeadCommit": "pending-review",
+    "reviewedHeadRef": "platform/growth-og-asset",
+    "reviewedDate": null,
+    "mergeMethod": null,
+    "mergeCommit": null,
+    "durableReleaseCommit": null,
+    "mergedAt": null
+  },
+  "delivery": {
+    "branch": "platform/growth-og-asset",
+    "releaseKind": "normal",
+    "preview": null,
+    "requiredChecks": [
+      {
+        "name": "Quality",
+        "status": "pending",
+        "reference": null
+      },
+      {
+        "name": "End-to-end",
+        "status": "pending",
+        "reference": null
+      },
+      {
+        "name": "Vercel",
+        "status": "pending",
+        "reference": null
+      }
+    ],
+    "productionUnchangedBeforeMerge": true
+  },
+  "evidence": [
+    {
+      "id": "axe-scan",
+      "status": "passed",
+      "reference": "Existing public routes remain unchanged and the 58-test Chromium suite passed its axe checks.",
+      "reviewedDate": "2026-07-15"
+    },
+    {
+      "id": "browser-tests",
+      "status": "passed",
+      "reference": "Chromium decoded the candidate at 1200x630 and all 58 existing browser tests passed.",
+      "reviewedDate": "2026-07-15"
+    },
+    {
+      "id": "clean-diff",
+      "status": "passed",
+      "reference": "git diff --check and Unit 1 scope inspection on platform/growth-og-asset.",
+      "reviewedDate": "2026-07-15"
+    },
+    {
+      "id": "component-tests",
+      "status": "passed",
+      "reference": "Static asset contract and negative tests passed; Unit 1 adds no application component.",
+      "reviewedDate": "2026-07-15"
+    },
+    {
+      "id": "manual-keyboard-review",
+      "status": "passed",
+      "reference": "Unit 1 adds no control or interaction; existing keyboard browser regressions passed.",
+      "reviewedDate": "2026-07-15"
+    },
+    {
+      "id": "normal-ci",
+      "status": "pending",
+      "reference": "Pending GitHub required checks after owner visual approval and candidate commit.",
+      "reviewedDate": "2026-07-15"
+    },
+    {
+      "id": "owner-plan-approval",
+      "status": "approved",
+      "reference": "APPROVE PLAN: Youtoola Phase 11 Unit 1 Open Graph asset.",
+      "reviewedDate": "2026-07-15"
+    },
+    {
+      "id": "preview-verification",
+      "status": "pending",
+      "reference": "Pending protected Vercel Preview after owner visual approval and candidate commit.",
+      "reviewedDate": "2026-07-15"
+    },
+    {
+      "id": "release-report",
+      "status": "passed",
+      "reference": "Unit 1 candidate report and explicit APPROVE ASSET decision for the immutable production hash.",
+      "reviewedDate": "2026-07-15"
+    },
+    {
+      "id": "responsive-review",
+      "status": "passed",
+      "reference": "Native, 600px, 300px and 150px review renders plus centred crop diagnostics.",
+      "reviewedDate": "2026-07-15"
+    },
+    {
+      "id": "rollback-plan",
+      "status": "approved",
+      "reference": "Restore current Production deployment and revert the asset-only squash through protected main.",
+      "reviewedDate": "2026-07-15"
+    },
+    {
+      "id": "visual-review",
+      "status": "approved",
+      "reference": "APPROVE ASSET: owner approved the production candidate, light and dark contexts, hierarchy and safe margins.",
+      "reviewedDate": "2026-07-15"
+    }
+  ],
+  "exceptions": [],
+  "rollbackPlan": {
+    "method": "Restore the current Ready Production deployment, then revert the asset-only squash through protected main.",
+    "owner": "Youtoola owner",
+    "target": "current-production"
+  },
+  "gateEvidence": {
+    "plan": {
+      "status": "approved",
+      "approver": "Youtoola owner",
+      "evidence": [
+        "APPROVE PLAN: Youtoola Phase 11 Unit 1 Open Graph asset"
+      ]
+    },
+    "build": {
+      "status": "complete",
+      "approver": null,
+      "evidence": [
+        "Deterministic asset generation and complete local validation",
+        "Owner visual approval for SHA-256 9a6c7ac46773ff6d8a6d2fe0de7aeaa5f0fc6c5ff272bc848d9da171d8aedcbc"
+      ]
+    },
+    "review": {
+      "status": "pending",
+      "approver": null,
+      "evidence": []
+    },
+    "ship": {
+      "status": "pending",
+      "approver": null,
+      "evidence": []
+    },
+    "post-deployment": {
+      "status": "pending",
+      "approver": null,
+      "evidence": []
+    },
+    "post-launch-review": {
+      "status": "pending",
+      "approver": null,
+      "evidence": []
+    }
+  },
+  "versions": {
+    "releaseSchema": 3,
+    "analyticsSchema": 1
+  },
+  "production": null,
+  "followUpReviews": {
+    "immediate": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "24-hour": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "7-day": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "28-day": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "monthly": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "quarterly": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    }
+  }
+}

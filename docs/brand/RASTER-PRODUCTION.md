@@ -13,7 +13,6 @@ The following secondary assets and integrations are intentionally deferred and d
 - SVG logo masters
 - wordmark-only asset
 - monochrome variants
-- default Open Graph image
 - full colour guide
 - typography guide
 - final brand guide
@@ -97,3 +96,15 @@ Owner-approved on 2026-07-13.
 Each size is generated directly from the approved 2048×2048 symbol master using Chromium/Skia high-quality alpha-aware resampling. The symbol geometry, gradient, dot, proportions and optical centring remain unchanged. The output is 8-bit RGBA with explicit standard sRGB, approved opaque corner pixels and no unnecessary metadata.
 
 No rounded corners, circular or squircle mask, transparent variation, SVG, shadow, outline, glow, texture, bevel, recolouring, maskable-specific artwork, adaptive-icon layers or monochrome version is included. Manifest declarations and application metadata integration are explicitly deferred. Preserve these three files byte-for-byte until the owner explicitly authorises replacement.
+
+## Phase 11 default Open Graph asset
+
+Owner-approved on 2026-07-15.
+
+| Asset | Dimensions | SHA-256 |
+| --- | ---: | --- |
+| `public/brand/og-default.png` | 1200×630 | `9a6c7ac46773ff6d8a6d2fe0de7aeaa5f0fc6c5ff272bc848d9da171d8aedcbc` |
+
+The asset uses the approved opaque `#000A3F` background, the frozen full Youtoola logo unchanged on a soft-white panel, and the approved brand promise “Useful tools. No account. No nonsense.” It is an 8-bit RGBA PNG with explicit standard sRGB, approved safe margins and no unnecessary metadata.
+
+Preserve this file byte-for-byte. Do not redesign, recolour, resize, crop or regenerate it differently without a separate owner-approved brand-change process. Social metadata integration remains deferred to Phase 11 Unit 2.

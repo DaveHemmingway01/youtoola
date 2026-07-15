@@ -34,6 +34,9 @@ npm run brand:favicon:preview
 npm run brand:application-icons:generate
 npm run brand:application-icons:validate
 npm run brand:application-icons:preview
+npm run brand:og:generate
+npm run brand:og:validate
+npm run brand:og:preview
 ```
 
 `brand:generate` can rebuild the Asset 01 logo PNG family and Asset 03 symbol PNG family from the approved JPGs. It creates the largest transparent master first and derives smaller sizes from that master. It does not generate later asset groups.
@@ -47,6 +50,8 @@ Favicon review material remains under the ignored `docs/brand/reviews/favicon/` 
 Asset Group 06 derives the Apple touch icon and 192/512-pixel application-icon candidates independently from the complete approved symbol master. Each candidate places the unchanged gradient symbol on an opaque `#000A3F` canvas: 75% scale for Apple and 71.875% for Android/PWA. The square files contain no baked platform mask; manifest, metadata, maskable, adaptive and monochrome integration is deferred.
 
 Application-icon review material remains under the ignored `docs/brand/reviews/application-icons/` directory. Home-screen, install-prompt, bookmark, launcher and common-mask previews control visual approval. Safe-area overlays are diagnostic only. The three approved application-icon files are immutable until the owner explicitly authorises replacement. Do not run `brand:application-icons:generate` against them for routine validation; use `brand:application-icons:validate`.
+
+The approved Phase 11 default Open Graph asset derives only from the frozen full logo and the approved brand promise. It uses the approved navy canvas and places the unchanged dark wordmark on a soft-white panel for legibility. Review material remains under ignored `docs/brand/reviews/og-default/`. Preserve `public/brand/og-default.png` byte-for-byte and use `brand:og:validate` for routine checks; metadata integration remains deferred to Phase 11 Unit 2.
 
 ## Asset 01 and Asset 03 references
 

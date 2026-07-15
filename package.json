@@ -38,6 +38,9 @@
     "brand:application-icons:generate": "node scripts/brand/generate-application-icon-candidates.mjs",
     "brand:application-icons:preview": "node scripts/brand/render-application-icon-preview.mjs",
     "brand:application-icons:validate": "node scripts/brand/validate-application-icon-assets.mjs --write-report",
+    "brand:og:generate": "node scripts/brand/generate-og-default.mjs",
+    "brand:og:preview": "node scripts/brand/render-og-default-preview.mjs",
+    "brand:og:validate": "node scripts/brand/validate-og-default.mjs --write-report",
     "check": "npm run validate"
   },
   "dependencies": {
