@@ -42,6 +42,8 @@ jobs:
         run: npm run knowledge:validate
       - name: Validate analytics, experiment and monetisation architecture
         run: npm run architecture:validate
+      - name: Validate Growth Foundation
+        run: npm run validate:growth
       - name: Validate release contracts and evidence
         run: npm run validate:release
       - name: Validate delivery and environment operations

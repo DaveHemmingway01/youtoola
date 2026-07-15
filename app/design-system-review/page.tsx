@@ -27,6 +27,7 @@ import { isDesignSystemReviewAvailable } from "@/lib/design-system-review";
 import { ReviewForm } from "./review-form";
 import { UtilityFrameworkExample } from "./utility-framework-example";
 import { AnalyticsMonetisationReview } from "./analytics-monetisation-review";
+import { GrowthFoundationReview } from "./growth-foundation-review";
 import {
   InertAdvertisingReview,
   InertAffiliateReview,
@@ -113,6 +114,7 @@ export default function DesignSystemReviewPage() {
       </Disclosure>
 
       <AnalyticsMonetisationReview />
+      <GrowthFoundationReview />
 
       <h2>Inactive commercial capability reviews</h2>
       <p>These review-only examples contain no provider, destination, offer, form, or activation.</p>

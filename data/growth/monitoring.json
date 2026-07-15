@@ -1,0 +1,21 @@
+{
+  "status": "definition-only",
+  "owner": "Youtoola owner",
+  "schedule": "0 7 * * 1",
+  "checks": [
+    "approved-public-routes",
+    "approved-unavailable-routes",
+    "apex-308",
+    "canonicals",
+    "sitemap",
+    "indexability",
+    "security-headers",
+    "open-graph-metadata",
+    "open-graph-asset",
+    "report-only-csp",
+    "no-enforced-csp",
+    "no-provider-identifiers-or-requests",
+    "no-analytics-set-cookie",
+    "no-clarity-or-commercial-providers"
+  ]
+}

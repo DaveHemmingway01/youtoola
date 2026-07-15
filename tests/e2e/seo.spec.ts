@@ -55,12 +55,19 @@ for (const expected of pageExpectations) {
       "href",
       expected.canonical,
     );
-    await expect(page.locator('meta[property="og:image"]')).toHaveCount(0);
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+      "content",
+      "https://www.youtoola.com/brand/og-default.png",
+    );
+    await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute(
+      "content",
+      "Youtoola — Useful tools. No account. No nonsense.",
+    );
     await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
       "content",
-      "summary",
+      "summary_large_image",
     );
-    await expect(page.locator('script[src*="google"], script[src*="analytics"]')).toHaveCount(0);
+    await expect(page.locator('script[src*="googletagmanager"], script[src*="google-analytics"], script[src*="clarity"]')).toHaveCount(0);
   });
 }
 
@@ -88,7 +95,7 @@ for (const expected of pageExpectations.slice(1)) {
   });
 }
 
-for (const path of ["/about", "/methodology", "/privacy"]) {
+for (const path of ["/about", "/methodology"]) {
   test(`${path} is accessible and contains review ownership`, async ({ page }) => {
     await page.goto(path);
     await expect(page.getByText("Content owner:")).toBeVisible();
@@ -99,3 +106,12 @@ for (const path of ["/about", "/methodology", "/privacy"]) {
     ).toEqual([]);
   });
 }
+
+test("privacy page reflects dormant analytics without making legal claims", async ({ page }) => {
+  await page.goto("/privacy");
+  await expect(page.getByText("Optional Google Analytics 4 (GA4) is currently off.", { exact: false })).toBeVisible();
+  await expect(page.getByText("Qualified legal and privacy review required", { exact: false })).toBeVisible();
+  await expect(page.locator("time[datetime='2026-07-15']")).toBeVisible();
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(results.violations.filter(({ impact }) => impact === "serious" || impact === "critical")).toEqual([]);
+});

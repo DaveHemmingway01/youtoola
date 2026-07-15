@@ -1,0 +1,11 @@
+[
+  { "id": "organic-landing-sessions", "numerator": "Production sessions attributed to Organic Search", "denominator": null, "source": "GA4" },
+  { "id": "search-click-through-rate", "numerator": "Search clicks", "denominator": "Search impressions", "source": "Google Search Console" },
+  { "id": "tool-start-rate", "numerator": "Accepted tool_start events", "denominator": "Accepted tool_view events", "source": "GA4" },
+  { "id": "validation-failure-rate", "numerator": "Accepted tool_validation_error events", "denominator": "Accepted tool_validation_error plus tool_complete attempt events", "source": "GA4" },
+  { "id": "tool-completion-rate", "numerator": "Accepted tool_complete events", "denominator": "Accepted tool_start events", "source": "GA4" },
+  { "id": "result-action-rate", "numerator": "Accepted result_copy, result_share or result_export events", "denominator": "Accepted eligible tool_complete events", "source": "GA4" },
+  { "id": "related-tool-continuation", "numerator": "Accepted related_tool_click events", "denominator": "Accepted eligible tool_complete events", "source": "GA4" },
+  { "id": "core-web-vitals", "numerator": "Good, needs-improvement and poor field observations", "denominator": "Eligible field observations", "source": "Google Search Console" },
+  { "id": "redirect-and-route-health", "numerator": "Passing route and redirect checks", "denominator": "Defined route and redirect checks", "source": "Vercel" }
+]

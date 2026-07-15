@@ -37,8 +37,10 @@ The environment file contains no required secrets. Leave `YOUTOOLA_ENV` empty fo
 | `npm run validate` | Run the complete offline pre-review validation suite. |
 | `npm run validate:architecture` | Validate registry, Knowledge Layer, SEO, Phase 8 and release architecture. |
 | `npm run validate:delivery` | Validate branch, environment, schema-v3 release, correction and follow-up delivery contracts. |
+| `npm run validate:growth` | Validate dormant consent, analytics, dashboard and monitoring definitions. |
 | `npm run validate:release -- --record=<path>` | Validate one release record, or all records when no path is supplied. |
 | `npm run smoke:production` | Run the package-free, read-only Production route, SEO, header and frozen-brand smoke suite. |
+| `npm run smoke:growth` | Run the package-free Growth Foundation Production smoke suite. |
 | `npm run validate:utility -- --slug=<slug>` | Validate a future utility definition, specification and golden vectors. |
 | `npm run security:scan` | Scan tracked files for committed environment files and high-confidence secret signatures. |
 | `npm run security:audit` | Run the offline high/critical dependency audit used by normal CI. |

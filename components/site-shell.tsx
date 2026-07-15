@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { MobileNavigation } from "@/components/mobile-navigation";
+import { PrivacyPreferencesButton } from "@/components/consent/privacy-preferences-button";
 
 export function SkipLink() {
   return (
@@ -64,6 +65,7 @@ export function SiteFooter() {
             <li><Link href="/about">About</Link></li>
             <li><Link href="/methodology">Methodology</Link></li>
             <li><Link href="/privacy">Privacy</Link></li>
+            <li><PrivacyPreferencesButton /></li>
           </ul>
         </nav>
       </div>

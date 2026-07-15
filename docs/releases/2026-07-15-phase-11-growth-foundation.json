@@ -1,0 +1,404 @@
+{
+  "recordVersion": 3,
+  "recordKind": "release",
+  "recordId": "2026-07-15-phase-11-growth-foundation",
+  "status": "candidate",
+  "phaseOrUtility": "Phase 11 Unit 2",
+  "summary": "Dormant Growth Foundation with consent, provider gating, social metadata, privacy, report-only CSP, configuration validation and monitoring; no analytics activation.",
+  "riskTags": [
+    "analytics-consent",
+    "metadata-indexing",
+    "security-privacy",
+    "visual-interface",
+    "platform-architecture",
+    "public-content"
+  ],
+  "planApproval": {
+    "approvedDate": "2026-07-15",
+    "approver": "Youtoola owner",
+    "reference": "APPROVE PLAN: Youtoola Phase 11 Unit 2 Growth Foundation"
+  },
+  "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/17",
+  "provenance": {
+    "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/17",
+    "sourceBranch": "origin/main",
+    "sourceCommit": "47821635c82153673e790a437b0cc5be09fe8e77",
+    "reviewedHeadCommit": "838555791e3c0eb5ed901328121f6f973648abf5",
+    "reviewedHeadRef": "platform/growth-foundation",
+    "reviewedDate": "2026-07-15",
+    "mergeMethod": null,
+    "mergeCommit": null,
+    "durableReleaseCommit": null,
+    "mergedAt": null
+  },
+  "delivery": {
+    "branch": "platform/growth-foundation",
+    "releaseKind": "normal",
+    "preview": {
+      "deploymentId": "dpl_4J2zYDQ6yFe18fLaUSHcgJhWLYx4",
+      "deploymentCommit": "838555791e3c0eb5ed901328121f6f973648abf5",
+      "uniqueUrl": "https://youtoola-7bzujcvqb-davincistudio.vercel.app/",
+      "branchAlias": "https://youtoola-git-platform-growth-foundation-davincistudio.vercel.app/",
+      "ready": true,
+      "protected": true,
+      "noindex": true
+    },
+    "productionUnchangedBeforeMerge": true,
+    "requiredChecks": [
+      {
+        "name": "Quality",
+        "status": "passed",
+        "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29415541489/job/87352635601"
+      },
+      {
+        "name": "End-to-end",
+        "status": "passed",
+        "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29415541489/job/87352635621"
+      },
+      {
+        "name": "Vercel",
+        "status": "passed",
+        "reference": "https://vercel.com/davincistudio/youtoola/4J2zYDQ6yFe18fLaUSHcgJhWLYx4"
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "id": "accessibility-review",
+      "reference": "Final Unit 2 review confirmed keyboard, focus, 44x44 targets, reduced motion and 200-percent text behavior for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "analytics-contract-tests",
+      "reference": "Phase 8 and Unit 2 analytics contract tests passed in the 299-test suite for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "axe-scan",
+      "reference": "The 61-test Chromium suite passed its serious-and-critical axe checks for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "browser-tests",
+      "reference": "All 61 Chromium E2E tests passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "clean-diff",
+      "reference": "Complete PR #17 diff inspection and git diff --check passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "component-tests",
+      "reference": "Consent component behavior and saved-state tests passed in the 299-test suite for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "consent-fail-closed-tests",
+      "reference": "Consent parsing, serialization, reserved-state and dormant behavior fail-closed tests passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "content-review",
+      "reference": "Final Unit 2 review confirmed factual dormant analytics, consent and provider wording for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "contract-tests",
+      "reference": "Growth, consent, analytics, delivery, release, SEO, registry and Knowledge Layer contract tests passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "crawler-validation",
+      "reference": "Crawler and sitemap regression validation passed with membership and crawler policy unchanged for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "debug-route-tests",
+      "reference": "Protected design-system review behavior and Production-mode 404 coverage passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "dependency-audit",
+      "reference": "Online npm audit and offline security audit reported zero vulnerabilities for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "dependency-review",
+      "reference": "Complete diff confirmed no dependency or lockfile change for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "environment-transmission-tests",
+      "reference": "Tests and protected Preview verification confirmed Local and Preview remain provider-disabled with no Measurement ID or provider transmission for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "environment-validation",
+      "reference": "Environment precedence and Production-only analytics configuration validation passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "manual-keyboard-review",
+      "reference": "Final Unit 2 review confirmed normal Tab order, Escape closure and focus restoration for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "negative-tests",
+      "reference": "Malformed configuration, identifiers, consent values, records and provider failures were covered by passing negative tests for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "normal-ci",
+      "reference": "Quality and End-to-end passed for reviewed implementation head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "owner-plan-approval",
+      "reference": "APPROVE PLAN: Youtoola Phase 11 Unit 2 Growth Foundation",
+      "reviewedDate": "2026-07-15",
+      "status": "approved"
+    },
+    {
+      "id": "payload-limit-tests",
+      "reference": "Analytics payload size, bounded scalar and allowlist tests passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "preview-verification",
+      "reference": "Protected noindexed Preview dpl_4J2zYDQ6yFe18fLaUSHcgJhWLYx4 for reviewed implementation head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "privacy-review",
+      "reference": "Final Unit 2 review confirmed privacy wording matches dormant behavior and makes no unsupported compliance or deletion claims for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "production-smoke-plan",
+      "reference": "The read-only Production and Growth smoke commands and rollback procedure were verified before merge for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5; no Production execution evidence is claimed here.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "prototype-pollution-tests",
+      "reference": "Plain-object, unknown-field and prototype-boundary analytics validation tests passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "provider-boundary-review",
+      "reference": "Final Unit 2 review confirmed the lazy GA4 adapter is the sole provider boundary and remains activation- and consent-gated for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "public-boundary-regression",
+      "reference": "Public routes, unavailable routes, registry, Knowledge Layer, sitemap and crawler boundaries passed regression validation for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "redirect-allowlist-tests",
+      "reference": "Canonical and apex redirect allowlist coverage passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "release-report",
+      "reference": "APPROVE REVIEW: Youtoola Phase 11 Unit 2 Growth Foundation for reviewed implementation head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "approved"
+    },
+    {
+      "id": "responsive-review",
+      "reference": "Final Unit 2 review covered 320x568, 390x844, 430x932, 768x1024, 1440x900 and 200-percent text; the clipping blocker was fixed and retested for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "rollback-plan",
+      "reference": "Ready Production deployment dpl_399VeuQ5o4dpJW3x5fkEp8cvZXhF and protected-main revert plan.",
+      "reviewedDate": "2026-07-15",
+      "status": "approved"
+    },
+    {
+      "id": "safe-serialization-tests",
+      "reference": "Fresh allowlisted analytics mapping and consent-cookie serialization tests passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "secret-leakage-tests",
+      "reference": "Client-boundary and configuration tests found no secret, provider identifier or Measurement ID leakage for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "secret-scan",
+      "reference": "Repository secret scan passed for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "security-header-tests",
+      "reference": "Report-only CSP and existing security-header tests passed without an enforcing CSP regression for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "security-review",
+      "reference": "Final Unit 2 review found no remaining security or privacy release blocker for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "sensitive-data-tests",
+      "reference": "Analytics mapping tests rejected raw inputs, exact results, free text, personal data, sensitive scenarios and unknown fields for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "seo-validation",
+      "reference": "SEO validation passed with unchanged titles, descriptions, canonicals, sitemap membership and crawler policy for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "storage-and-replay-tests",
+      "reference": "Consent and provider tests confirmed no automatic cookie, buffering, replay, analytics persistence or retry for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "structured-data-validation",
+      "reference": "Structured-data validation passed with existing visible-content contracts unchanged for reviewed head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "passed"
+    },
+    {
+      "id": "visual-review",
+      "reference": "APPROVE REVIEW: owner-approved final visual and responsive review for Phase 11 Unit 2 reviewed implementation head 838555791e3c0eb5ed901328121f6f973648abf5.",
+      "reviewedDate": "2026-07-15",
+      "status": "approved"
+    }
+  ],
+  "exceptions": [],
+  "rollbackPlan": {
+    "method": "Restore the current Ready Vercel deployment, then revert the Unit 2 squash through protected main.",
+    "owner": "Youtoola owner",
+    "target": "dpl_399VeuQ5o4dpJW3x5fkEp8cvZXhF"
+  },
+  "gateEvidence": {
+    "plan": {
+      "status": "approved",
+      "approver": "Youtoola owner",
+      "evidence": [
+        "APPROVE PLAN: Youtoola Phase 11 Unit 2 Growth Foundation"
+      ]
+    },
+    "build": {
+      "status": "pending",
+      "approver": null,
+      "evidence": []
+    },
+    "review": {
+      "status": "approved",
+      "approver": "Youtoola owner",
+      "evidence": [
+        "APPROVE REVIEW: Phase 11 Unit 2 Growth Foundation for reviewed implementation head 838555791e3c0eb5ed901328121f6f973648abf5"
+      ]
+    },
+    "ship": {
+      "status": "pending",
+      "approver": null,
+      "evidence": []
+    },
+    "post-deployment": {
+      "status": "pending",
+      "approver": null,
+      "evidence": []
+    },
+    "post-launch-review": {
+      "status": "pending",
+      "approver": null,
+      "evidence": []
+    }
+  },
+  "versions": {
+    "releaseSchema": 3,
+    "analyticsSchema": 1
+  },
+  "production": null,
+  "followUpReviews": {
+    "immediate": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "24-hour": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "7-day": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "28-day": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "monthly": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "quarterly": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    }
+  }
+}
