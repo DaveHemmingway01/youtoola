@@ -48,6 +48,13 @@ const allowedCustomDimensions = new Set([
   "relationship_type",
   "target_utility_id",
 ]);
+const publicGrowthUrls = [
+  "https://www.youtoola.com/",
+  "https://www.youtoola.com/tools",
+  "https://www.youtoola.com/about",
+  "https://www.youtoola.com/methodology",
+  "https://www.youtoola.com/privacy",
+] as const;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -76,6 +83,27 @@ function expectRecord(
     return null;
   }
   return value;
+}
+
+function validateUrlInspections(value: unknown, issue: string, issues: string[]) {
+  if (!Array.isArray(value) || value.length !== publicGrowthUrls.length) {
+    issues.push(`${issue}-url-inspections`);
+    return;
+  }
+  value.forEach((rawInspection, index) => {
+    const inspection = expectRecord(
+      rawInspection,
+      ["indexStatus", "indexingRequest", "liveTest", "technicallyIndexable", "url"],
+      `${issue}-url-inspection-fields`,
+      issues,
+    );
+    if (!inspection) return;
+    if (inspection.url !== publicGrowthUrls[index]) issues.push(`${issue}-url`);
+    if (inspection.liveTest !== "passed") issues.push(`${issue}-live-test`);
+    if (inspection.technicallyIndexable !== true) issues.push(`${issue}-indexability`);
+    if (inspection.indexingRequest !== "submitted-where-needed") issues.push(`${issue}-indexing-request`);
+    if (inspection.indexStatus !== "pending") issues.push(`${issue}-index-status`);
+  });
 }
 
 export function validateGrowthFoundationRecord(input: unknown) {
@@ -281,18 +309,58 @@ export function validateGrowthActivationRecord(input: unknown) {
   }
 
   for (const [key, issue] of [["searchConsole", "search-console"], ["bing", "bing"]] as const) {
-    const service = expectRecord(record[key], key === "searchConsole" ? ["property", "status"] : ["site", "status"], `${issue}-activation-fields`, issues);
+    const rawService = record[key];
+    const verified = isRecord(rawService) && rawService.status === "verified";
+    const expectedKeys = key === "searchConsole"
+      ? verified
+        ? ["property", "propertyType", "status", "urlInspections", "verificationMethod"]
+        : ["property", "status"]
+      : verified
+        ? ["site", "status", "urlInspections", "verificationMethod"]
+        : ["site", "status"];
+    const service = expectRecord(rawService, expectedKeys, `${issue}-activation-fields`, issues);
     if (!service) continue;
     if (!["configured", "error", "not-configured", "verified"].includes(service.status as string)) issues.push(`${issue}-activation-status`);
     const identifier = key === "searchConsole" ? service.property : service.site;
     if ((service.status === "configured" || service.status === "verified") && (typeof identifier !== "string" || identifier.length === 0)) issues.push(`${issue}-identifier`);
     if (service.status === "not-configured" && identifier !== null) issues.push(`premature-${issue}-identifier`);
+    if (service.status === "verified") {
+      if (identifier !== "youtoola.com") issues.push(`${issue}-property`);
+      if (key === "searchConsole") {
+        if (service.propertyType !== "domain") issues.push("search-console-property-type");
+        if (service.verificationMethod !== "dns-txt") issues.push("search-console-verification-method");
+      } else if (service.verificationMethod !== "imported-from-google-search-console") {
+        issues.push("bing-verification-method");
+      }
+      validateUrlInspections(service.urlInspections, issue, issues);
+    }
   }
 
-  const sitemap = expectRecord(record.sitemapSubmission, ["status", "url"], "activation-sitemap-fields", issues);
+  const rawSitemap = record.sitemapSubmission;
+  const sitemapAccepted = isRecord(rawSitemap) && rawSitemap.status === "accepted";
+  const sitemap = expectRecord(
+    rawSitemap,
+    sitemapAccepted ? ["bing", "google", "status", "url"] : ["status", "url"],
+    "activation-sitemap-fields",
+    issues,
+  );
   if (sitemap) {
     if (!["accepted", "error", "not-submitted", "submitted"].includes(sitemap.status as string)) issues.push("activation-sitemap-status");
     if (sitemap.url !== "https://www.youtoola.com/sitemap.xml") issues.push("activation-sitemap-url");
+    if (sitemap.status === "accepted") {
+      for (const provider of ["google", "bing"] as const) {
+        const providerEvidence = expectRecord(
+          sitemap[provider],
+          ["discoveredUrls", "processingStatus", "status"],
+          `activation-sitemap-${provider}-fields`,
+          issues,
+        );
+        if (!providerEvidence) continue;
+        if (providerEvidence.status !== "submitted") issues.push(`activation-sitemap-${provider}-status`);
+        if (providerEvidence.processingStatus !== "successfully-processed") issues.push(`activation-sitemap-${provider}-processing`);
+        if (providerEvidence.discoveredUrls !== 5) issues.push(`activation-sitemap-${provider}-urls`);
+      }
+    }
   }
 
   for (const key of ["dashboard", "monitoring"] as const) {

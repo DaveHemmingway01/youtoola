@@ -1,6 +1,6 @@
 # Growth Activation Architecture
 
-Status: Phase 11 Unit 3 legally approved; external configuration, REVIEW and activation remain pending.
+Status: Phase 11 Unit 3 legally approved; Search Console and Bing evidence recorded; GA4 configuration, REVIEW and activation remain pending.
 
 ## State and evidence boundary
 
@@ -20,7 +20,7 @@ Direct `gtag.js` remains the sole provider integration. Automatic page views, en
 
 ## External gates
 
-Activation requires the recorded qualified legal/privacy approval, approved consent wording and lifetime, an operational privacy contact, owner-controlled GA4 property and stream, Search Console Domain ownership, Bing ownership, sitemap submission authorization, dashboard and monitoring owners, rollback authority and factual evidence for each state transition. The accepted review requires withdrawal to expire host-only and canonical-domain `_ga` and `_ga_*` cookies while blocking future provider delivery; this behavior is implemented and tested before external activation.
+Activation requires the recorded qualified legal/privacy approval, approved consent wording and lifetime, an operational privacy contact, owner-controlled GA4 property and stream, Search Console Domain ownership, Bing ownership, sitemap submission authorization, dashboard and monitoring owners, rollback authority and factual evidence for each state transition. Search Console Domain property `youtoola.com` and Bing site `youtoola.com` are verified; both report the five-URL sitemap successfully processed, but no route is claimed indexed until its provider confirms that state. GA4 and Vercel Production configuration remain absent, so the activation state stays `legally-approved` and external configuration evidence stays pending. The accepted review requires withdrawal to expire host-only and canonical-domain `_ga` and `_ga_*` cookies while blocking future provider delivery; this behavior is implemented and tested before external activation.
 
 The smallest controlled DebugView evidence is one consented sanitized homepage `page_view`. It contains no utility, personal, commercial, input or result data. Search submission is not represented as acceptance or indexing. Core Web Vitals may truthfully remain `insufficient-data`.
 

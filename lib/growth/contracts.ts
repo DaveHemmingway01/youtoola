@@ -63,6 +63,13 @@ export type GrowthActivationState =
 
 type PendingOrComplete = "complete" | "pending";
 type ExternalServiceStatus = "configured" | "error" | "not-configured" | "verified";
+type PublicUrlInspection = Readonly<{
+  indexStatus: "pending";
+  indexingRequest: "submitted-where-needed";
+  liveTest: "passed";
+  technicallyIndexable: true;
+  url: string;
+}>;
 
 export interface GrowthActivationRecord {
   activationState: GrowthActivationState;
@@ -85,7 +92,12 @@ export interface GrowthActivationRecord {
     }>;
     status: "configured" | "disabled" | "not-configured" | "verified";
   }>;
-  bing: Readonly<{ site: string | null; status: ExternalServiceStatus }>;
+  bing: Readonly<{
+    site: string | null;
+    status: ExternalServiceStatus;
+    urlInspections?: readonly PublicUrlInspection[];
+    verificationMethod?: "imported-from-google-search-console";
+  }>;
   dashboard: Readonly<{
     owner: "Youtoola owner";
     status: "definition-only" | "operational";
@@ -114,8 +126,24 @@ export interface GrowthActivationRecord {
   }>;
   recordVersion: 1;
   reviewedDate: string;
-  searchConsole: Readonly<{ property: string | null; status: ExternalServiceStatus }>;
+  searchConsole: Readonly<{
+    property: string | null;
+    propertyType?: "domain";
+    status: ExternalServiceStatus;
+    urlInspections?: readonly PublicUrlInspection[];
+    verificationMethod?: "dns-txt";
+  }>;
   sitemapSubmission: Readonly<{
+    bing?: Readonly<{
+      discoveredUrls: 5;
+      processingStatus: "successfully-processed";
+      status: "submitted";
+    }>;
+    google?: Readonly<{
+      discoveredUrls: 5;
+      processingStatus: "successfully-processed";
+      status: "submitted";
+    }>;
     status: "accepted" | "error" | "not-submitted" | "submitted";
     url: "https://www.youtoola.com/sitemap.xml";
   }>;

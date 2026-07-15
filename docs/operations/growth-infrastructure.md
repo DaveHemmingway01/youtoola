@@ -4,15 +4,22 @@
 
 - Analytics: disabled; no provider identifier configured.
 - Consent: no automatic notice or cookie while analytics is dormant; footer preferences remain available.
-- Search Console and Bing: not configured.
-- Sitemap provider-console submission: not submitted.
+- Search Console: Domain property `youtoola.com` verified by DNS TXT.
+- Bing: site `youtoola.com` verified through the Search Console import.
+- Sitemap provider-console submission: submitted and successfully processed by both providers; five URLs discovered by each.
 - Dashboard and monitoring: definition-only.
 - Legal/privacy approval: accepted for Portugal and the EU/EEA under `YT-PRIV-2026-07-15-01 / PT99T0-1300-BG`.
 - Clarity, advertising, affiliate, premium, lead and experiment delivery: disabled.
-- Activation record: `legally-approved`; the public contact is operational, while GA4, Search Console, Bing, sitemap-console and Vercel evidence remain pending.
+- Activation record: `legally-approved`; the public contact, Search Console, Bing and sitemap evidence are recorded, while GA4 and Vercel evidence remain pending.
 - Unit 2 baseline: frozen at `data/growth/foundation.json`; later machine-readable Growth state remains under `data/growth/`.
 
 Run offline validation with `npm run validate:growth`. Run the read-only live baseline with `npm run smoke:growth`. The scheduled Growth monitor runs Monday at 07:00 UTC and is informational, not a required merge check.
+
+## Search ownership and inspection evidence
+
+Google Search Console and Bing Webmaster Tools each report successful live inspection and technical indexability for `/`, `/tools`, `/about`, `/methodology` and `/privacy`. Indexing requests were submitted where needed. Current index membership remains `pending` for every route because neither provider supplied explicit indexed-state evidence. The sitemap URL is `https://www.youtoola.com/sitemap.xml`; each provider reports successful processing and five discovered URLs. No DNS token, OAuth material, account identity, recovery material or IndexNow key is stored.
+
+The live Production `/privacy` response was rechecked on 15 July 2026: HTTP 200, HTML UTF-8, report-only CSP without Google provider origins, no `Set-Cookie`, required security headers present and Vercel cache HIT.
 
 ## Activation boundary
 

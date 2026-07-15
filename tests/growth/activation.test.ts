@@ -14,6 +14,28 @@ describe("Growth Activation record", () => {
       jurisdictions: ["PT", "EU/EEA"],
       status: "approved",
     });
+    expect(activation.searchConsole).toMatchObject({
+      property: "youtoola.com",
+      propertyType: "domain",
+      status: "verified",
+      verificationMethod: "dns-txt",
+    });
+    expect(activation.bing).toMatchObject({
+      site: "youtoola.com",
+      status: "verified",
+      verificationMethod: "imported-from-google-search-console",
+    });
+    expect(activation.searchConsole.urlInspections).toHaveLength(5);
+    expect(activation.bing.urlInspections).toHaveLength(5);
+    expect([
+      ...activation.searchConsole.urlInspections,
+      ...activation.bing.urlInspections,
+    ].every(({ indexStatus }) => indexStatus === "pending")).toBe(true);
+    expect(activation.sitemapSubmission).toMatchObject({
+      status: "accepted",
+      google: { discoveredUrls: 5, processingStatus: "successfully-processed", status: "submitted" },
+      bing: { discoveredUrls: 5, processingStatus: "successfully-processed", status: "submitted" },
+    });
     expect(JSON.stringify(activation)).not.toMatch(/G-[A-Z0-9]{4,20}|token|credential|oauth|api.?key/i);
     expect(foundation.analytics.activation).toBe("disabled");
     expect(foundation.analytics.legalPrivacyApproval).toBe("pending");
@@ -44,5 +66,15 @@ describe("Growth Activation record", () => {
     expect(validateGrowthActivationRecord(premature)).toEqual(
       expect.arrayContaining(["activation-transition:external", "activation-transition:ready"]),
     );
+  });
+
+  it("rejects unsupported indexing claims and contradictory sitemap evidence", () => {
+    const claimedIndexed = structuredClone(activation);
+    claimedIndexed.searchConsole.urlInspections[0].indexStatus = "indexed" as never;
+    expect(validateGrowthActivationRecord(claimedIndexed)).toContain("search-console-index-status");
+
+    const wrongSitemapCount = structuredClone(activation);
+    wrongSitemapCount.sitemapSubmission.google.discoveredUrls = 6 as never;
+    expect(validateGrowthActivationRecord(wrongSitemapCount)).toContain("activation-sitemap-google-urls");
   });
 });
