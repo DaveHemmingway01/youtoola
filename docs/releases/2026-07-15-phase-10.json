@@ -14,9 +14,9 @@
     "approver": "Youtoola owner",
     "reference": "APPROVE PLAN: Youtoola Phase 10"
   },
-  "pullRequest": "pending",
+  "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/13",
   "provenance": {
-    "pullRequest": "pending",
+    "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/13",
     "sourceBranch": "origin/main",
     "sourceCommit": "ed2d740a8d616952a6e1aa82805edaa851e62945",
     "reviewedHeadCommit": "pending-review",
