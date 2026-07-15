@@ -54,7 +54,7 @@
   },
   "evidence": {
     "externalConfiguration": "pending",
-    "previewProviderFree": "pending",
+    "previewProviderFree": "complete",
     "productionActivation": "pending",
     "immediateReview": "pending",
     "twentyFourHourReview": "pending"
