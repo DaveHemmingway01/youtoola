@@ -27,6 +27,21 @@ function factualPhase10Record(): Record<string, unknown> {
 }
 
 describe("delivery contracts", () => {
+  it("skips only strict evidence checks for utility pull requests", () => {
+    const workflow = readFileSync(
+      join(process.cwd(), ".github/workflows/foundation-ci.yml"),
+      "utf8",
+    );
+    const rapidCondition = "if: ${{ !startsWith(github.head_ref, 'utility/') }}";
+
+    expect(workflow.split(rapidCondition)).toHaveLength(3);
+    expect(workflow).toContain("- name: Validate release contracts and evidence\n        " + rapidCondition);
+    expect(workflow).toContain("- name: Validate delivery and environment operations\n        " + rapidCondition);
+    expect(workflow).toContain("push:\n    branches:\n      - main");
+    expect(workflow).not.toContain("if: ${{ startsWith(github.head_ref, 'platform/') }}");
+    expect(workflow).not.toContain("if: ${{ startsWith(github.head_ref, 'hotfix/') }}");
+  });
+
   it.each([
     "platform/delivery-operations",
     "utility/fuel-trip-calculator",
