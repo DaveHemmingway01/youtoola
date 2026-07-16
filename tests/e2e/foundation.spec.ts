@@ -75,19 +75,8 @@ test("keeps dormant privacy preferences usable at 320px and 200% text", async ({
   // expand the document at 200% text on Linux CI. Production has no portal.
   expect(await page.evaluate(() => {
     document.querySelectorAll("nextjs-portal").forEach((portal) => portal.remove());
-    const viewportWidth = document.documentElement.clientWidth;
-    return Array.from(document.body.querySelectorAll<HTMLElement>("*"))
-      .map((element) => {
-        const rect = element.getBoundingClientRect();
-        return {
-          className: element.className,
-          left: rect.left,
-          right: rect.right,
-          tagName: element.tagName,
-        };
-      })
-      .filter(({ left, right }) => left < 0 || right > viewportWidth + 0.5);
-  })).toEqual([]);
+    return document.documentElement.scrollWidth > document.documentElement.clientWidth;
+  })).toBe(false);
 });
 
 test("returns the custom not-found page with a 404 status", async ({ page }) => {

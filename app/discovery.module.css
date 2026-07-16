@@ -92,9 +92,14 @@
 }
 
 .directoryList {
+  min-width: 0;
   display: grid;
   gap: var(--space-4);
   margin-top: var(--space-6);
+}
+
+.directoryItem {
+  min-width: 0;
 }
 
 .directoryItem h2 {
