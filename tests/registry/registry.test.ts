@@ -21,17 +21,20 @@ function validate(testTools: readonly UtilityRegistryEntry[]) {
 }
 
 describe("Canonical utility registry", () => {
-  it("validates the approved idea registry", () => {
+  it("validates the approved released registry", () => {
     expect(validate(tools)).toEqual([]);
   });
 
-  it("contains the approved Fuel Trip Calculator idea only", () => {
+  it("contains the released Fuel Trip Calculator only", () => {
     expect(tools).toHaveLength(1);
     expect(tools[0]).toMatchObject({
       utilityId: "fuel-trip-calculator",
       name: "Fuel Trip Calculator",
       slug: "fuel-trip-calculator",
-      status: "idea",
+      status: "released",
+      calculationVersion: 1,
+      methodologyVersion: 1,
+      riskProfile: "standard",
       categoryId: "travel-mobility",
       source: {
         sourceUtilityId: "21",
@@ -40,7 +43,8 @@ describe("Canonical utility registry", () => {
         categoryMapping: "approved-tab-context",
       },
     });
-    expect(tools[0].releaseDate).toBeUndefined();
+    expect(tools[0].releaseDate).toBe("2026-07-16");
+    expect(tools[0].specificationPath).toBe("docs/utilities/fuel-trip-calculator.md");
     expect(tools[0].complexity).toBeUndefined();
     expect(tools[0].premiumOpportunity).toBeUndefined();
     expect(tools[0].formulaFamilyIds).toEqual(["formula-family:trip-cost"]);
@@ -48,13 +52,13 @@ describe("Canonical utility registry", () => {
     expect(tools[0].source.sourceUtilityId).toBe(sourceFixture.normalized.sourceUtilityId);
   });
 
-  it("provides internal selectors while public released selection remains empty", () => {
+  it("provides internal selectors and the exact released selection", () => {
     expect(getAllTools()).toHaveLength(1);
     expect(getToolById("fuel-trip-calculator")?.name).toBe("Fuel Trip Calculator");
-    expect(getToolBySlug("fuel-trip-calculator")?.status).toBe("idea");
+    expect(getToolBySlug("fuel-trip-calculator")?.status).toBe("released");
     expect(getToolsByCategory("travel-mobility")).toHaveLength(1);
     expect(getRelatedTools("fuel-trip-calculator")).toEqual([]);
-    expect(getReleasedTools()).toEqual([]);
+    expect(getReleasedTools()).toEqual([tools[0]]);
   });
 
   it("rejects duplicate IDs and slugs", () => {
@@ -101,7 +105,11 @@ describe("Canonical utility registry", () => {
   it("requires release evidence only for released entries", () => {
     const released: UtilityRegistryEntry = {
       ...tools[0],
-      status: "released",
+      calculationVersion: undefined,
+      methodologyVersion: undefined,
+      releaseDate: undefined,
+      riskProfile: "unclassified",
+      specificationPath: undefined,
     };
     const errors = validate([released]);
     expect(errors).toContain(
@@ -110,5 +118,8 @@ describe("Canonical utility registry", () => {
     expect(errors).toContain(
       "Released tool fuel-trip-calculator requires a specification path.",
     );
+    expect(errors).toContain("Released tool fuel-trip-calculator requires a calculation version.");
+    expect(errors).toContain("Released tool fuel-trip-calculator requires a methodology version.");
+    expect(errors).toContain("Released tool fuel-trip-calculator requires a classified risk profile.");
   });
 });

@@ -14,8 +14,8 @@ export const formulaFamilies: readonly FormulaFamilyEntity[] = [
       "concept:total-trip-cost",
     ],
     compatibleUnitFamilyIds: ["distance", "fuel-efficiency", "volume"],
-    status: "provisional",
-    reviewedDate: "2026-07-13",
+    status: "active",
+    reviewedDate: "2026-07-16",
     sourceIds: ["source:google-sheet-youtoola-map"],
   },
 ];

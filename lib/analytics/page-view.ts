@@ -1,5 +1,6 @@
 import { PLATFORM_PAGE_DEFINITIONS } from "@/data/seo/platform";
 import { TRUST_PAGE_DEFINITIONS } from "@/data/seo/trust-pages";
+import { UTILITY_SEO_DEFINITIONS } from "@/data/seo/utilities";
 import { CANONICAL_ORIGIN } from "@/lib/environment";
 
 export interface SanitizedPageView {
@@ -8,7 +9,7 @@ export interface SanitizedPageView {
 }
 
 const knownPages = new Map(
-  [...Object.values(PLATFORM_PAGE_DEFINITIONS), ...TRUST_PAGE_DEFINITIONS].map(
+  [...Object.values(PLATFORM_PAGE_DEFINITIONS), ...TRUST_PAGE_DEFINITIONS, ...UTILITY_SEO_DEFINITIONS].map(
     (page) => [page.canonicalPath, page] as const,
   ),
 );

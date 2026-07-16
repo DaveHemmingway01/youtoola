@@ -1,6 +1,6 @@
 # Fuel Trip Calculator — RAPID specification
 
-Status: owner-authorised PLAN and BUILD candidate; not approved for public release.
+Status: public-release BUILD candidate; RAPID REVIEW and SHIP remain pending.
 
 ## Source verification
 
@@ -36,7 +36,7 @@ The Sheet is opportunity provenance, not calculation authority.
 | Regulatory risk | 5 | This is a transparent planning estimate, not regulated advice. |
 | Defensibility | 3 | Trust, performance, transparent formulas and a connected tool portfolio provide modest defensibility. |
 
-Decision: `BUILD NOW` as a private Preview candidate. Public SHIP remains blocked by Growth Infrastructure.
+Decision: `BUILD NOW`. The calculator implementation is approved for public-release BUILD; SHIP remains blocked until Growth Infrastructure activation and external GA4 evidence are complete.
 
 Commercial hypothesis: people arrive through queries such as “fuel trip calculator”, “fuel cost calculator”, “road trip cost calculator” and natural-language questions about splitting petrol and tolls. Their job is to estimate the journey budget quickly using their own current values. Completion is a valid calculation. After value, future released related tools and clearly labelled fuel, rental-car or travel affiliates may provide continuation; no commercial provider is active in this candidate.
 
@@ -46,7 +46,7 @@ Researched 2026-07-16. Leading results commonly calculate distance × L/100 km �
 
 Youtoola's V1 differentiates through no defaults, an explicit whole-journey toll field, a compact breakdown, browser-local privacy and transparent assumptions. Primary intent is `fuel trip calculator`; related intents include `fuel cost calculator`, `road trip cost calculator`, `petrol cost calculator`, `fuel needed for trip` and `split trip cost`. Natural-language questions include “How much fuel will my return trip use?” and “How much should each passenger pay including tolls?”
 
-The public title, metadata, structured data, FAQ eligibility and indexing remain deferred until the route is approved for release. The calculation methodology cites the EU convention that passenger-car consumption is expressed in litres per 100 kilometres: <https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:31999L0094>.
+The release defines unique metadata, the canonical URL, default Open Graph image and visible/structured breadcrumbs. The approved Phase 7 schema contract has no truthful utility-specific rich-result type, so no speculative utility application, rating, offer or FAQ schema is emitted. The calculation methodology cites the EU convention that passenger-car consumption is expressed in litres per 100 kilometres: <https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:31999L0094>.
 
 ## V1 product contract
 
@@ -80,8 +80,10 @@ Distance must be greater than zero. Consumption, price and tolls must be zero or
 
 ## UX, privacy and acceptance
 
-The private Preview page uses the shared utility shell, visible labels and units, a required trip-type choice, an error summary linked to fields, a Calculate action, Reset, a polite result announcement and an immediate breakdown. It works from 320 px upward, supports keyboard-only completion and keeps controls at least 44 CSS pixels high.
+The public candidate uses the shared utility shell, visible labels and units, a required trip-type choice, an error summary linked to fields, a Calculate action, Reset, a polite result announcement and an immediate breakdown. It works from 320 px upward, supports keyboard-only completion and keeps controls at least 44 CSS pixels high.
 
 All calculation happens in the browser. The utility creates no account, network calculation request, cookie, local storage, session storage or URL state. It does not send raw inputs or exact results to analytics. Commercial and related-tool output is absent while unconfigured or unreleased.
 
-Required RAPID evidence: calculation and boundary tests, component interaction tests, browser success and invalid flows, accessibility scan, no-overflow checks, strict type-check, build and CI. `/fuel-trip-calculator` must remain 404; the Preview review route must be noindexed and absent from the sitemap.
+Approved analytics eligibility is limited to `tool_view`, `tool_start`, `tool_validation_error` and `tool_complete`. Payloads may contain only stable field IDs, stable error codes, approved interaction sources, the `trip-cost-estimate` result type, estimate classification and coarse time/error-count buckets. Raw inputs, exact or formatted results, distance, consumption, fuel price, tolls, passenger count, free text and URL query data are prohibited. `result_copy` is not wired because the calculator has no copy action.
+
+Required RAPID evidence: calculation and boundary tests, component interaction tests, browser success and invalid flows, accessibility scan, no-overflow checks, strict type-check, build and CI. `/fuel-trip-calculator` is the canonical public route and sitemap member; every Preview response remains noindexed. Production SHIP additionally requires operational GA4 consented delivery, `tool_complete` configured as the initial key event, the approved minimum custom dimensions, DebugView evidence, Production smoke and a Ready rollback target.

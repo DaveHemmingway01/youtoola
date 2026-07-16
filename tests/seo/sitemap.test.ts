@@ -9,6 +9,7 @@ import {
 const approvedUrls = [
   "https://www.youtoola.com",
   "https://www.youtoola.com/tools",
+  "https://www.youtoola.com/fuel-trip-calculator",
   "https://www.youtoola.com/about",
   "https://www.youtoola.com/methodology",
   "https://www.youtoola.com/privacy",
@@ -26,7 +27,6 @@ describe("SEO sitemap composition", () => {
       "accessibility",
       "contact",
       "editorial-policy",
-      "fuel-trip-calculator",
       "categories/",
       "journeys/",
       "search",

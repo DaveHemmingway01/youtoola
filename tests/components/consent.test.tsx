@@ -36,7 +36,7 @@ describe("consent interface", () => {
   it("keeps dormant analytics quiet and exposes footer preferences", async () => {
     const user = userEvent.setup();
     render(
-      <ConsentProvider configuration={{ analyticsAvailable: false, secureCookie: false }}>
+      <ConsentProvider configuration={{ analyticsAvailable: false, environment: "local", secureCookie: false }}>
         <PrivacyPreferencesButton />
       </ConsentProvider>,
     );
@@ -54,7 +54,7 @@ describe("consent interface", () => {
   it("shows equal active choices only for an available unknown configuration", async () => {
     const user = userEvent.setup();
     render(
-      <ConsentProvider configuration={{ analyticsAvailable: true, measurementId: "provider-id", secureCookie: true }}>
+      <ConsentProvider configuration={{ analyticsAvailable: true, environment: "production", measurementId: "provider-id", secureCookie: true }}>
         <PrivacyPreferencesButton />
       </ConsentProvider>,
     );
@@ -71,7 +71,7 @@ describe("consent interface", () => {
   it("does not trap Tab inside preferences", async () => {
     const user = userEvent.setup();
     render(
-      <ConsentProvider configuration={{ analyticsAvailable: false, secureCookie: false }}>
+      <ConsentProvider configuration={{ analyticsAvailable: false, environment: "local", secureCookie: false }}>
         <PrivacyPreferencesButton />
         <a href="/outside">Outside control</a>
       </ConsentProvider>,
@@ -86,7 +86,7 @@ describe("consent interface", () => {
   it("tracks recognized App Router transitions once after provider readiness", async () => {
     document.cookie = "youtoola_consent=v1:analytics-granted; Path=/";
     const view = render(
-      <ConsentProvider configuration={{ analyticsAvailable: true, measurementId: "provider-id", secureCookie: true }}>
+      <ConsentProvider configuration={{ analyticsAvailable: true, environment: "production", measurementId: "provider-id", secureCookie: true }}>
         <p>Content</p>
       </ConsentProvider>,
     );
@@ -100,7 +100,7 @@ describe("consent interface", () => {
     navigation.pathname = "/tools";
     window.history.pushState({}, "", "/tools?private=value#result");
     view.rerender(
-      <ConsentProvider configuration={{ analyticsAvailable: true, measurementId: "provider-id", secureCookie: true }}>
+      <ConsentProvider configuration={{ analyticsAvailable: true, environment: "production", measurementId: "provider-id", secureCookie: true }}>
         <p>Content</p>
       </ConsentProvider>,
     );
@@ -111,7 +111,7 @@ describe("consent interface", () => {
     });
 
     view.rerender(
-      <ConsentProvider configuration={{ analyticsAvailable: true, measurementId: "provider-id", secureCookie: true }}>
+      <ConsentProvider configuration={{ analyticsAvailable: true, environment: "production", measurementId: "provider-id", secureCookie: true }}>
         <p>Content</p>
       </ConsentProvider>,
     );

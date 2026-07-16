@@ -17,7 +17,12 @@ describe("canonical analytics context", () => {
     });
   });
 
-  it("fails closed when the utility is not publicly released", () => {
-    expect(resolveCanonicalAnalyticsContext("fuel-trip-calculator")).toBeUndefined();
+  it("resolves the released Fuel Trip Calculator without exposing another target", () => {
+    expect(resolveCanonicalAnalyticsContext("fuel-trip-calculator")).toEqual({
+      categoryId: "travel-mobility",
+      releasedTargetUtilityIds: [],
+      utilityId: "fuel-trip-calculator",
+      utilitySlug: "fuel-trip-calculator",
+    });
   });
 });

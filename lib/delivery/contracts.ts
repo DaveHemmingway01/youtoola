@@ -21,13 +21,13 @@ export const APPROVED_PRODUCTION_ORIGINS = Object.freeze([
 export const EXPECTED_PUBLIC_PATHS = Object.freeze([
   "/",
   "/tools",
+  "/fuel-trip-calculator",
   "/about",
   "/methodology",
   "/privacy",
 ]);
 
 export const EXPECTED_UNAVAILABLE_PATHS = Object.freeze([
-  "/fuel-trip-calculator",
   "/design-system-review",
 ]);
 

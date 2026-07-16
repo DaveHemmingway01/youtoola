@@ -7,7 +7,7 @@ describe("server-owned analytics configuration", () => {
   it("defaults to disabled and sends no identifier to the client", () => {
     const configuration = resolveGa4Configuration({});
     expect(configuration).toEqual({ enabled: false, environment: "local", warnings: [] });
-    expect(createClientGrowthConfiguration(configuration)).toEqual({ analyticsAvailable: false, secureCookie: false });
+    expect(createClientGrowthConfiguration(configuration)).toEqual({ analyticsAvailable: false, environment: "local", secureCookie: false });
   });
 
   it.each(["local", "preview"] as const)("rejects any provider configuration in %s", (environment) => {
@@ -44,6 +44,6 @@ describe("server-owned analytics configuration", () => {
     expect(configuration.enabled).toBe(false);
     expect(configuration.measurementId).toBeUndefined();
     expect(configuration.warnings).toHaveLength(1);
-    expect(createClientGrowthConfiguration(configuration)).toEqual({ analyticsAvailable: false, secureCookie: true });
+    expect(createClientGrowthConfiguration(configuration)).toEqual({ analyticsAvailable: false, environment: "production", secureCookie: true });
   });
 });

@@ -12,7 +12,10 @@ export const tools: readonly UtilityRegistryEntry[] = [
     canonicalUrl: "https://www.youtoola.com/fuel-trip-calculator",
     categoryId: "travel-mobility",
     description: "Calculate fuel, tolls, return journeys and cost per passenger.",
-    status: "idea",
+    status: "released",
+    calculationVersion: 1,
+    methodologyVersion: 1,
+    riskProfile: "standard",
     priority: "Tier 1",
     monetisationTypes: ["affiliate"],
     conceptIds: [
@@ -36,6 +39,8 @@ export const tools: readonly UtilityRegistryEntry[] = [
       contentHash: "sha256:88b614a6c8ca091012fc4b996389fd6aff3f2f8769d3e2567ec17bf4aba6d0de",
       categoryMapping: "approved-tab-context",
     },
-    lastReviewedDate: "2026-07-13",
+    lastReviewedDate: "2026-07-16",
+    specificationPath: "docs/utilities/fuel-trip-calculator.md",
+    releaseDate: "2026-07-16",
   },
 ] satisfies readonly UtilityRegistryEntry[];

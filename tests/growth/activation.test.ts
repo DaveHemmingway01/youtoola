@@ -61,6 +61,11 @@ describe("Growth Activation record", () => {
       userDataMonths: 2,
       resetOnNewUserActivity: false,
     });
+    expect(activation.analytics.customDimensions).toEqual([
+      "utility_id",
+      "error_code",
+      "time_to_result_bucket",
+    ]);
     expect(activation.analytics.settings).toMatchObject({
       automaticPageViews: false,
       browserHistoryPageViews: false,

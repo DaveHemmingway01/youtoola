@@ -52,8 +52,8 @@ export function resolveGa4Configuration(
 }
 
 export type ClientGrowthConfiguration =
-  | Readonly<{ analyticsAvailable: false; secureCookie: boolean }>
-  | Readonly<{ analyticsAvailable: true; measurementId: string; secureCookie: true }>;
+  | Readonly<{ analyticsAvailable: false; environment: RuntimeEnvironment; secureCookie: boolean }>
+  | Readonly<{ analyticsAvailable: true; environment: "production"; measurementId: string; secureCookie: true }>;
 
 export function createClientGrowthConfiguration(
   configuration: Ga4Configuration,
@@ -65,12 +65,14 @@ export function createClientGrowthConfiguration(
   ) {
     return Object.freeze({
       analyticsAvailable: true,
+      environment: "production",
       measurementId: configuration.measurementId,
       secureCookie: true,
     });
   }
   return Object.freeze({
     analyticsAvailable: false,
+    environment: configuration.environment,
     secureCookie: configuration.environment === "production",
   });
 }

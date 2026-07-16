@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { PLATFORM_PAGE_DEFINITIONS, PLATFORM_SEO } from "@/data/seo/platform";
 import { TRUST_PAGE_DEFINITIONS } from "@/data/seo/trust-pages";
+import { UTILITY_SEO_DEFINITIONS } from "@/data/seo/utilities";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import {
   getMetadataAdvisories,
@@ -70,12 +71,19 @@ describe("SEO metadata contracts", () => {
     expect(validateIndexablePageDefinitions()).toEqual([]);
   });
 
-  it("does not create utility SEO records and rejects an unreleased record", () => {
-    expect(validateUtilitySeoDefinitions([], tools)).toEqual([]);
+  it("validates the unique released utility SEO definition", () => {
+    expect(validateUtilitySeoDefinitions(UTILITY_SEO_DEFINITIONS, tools)).toEqual([]);
+    expect(UTILITY_SEO_DEFINITIONS[0]).toMatchObject({
+      canonicalPath: "/fuel-trip-calculator",
+      methodologyVersion: 1,
+      title: "Fuel Trip Calculator",
+      utilityId: "fuel-trip-calculator",
+    });
     expect(
       validateUtilitySeoDefinitions(
         [
           {
+            canonicalPath: "/wrong-path",
             conciseUserProblem: "Internal test only",
             description: "Internal test description",
             indexable: true,
@@ -91,6 +99,6 @@ describe("SEO metadata contracts", () => {
         ],
         tools,
       ),
-    ).toContain("Utility SEO definition fuel-trip-calculator is not released.");
+    ).toContain("Utility SEO definition fuel-trip-calculator has a mismatched canonical path.");
   });
 });

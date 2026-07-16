@@ -2,6 +2,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 const reviewPath = "/design-system-review/fuel-trip-calculator";
+const publicPath = "/fuel-trip-calculator";
 
 test("calculates privately without network, persistence or URL state", async ({ page }) => {
   const requests: string[] = [];
@@ -55,21 +56,21 @@ for (const size of [
 ]) {
   test(`has no horizontal overflow at ${size.width}x${size.height}`, async ({ page }) => {
     await page.setViewportSize(size);
-    await page.goto(reviewPath);
+    await page.goto(publicPath);
     expect(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)).toBe(false);
   });
 }
 
 test("has no serious accessibility violations", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(reviewPath);
+  await page.goto(publicPath);
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations.filter(({ impact }) => impact === "serious" || impact === "critical")).toEqual([]);
 });
 
 test("supports 200 percent text without overflow or serious accessibility violations", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(reviewPath);
+  await page.goto(publicPath);
   await page.evaluate(() => {
     document.documentElement.style.fontSize = "200%";
   });
@@ -79,8 +80,26 @@ test("supports 200 percent text without overflow or serious accessibility violat
   expect(results.violations.filter(({ impact }) => impact === "serious" || impact === "critical")).toEqual([]);
 });
 
-test("keeps the canonical public route unavailable and out of the sitemap", async ({ request }) => {
-  expect((await request.get("/fuel-trip-calculator")).status()).toBe(404);
+test("publishes the canonical route in the sitemap while Preview stays noindexed", async ({ request }) => {
+  const response = await request.get("/fuel-trip-calculator");
+  expect(response.status()).toBe(200);
+  expect(response.headers()["x-robots-tag"]).toBe("noindex, nofollow");
   const sitemap = await (await request.get("/sitemap.xml")).text();
-  expect(sitemap).not.toContain("fuel-trip-calculator");
+  expect(sitemap).toContain("https://www.youtoola.com/fuel-trip-calculator");
+});
+
+test("public calculator remains browser-local and exposes no commercial capability", async ({ page }) => {
+  const thirdPartyRequests: string[] = [];
+  await page.goto("/fuel-trip-calculator");
+  const origin = new URL(page.url()).origin;
+  page.on("request", (request) => {
+    if (new URL(request.url()).origin !== origin) {
+      thirdPartyRequests.push(request.url());
+    }
+  });
+  await expect(page.getByRole("heading", { level: 1, name: "Fuel Trip Calculator" })).toBeVisible();
+  await expect(page.getByText("Related tools")).toHaveCount(0);
+  await expect(page.getByText(/affiliate|premium|advertisement/i)).toHaveCount(0);
+  await expect(page.locator('script[src*="googletagmanager"], script[src*="google-analytics"]')).toHaveCount(0);
+  expect(thirdPartyRequests).toEqual([]);
 });

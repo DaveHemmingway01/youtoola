@@ -31,6 +31,7 @@ export interface TrustPageDefinition extends IndexablePageDefinition {
 }
 
 export interface UtilitySeoDefinition {
+  canonicalPath: `/${string}`;
   conciseUserProblem: string;
   description: string;
   indexable: boolean;

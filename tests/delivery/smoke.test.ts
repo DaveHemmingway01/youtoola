@@ -53,7 +53,7 @@ function fixtureFetcher(overrides: Record<string, SmokeResponse> = {}): SmokeFet
     if (parsed.pathname in FROZEN_BRAND_HASHES) {
       throw new Error("Hash fixtures are supplied separately.");
     }
-    if (parsed.pathname === "/fuel-trip-calculator" || parsed.pathname === "/design-system-review") {
+    if (parsed.pathname === "/design-system-review") {
       return response(url, 404);
     }
     if (EXPECTED_PUBLIC_PATHS.includes(parsed.pathname as (typeof EXPECTED_PUBLIC_PATHS)[number])) {

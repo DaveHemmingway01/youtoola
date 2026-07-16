@@ -13,6 +13,12 @@ import {
 import { usePathname } from "next/navigation";
 
 import type { AnalyticsConsentState } from "@/lib/analytics/contracts";
+import {
+  analyticsSchemaVersion,
+  type CanonicalAnalyticsContext,
+  type UtilityAnalyticsEligibility,
+  type UtilityAnalyticsEventInput,
+} from "@/lib/analytics/contracts";
 import type { Ga4Adapter } from "@/lib/analytics/ga4-adapter";
 import type { ClientGrowthConfiguration } from "@/lib/analytics/ga4-configuration";
 import {
@@ -25,11 +31,27 @@ import {
   deleteGoogleAnalyticsCookies,
   withdrawAnalyticsConsent,
 } from "@/lib/consent/runtime";
+import {
+  createAnalyticsDispatcher,
+  EphemeralAnalyticsDeduplicator,
+  type AnalyticsDeduplicationToken,
+  type AnalyticsDispatchResult,
+} from "@/lib/analytics/runtime";
+
+export interface UtilityAnalyticsTrackingRequest {
+  canonicalContext: CanonicalAnalyticsContext;
+  deduplicationToken: AnalyticsDeduplicationToken;
+  eligibility: UtilityAnalyticsEligibility;
+  event: UtilityAnalyticsEventInput;
+  lifecycleEligible: boolean;
+}
 
 interface ConsentContextValue {
   analyticsAvailable: boolean;
+  analyticsReady: boolean;
   openPreferences(trigger: HTMLButtonElement): void;
   state: AnalyticsConsentState;
+  trackUtilityEvent(request: UtilityAnalyticsTrackingRequest): AnalyticsDispatchResult;
 }
 
 const ConsentContext = createContext<ConsentContextValue | null>(null);
@@ -60,10 +82,12 @@ export function ConsentProvider({
   const [hydrated, setHydrated] = useState(false);
   const [preferencesOpen, setPreferencesOpen] = useState(false);
   const [announcement, setAnnouncement] = useState("");
+  const [analyticsReady, setAnalyticsReady] = useState(false);
   const pathname = usePathname();
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const adapterRef = useRef<Ga4Adapter | null>(null);
   const pageViews = useRef(new PageViewDeduplicator());
+  const utilityEvents = useRef(new EphemeralAnalyticsDeduplicator());
 
   useEffect(() => {
     let active = true;
@@ -100,7 +124,10 @@ export function ConsentProvider({
       const adapter = createGa4Adapter({ measurementId: configuration.measurementId });
       adapterRef.current = adapter;
       const lifecycle = await adapter.load();
-      if (active && lifecycle === "ready") emitCurrentPage();
+      if (active && lifecycle === "ready") {
+        setAnalyticsReady(true);
+        emitCurrentPage();
+      }
     });
     return () => {
       active = false;
@@ -116,9 +143,10 @@ export function ConsentProvider({
     if (next === "denied") {
       const adapter = adapterRef.current;
       withdrawAnalyticsConsent({
-        clearAnalyticsDeduplication: () => undefined,
+        clearAnalyticsDeduplication: () => utilityEvents.current.clear(),
         clearPageViewState: () => pageViews.current.clear(),
         clearProviderLifecycle: () => {
+          setAnalyticsReady(false);
           adapter?.clear();
           adapterRef.current = null;
         },
@@ -145,6 +173,37 @@ export function ConsentProvider({
     setAnnouncement(next === "analytics-granted" ? "Analytics preference saved." : "Optional analytics rejected.");
   }, [configuration]);
 
+  const trackUtilityEvent = useCallback((request: UtilityAnalyticsTrackingRequest) => {
+    const adapter = adapterRef.current;
+    if (!analyticsReady || !adapter) {
+      return {
+        reason: configuration.environment === "production" ? "provider-missing" : "environment-blocked",
+        status: "dropped",
+      } as const;
+    }
+    const { eventName, ...properties } = request.event;
+    return createAnalyticsDispatcher({
+      consentState: state,
+      deduplicator: utilityEvents.current,
+      environment: configuration.environment,
+      provider: adapter,
+    }).track({
+      canonicalContext: request.canonicalContext,
+      deduplicationToken: request.deduplicationToken,
+      eligibility: request.eligibility,
+      lifecycleEligible: request.lifecycleEligible,
+      payload: {
+        analyticsSchemaVersion,
+        consentState: state,
+        environment: configuration.environment,
+        eventName,
+        locale: document.documentElement.lang || "en",
+        pageType: "utility",
+        ...properties,
+      },
+    });
+  }, [analyticsReady, configuration.environment, state]);
+
   const closePreferences = useCallback(() => {
     setPreferencesOpen(false);
     requestAnimationFrame(() => triggerRef.current?.focus());
@@ -166,9 +225,11 @@ export function ConsentProvider({
 
   const contextValue = useMemo(() => ({
     analyticsAvailable: configuration.analyticsAvailable,
+    analyticsReady,
     openPreferences,
     state,
-  }), [configuration.analyticsAvailable, openPreferences, state]);
+    trackUtilityEvent,
+  }), [analyticsReady, configuration.analyticsAvailable, openPreferences, state, trackUtilityEvent]);
 
   const showNotice =
     hydrated && configuration.analyticsAvailable && state === "unknown";

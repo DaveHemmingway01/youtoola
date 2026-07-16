@@ -129,6 +129,9 @@ test("serves non-production crawler controls and the minimal sitemap", async ({
       "<loc>https://www.youtoola.com/tools</loc>\n" +
       "</url>\n" +
       "<url>\n" +
+      "<loc>https://www.youtoola.com/fuel-trip-calculator</loc>\n" +
+      "</url>\n" +
+      "<url>\n" +
       "<loc>https://www.youtoola.com/about</loc>\n" +
       "</url>\n" +
       "<url>\n" +

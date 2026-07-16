@@ -140,8 +140,16 @@ describe("Repository Knowledge Layer relationships", () => {
       contextJourneyEntityId: undefined,
     };
     const releasedTools = data.tools.map((tool) => ({ ...tool, status: "released" as const }));
+    const inactiveIntentClusters = data.intentClusters.map((intent, index) =>
+      index === 0 ? { ...intent, status: "provisional" as const } : intent,
+    );
     expect(
-      validateKnowledgeLayer({ ...data, tools: releasedTools, relationships: [publicCandidate] }),
+      validateKnowledgeLayer({
+        ...data,
+        intentClusters: inactiveIntentClusters,
+        tools: releasedTools,
+        relationships: [publicCandidate],
+      }),
     ).toContain(
       "Relationship utility:fuel-trip-calculator -> utility:route-distance-calculator is not eligible as a public candidate.",
     );
