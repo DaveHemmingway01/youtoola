@@ -12,9 +12,10 @@ async function exists(filePath: string) {
 }
 
 describe("Fuel Trip framework fixture isolation", () => {
-  it("creates no Production utility route or utility implementation", async () => {
+  it("keeps the implementation private without creating a Production utility route", async () => {
     expect(await exists(path.join(process.cwd(), "app/fuel-trip-calculator/page.tsx"))).toBe(false);
-    expect(await exists(path.join(process.cwd(), "utilities/fuel-trip-calculator"))).toBe(false);
+    expect(await exists(path.join(process.cwd(), "utilities/fuel-trip-calculator"))).toBe(true);
+    expect(await exists(path.join(process.cwd(), "app/design-system-review/fuel-trip-calculator/page.tsx"))).toBe(true);
   });
 
   it("does not import the test fixture from application or shared runtime code", async () => {

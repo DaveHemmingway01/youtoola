@@ -720,7 +720,7 @@ The first real utility will expose missing contracts and unnecessary abstraction
 
 **Dependencies**
 
-- Phases 0 through 11, including Growth Infrastructure complete and verified in Production
+- Phases 0 through 10 complete; Phase 11 Growth Infrastructure may run in parallel with a private RAPID utility candidate but remains a hard SHIP dependency
 - Approved utility selected from an exact live Sheet row
 - Completed search research and commercial scorecard
 
@@ -731,7 +731,7 @@ The first real utility will expose missing contracts and unnecessary abstraction
 **Implementation work**
 
 1. Select a utility with clear intent, stable logic and limited regulatory exposure.
-2. Confirm the Growth Infrastructure Production evidence record before beginning the mandatory utility plan and owner approval.
+2. Confirm the Growth Infrastructure Production evidence record before `APPROVE SHIP`; RAPID PLAN, BUILD and Preview review may proceed privately while that STRICT gate is completed.
 3. Save the specification at `docs/utilities/<canonical-slug>.md`.
 4. Implement the smallest superior V1 using only shared platform contracts.
 5. Add calculation, validation, integration, end-to-end, accessibility, performance and SEO tests.
@@ -1008,7 +1008,7 @@ No phase or utility is complete unless the relevant controls below are satisfied
 
 **Utility #1 cannot receive `APPROVE SHIP` until Growth Infrastructure is complete and verified in Production.**
 
-- Platform-level GA4 delivery, consent behaviour, search-platform ownership, sitemap acceptance, canonical behaviour, structured data, default social metadata, Core Web Vitals monitoring, 404 and redirect monitoring, dashboard access and rollback procedures must have Production evidence before Utility #1 planning begins.
+- Platform-level GA4 delivery, consent behaviour, search-platform ownership, sitemap acceptance, canonical behaviour, structured data, default social metadata, Core Web Vitals monitoring, 404 and redirect monitoring, dashboard access and rollback procedures must have Production evidence before Utility #1 can receive `APPROVE SHIP`. RAPID PLAN, BUILD and private Preview review may proceed without weakening that STRICT release gate.
 - Utility-specific analytics, conversion events, metadata and sitemap membership must pass automated tests and Preview review before `APPROVE SHIP`.
 - Because a private Preview URL cannot prove live utility indexing or Production event delivery, Utility #1 receives an immediate post-deployment smoke test. A measurement, indexing or conversion-tracking failure invokes the approved containment or rollback procedure.
 

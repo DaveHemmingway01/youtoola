@@ -33,6 +33,9 @@ Utility quality, speed and trust always come before monetisation.
 
 ## Delivery operations
 
+- Utility development defaults to `RAPID`: build, focused tests, strict type-check and CI are required; release-evidence updates, extended provenance and manual review records are optional unless a validator or the utility's risk requires them.
+- Infrastructure, security, payments and analytics activation use `STRICT` and retain the complete approval, evidence, rollback and operational-verification gates.
+- In `RAPID`, the owner may explicitly authorize PLAN and BUILD together. REVIEW and SHIP remain separate owner gates, and no utility may ship before its applicable Growth Infrastructure gate passes.
 - Start approved work from current `origin/main` on `platform/`, `utility/`, `docs/` or owner-authorised `hotfix/`; never stack on an unmerged feature branch.
 - Use protected pull requests and squash-only merges. Retain merged source branches as release provenance.
 - `Quality`, `End-to-end` and `Vercel` are required. Preview Comments is informational. Automation reports evidence but never grants PLAN, REVIEW or SHIP approval.
@@ -367,14 +370,12 @@ Prefer the Google Sheets API for exact row addressing. A public CSV or GViz expo
 
 ## 6. Mandatory operating gates
 
-Every new utility follows four separate gates:
+Every new utility follows PLAN, BUILD, REVIEW and SHIP. REVIEW and SHIP are always separate. In `RAPID`, the owner may explicitly authorize PLAN and BUILD together; otherwise they remain separate. `STRICT` work retains all four separate gates.
 
 1. PLAN
 2. BUILD
 3. REVIEW
 4. SHIP
-
-Never collapse these gates.
 
 ### Gate 1: PLAN
 
@@ -543,7 +544,7 @@ Do not continue into BUILD until the user sends:
 
 `APPROVE PLAN`
 
-The user may approve with amendments. Apply the amendments to the plan before building.
+The user may approve with amendments. Apply the amendments to the plan before building. An explicit owner instruction to start PLAN and BUILD together satisfies this approval only for `RAPID` utility work.
 
 ### Gate 2: BUILD
 
