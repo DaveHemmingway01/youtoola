@@ -31,6 +31,7 @@
     "validate": "npm run lint && npm run typecheck && npm run validate:architecture && npm run validate:delivery && npm run test && npm run security:scan && npm run build",
     "smoke:production": "node --no-warnings --experimental-strip-types scripts/smoke-production.mjs",
     "smoke:growth": "node scripts/smoke-growth.mjs",
+    "smoke:growth:browser": "node scripts/smoke-growth-browser.mjs",
     "brand:generate": "node scripts/brand/generate-raster-candidates.mjs",
     "brand:preview": "node scripts/brand/render-preview.mjs",
     "brand:validate": "node scripts/brand/validate-assets.mjs",

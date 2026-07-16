@@ -23,6 +23,37 @@ const requiredMonitoringChecks = [
   "no-provider-identifiers-or-requests",
   "no-analytics-set-cookie",
   "no-clarity-or-commercial-providers",
+  "preview-provider-free",
+  "pre-consent-provider-silence",
+  "reject-provider-silence",
+  "single-sanitized-page-view",
+  "withdrawal-blocks-future-events",
+] as const;
+const activationStates = new Set([
+  "dormant",
+  "legally-approved",
+  "externally-configured",
+  "activation-ready",
+  "active",
+  "disabled",
+  "incident-disabled",
+]);
+const allowedCustomDimensions = new Set([
+  "utility_id",
+  "category_id",
+  "error_code",
+  "result_classification",
+  "non_sensitive_result_type",
+  "time_to_result_bucket",
+  "relationship_type",
+  "target_utility_id",
+]);
+const publicGrowthUrls = [
+  "https://www.youtoola.com/",
+  "https://www.youtoola.com/tools",
+  "https://www.youtoola.com/about",
+  "https://www.youtoola.com/methodology",
+  "https://www.youtoola.com/privacy",
 ] as const;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -52,6 +83,27 @@ function expectRecord(
     return null;
   }
   return value;
+}
+
+function validateUrlInspections(value: unknown, issue: string, issues: string[]) {
+  if (!Array.isArray(value) || value.length !== publicGrowthUrls.length) {
+    issues.push(`${issue}-url-inspections`);
+    return;
+  }
+  value.forEach((rawInspection, index) => {
+    const inspection = expectRecord(
+      rawInspection,
+      ["indexStatus", "indexingRequest", "liveTest", "technicallyIndexable", "url"],
+      `${issue}-url-inspection-fields`,
+      issues,
+    );
+    if (!inspection) return;
+    if (inspection.url !== publicGrowthUrls[index]) issues.push(`${issue}-url`);
+    if (inspection.liveTest !== "passed") issues.push(`${issue}-live-test`);
+    if (inspection.technicallyIndexable !== true) issues.push(`${issue}-indexability`);
+    if (inspection.indexingRequest !== "submitted-where-needed") issues.push(`${issue}-indexing-request`);
+    if (inspection.indexStatus !== "pending") issues.push(`${issue}-index-status`);
+  });
 }
 
 export function validateGrowthFoundationRecord(input: unknown) {
@@ -161,6 +213,272 @@ export function validateGrowthFoundationRecord(input: unknown) {
     if (monitoring.owner !== "Youtoola owner") issues.push("monitoring-owner");
     if (monitoring.schedule !== "0 7 * * 1") issues.push("monitoring-schedule");
     if (monitoring.status !== "definition-only") issues.push("monitoring-status");
+  }
+
+  return Object.freeze([...new Set(issues)]);
+}
+
+export function validateGrowthActivationRecord(input: unknown) {
+  const issues: string[] = [];
+  let measurementEvidenceReady = false;
+  const record = expectRecord(
+    input,
+    [
+      "activationState",
+      "analytics",
+      "bing",
+      "dashboard",
+      "evidence",
+      "legalPrivacy",
+      "monitoring",
+      "owner",
+      "privacyContact",
+      "recordVersion",
+      "reviewedDate",
+      "searchConsole",
+      "sitemapSubmission",
+    ],
+    "activation-record-fields",
+    issues,
+  );
+  if (!record) return Object.freeze(issues);
+
+  if (record.recordVersion !== 1) issues.push("activation-record-version");
+  if (record.owner !== "Youtoola owner") issues.push("activation-owner");
+  if (!isValidDate(record.reviewedDate)) issues.push("activation-reviewed-date");
+  if (typeof record.activationState !== "string" || !activationStates.has(record.activationState)) {
+    issues.push("activation-state");
+  }
+
+  const legal = expectRecord(
+    record.legalPrivacy,
+    ["approvalReference", "jurisdictions", "status"],
+    "legal-privacy-fields",
+    issues,
+  );
+  if (legal) {
+    if (!["approved", "pending"].includes(legal.status as string)) issues.push("legal-privacy-status");
+    if (!Array.isArray(legal.jurisdictions) || legal.jurisdictions.some((value) => typeof value !== "string" || value.length === 0)) {
+      issues.push("legal-jurisdictions");
+    }
+    if (legal.status === "approved" && (typeof legal.approvalReference !== "string" || legal.approvalReference.length === 0)) {
+      issues.push("legal-approval-reference");
+    }
+    if (legal.status === "pending" && legal.approvalReference !== null) issues.push("premature-legal-reference");
+  }
+
+  const contact = expectRecord(
+    record.privacyContact,
+    ["address", "status"],
+    "privacy-contact-fields",
+    issues,
+  );
+  if (contact) {
+    if (!["operational", "pending"].includes(contact.status as string)) issues.push("privacy-contact-status");
+    if (contact.status === "operational" && (typeof contact.address !== "string" || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(contact.address))) {
+      issues.push("privacy-contact-address");
+    }
+    if (contact.status === "pending" && contact.address !== null) issues.push("premature-privacy-contact");
+  }
+
+  const analytics = expectRecord(
+    record.analytics,
+    ["configuration", "customDimensionConfiguration", "customDimensions", "debugView", "keyEventConfiguration", "keyEvents", "measurementIdStatus", "productionVariables", "provider", "retention", "sanitizedPageView", "settings", "settingsVerification", "status"],
+    "activation-analytics-fields",
+    issues,
+  );
+  if (analytics) {
+    if (analytics.provider !== "Google Analytics 4") issues.push("activation-provider");
+    if (!["configured", "disabled", "not-configured", "partially-configured", "verified"].includes(analytics.status as string)) issues.push("activation-analytics-status");
+    if (!["configured", "not-configured"].includes(analytics.measurementIdStatus as string)) issues.push("measurement-id-status");
+    if (!["configured", "not-configured"].includes(analytics.productionVariables as string)) issues.push("production-variables-status");
+    if (!["pending", "verified"].includes(analytics.settingsVerification as string)) issues.push("analytics-settings-verification");
+    if (!["approved", "build-ready", "verified"].includes(analytics.sanitizedPageView as string)) issues.push("sanitized-page-view-status");
+    if (!["not-configured", "verified"].includes(analytics.customDimensionConfiguration as string)) issues.push("custom-dimension-configuration-status");
+    if (!["not-configured", "verified"].includes(analytics.keyEventConfiguration as string)) issues.push("key-event-configuration-status");
+    if (!["pending", "verified"].includes(analytics.debugView as string)) issues.push("debug-view-status");
+    if (!Array.isArray(analytics.keyEvents) || analytics.keyEvents.join(",") !== "tool_complete") issues.push("activation-key-events");
+    if (!Array.isArray(analytics.customDimensions) ||
+      analytics.customDimensions.some((value) => typeof value !== "string" || !allowedCustomDimensions.has(value)) ||
+      new Set(analytics.customDimensions).size !== analytics.customDimensions.length) {
+      issues.push("custom-dimensions");
+    }
+    const configuration = expectRecord(
+      analytics.configuration,
+      ["accountDisplayName", "evidenceReference", "measurementIdFingerprint", "propertyDisplayName", "propertyId", "reportingCurrency", "reportingTimeZone", "streamDisplayName", "streamId", "streamUrl"],
+      "analytics-configuration-fields",
+      issues,
+    );
+    if (configuration) {
+      if (configuration.accountDisplayName !== "Youtoola") issues.push("analytics-account-name");
+      if (configuration.propertyDisplayName !== "Youtoola Production") issues.push("analytics-property-name");
+      if (configuration.propertyId !== "545783566") issues.push("analytics-property-id");
+      if (configuration.reportingTimeZone !== "Europe/Lisbon") issues.push("analytics-reporting-time-zone");
+      if (configuration.reportingCurrency !== "EUR") issues.push("analytics-reporting-currency");
+      if (configuration.streamDisplayName !== "Youtoola") issues.push("analytics-stream-name");
+      if (configuration.streamId !== "15263953983") issues.push("analytics-stream-id");
+      if (configuration.streamUrl !== "https://www.youtoola.com") issues.push("analytics-stream-url");
+      const fingerprintVerified = configuration.measurementIdFingerprint === "sha256:96718192b2e08dc78eec82cd444dbdf359b3d6bbcf550c1ae0a96f81b10fe67b";
+      if (!fingerprintVerified) issues.push("analytics-measurement-id-fingerprint");
+      const evidenceReferenceVerified = typeof configuration.evidenceReference === "string" &&
+        configuration.evidenceReference.includes("7a684274b68f8bf0b56d74ce47791e7a369bb0e400627a328ffac04628743ee4") &&
+        configuration.evidenceReference.includes("docs/operations/growth-infrastructure.md");
+      if (!evidenceReferenceVerified) {
+        issues.push("analytics-evidence-reference");
+      }
+      measurementEvidenceReady = analytics.measurementIdStatus === "configured" &&
+        fingerprintVerified && evidenceReferenceVerified;
+    }
+    const retention = expectRecord(
+      analytics.retention,
+      ["eventDataMonths", "resetOnNewUserActivity", "userDataMonths"],
+      "analytics-retention-fields",
+      issues,
+    );
+    if (retention && (retention.eventDataMonths !== 2 || retention.userDataMonths !== 2 || retention.resetOnNewUserActivity !== false)) {
+      issues.push("analytics-retention");
+    }
+    if (analytics.status === "partially-configured" &&
+      (analytics.measurementIdStatus !== "configured" || analytics.productionVariables !== "not-configured" || analytics.debugView !== "pending")) {
+      issues.push("analytics-partial-configuration");
+    }
+    const settings = expectRecord(
+      analytics.settings,
+      ["adsLinks", "advertisingFeatures", "automaticPageViews", "browserHistoryPageViews", "crossDomainMeasurement", "dataSharing", "enhancedMeasurementStatus", "googleSignals", "measurementProtocol", "optionalEnhancedMeasurementEvents", "userId"],
+      "analytics-settings-fields",
+      issues,
+    );
+    if (settings) {
+      for (const key of ["adsLinks", "advertisingFeatures", "automaticPageViews", "browserHistoryPageViews", "crossDomainMeasurement", "dataSharing", "googleSignals", "measurementProtocol", "userId"] as const) {
+        if (settings[key] !== false) issues.push("prohibited-analytics-setting");
+      }
+      if (settings.enhancedMeasurementStatus !== "page-view-category-google-locked-on-optional-events-off") {
+        issues.push("enhanced-measurement-status");
+      }
+      const optionalEvents = expectRecord(
+        settings.optionalEnhancedMeasurementEvents,
+        ["fileDownloads", "formInteractions", "outboundClicks", "scrolls", "siteSearch", "videoEngagement"],
+        "optional-enhanced-measurement-fields",
+        issues,
+      );
+      if (optionalEvents && Object.values(optionalEvents).some((value) => value !== false)) {
+        issues.push("prohibited-enhanced-measurement-event");
+      }
+    }
+  }
+
+  for (const [key, issue] of [["searchConsole", "search-console"], ["bing", "bing"]] as const) {
+    const rawService = record[key];
+    const verified = isRecord(rawService) && rawService.status === "verified";
+    const expectedKeys = key === "searchConsole"
+      ? verified
+        ? ["property", "propertyType", "status", "urlInspections", "verificationMethod"]
+        : ["property", "status"]
+      : verified
+        ? ["site", "status", "urlInspections", "verificationMethod"]
+        : ["site", "status"];
+    const service = expectRecord(rawService, expectedKeys, `${issue}-activation-fields`, issues);
+    if (!service) continue;
+    if (!["configured", "error", "not-configured", "verified"].includes(service.status as string)) issues.push(`${issue}-activation-status`);
+    const identifier = key === "searchConsole" ? service.property : service.site;
+    if ((service.status === "configured" || service.status === "verified") && (typeof identifier !== "string" || identifier.length === 0)) issues.push(`${issue}-identifier`);
+    if (service.status === "not-configured" && identifier !== null) issues.push(`premature-${issue}-identifier`);
+    if (service.status === "verified") {
+      if (identifier !== "youtoola.com") issues.push(`${issue}-property`);
+      if (key === "searchConsole") {
+        if (service.propertyType !== "domain") issues.push("search-console-property-type");
+        if (service.verificationMethod !== "dns-txt") issues.push("search-console-verification-method");
+      } else if (service.verificationMethod !== "imported-from-google-search-console") {
+        issues.push("bing-verification-method");
+      }
+      validateUrlInspections(service.urlInspections, issue, issues);
+    }
+  }
+
+  const rawSitemap = record.sitemapSubmission;
+  const sitemapAccepted = isRecord(rawSitemap) && rawSitemap.status === "accepted";
+  const sitemap = expectRecord(
+    rawSitemap,
+    sitemapAccepted ? ["bing", "google", "status", "url"] : ["status", "url"],
+    "activation-sitemap-fields",
+    issues,
+  );
+  if (sitemap) {
+    if (!["accepted", "error", "not-submitted", "submitted"].includes(sitemap.status as string)) issues.push("activation-sitemap-status");
+    if (sitemap.url !== "https://www.youtoola.com/sitemap.xml") issues.push("activation-sitemap-url");
+    if (sitemap.status === "accepted") {
+      for (const provider of ["google", "bing"] as const) {
+        const providerEvidence = expectRecord(
+          sitemap[provider],
+          ["discoveredUrls", "processingStatus", "status"],
+          `activation-sitemap-${provider}-fields`,
+          issues,
+        );
+        if (!providerEvidence) continue;
+        if (providerEvidence.status !== "submitted") issues.push(`activation-sitemap-${provider}-status`);
+        if (providerEvidence.processingStatus !== "successfully-processed") issues.push(`activation-sitemap-${provider}-processing`);
+        if (providerEvidence.discoveredUrls !== 5) issues.push(`activation-sitemap-${provider}-urls`);
+      }
+    }
+  }
+
+  for (const key of ["dashboard", "monitoring"] as const) {
+    const expectedKeys = key === "monitoring" ? ["owner", "schedule", "status"] : ["owner", "status"];
+    const item = expectRecord(record[key], expectedKeys, `${key}-activation-fields`, issues);
+    if (!item) continue;
+    if (item.owner !== "Youtoola owner") issues.push(`${key}-activation-owner`);
+    if (!["definition-only", "operational"].includes(item.status as string)) issues.push(`${key}-activation-status`);
+    if (key === "monitoring" && item.schedule !== "0 7 * * 1") issues.push("monitoring-activation-schedule");
+  }
+
+  const evidence = expectRecord(
+    record.evidence,
+    ["externalConfiguration", "immediateReview", "previewProviderFree", "productionActivation", "twentyFourHourReview"],
+    "activation-evidence-fields",
+    issues,
+  );
+  if (evidence && Object.values(evidence).some((value) => value !== "pending" && value !== "complete")) {
+    issues.push("activation-evidence-status");
+  }
+
+  const state = record.activationState;
+  const legalReady = legal?.status === "approved" && contact?.status === "operational";
+  const externalReady = measurementEvidenceReady &&
+    (analytics?.status === "configured" || analytics?.status === "verified");
+  const servicesReady =
+    ["configured", "verified"].includes((record.searchConsole as Record<string, unknown> | undefined)?.status as string) &&
+    ["configured", "verified"].includes((record.bing as Record<string, unknown> | undefined)?.status as string) &&
+    ["submitted", "accepted"].includes(sitemap?.status as string);
+  if (["legally-approved", "externally-configured", "activation-ready", "active"].includes(state as string) && !legalReady) {
+    issues.push("activation-transition:legal");
+  }
+  if (["externally-configured", "activation-ready", "active"].includes(state as string) &&
+    (!externalReady || !servicesReady || evidence?.externalConfiguration !== "complete")) {
+    issues.push("activation-transition:external");
+  }
+  if (["activation-ready", "active"].includes(state as string) &&
+    (analytics?.productionVariables !== "configured" || evidence?.previewProviderFree !== "complete")) {
+    issues.push("activation-transition:ready");
+  }
+  if (analytics?.debugView === "verified" &&
+    (analytics.productionVariables !== "configured" ||
+      !["activation-ready", "active"].includes(state as string) ||
+      evidence?.productionActivation !== "complete")) {
+    issues.push("debug-view-without-production-evidence");
+  }
+  if (analytics?.customDimensionConfiguration === "verified" &&
+    ((!Array.isArray(analytics.customDimensions) || analytics.customDimensions.length === 0) ||
+      evidence?.externalConfiguration !== "complete")) {
+    issues.push("custom-dimensions-without-evidence");
+  }
+  if (analytics?.keyEventConfiguration === "verified" && evidence?.externalConfiguration !== "complete") {
+    issues.push("key-event-without-evidence");
+  }
+  if (state === "active" &&
+    (analytics?.status !== "verified" || sitemap?.status !== "accepted" ||
+      evidence?.productionActivation !== "complete" || evidence?.immediateReview !== "complete" ||
+      evidence?.twentyFourHourReview !== "complete")) {
+    issues.push("activation-transition:active");
   }
 
   return Object.freeze([...new Set(issues)]);

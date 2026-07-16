@@ -22,6 +22,8 @@ Operational response targets are: Critical containment begins immediately with a
 
 The same classification covers failed builds/deployments, smoke failures, deployment-commit mismatches, alias/DNS incidents, outages, wrong calculations, data exposure, secret leaks, indexing failures, analytics-before-consent, provider outages, commercial misrepresentation, environment defects, header regressions, temporary 503 use and release-record corrections. Provider-specific cases remain inactive until their provider is approved.
 
+For GA4 containment, remove or disable the two Production-only analytics variables, allow the resulting Production build to reach Ready, and verify pre-consent and post-rejection provider silence. Record the configuration change and deployment, then revert or correct source through protected `main`. Do not promise deletion of provider cookies unless the qualified privacy decision explicitly requires and defines it.
+
 Route withdrawal must preserve an explicit indexing decision. Provider and commercial integrations must have an owner-approved disablement path before activation. Phase 9 creates policy only and activates nothing.
 
 Only the Youtoola owner authorises a rollback or emergency hotfix. The operator records the affected and rollback deployment IDs/commits before acting, runs the package-free Production smoke after containment, and then restores repository alignment through a protected-main revert. Vercel restoration alone is not the durable source fix.

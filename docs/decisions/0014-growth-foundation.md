@@ -1,6 +1,6 @@
 # ADR 0014: Dormant Growth Foundation
 
-- Status: Proposed for Phase 11 Unit 2 review
+- Status: Accepted and shipped in Phase 11 Unit 2
 - Date: 2026-07-15
 - Decision owner: Youtoola owner
 

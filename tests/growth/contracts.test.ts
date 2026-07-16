@@ -33,12 +33,13 @@ describe("Growth Foundation records", () => {
   });
 
   it("fails closed for malformed, unknown or activated record data", () => {
+    const organicLandingSessions = dashboard.find((metric) => metric.id === "organic-landing-sessions")!;
     expect(validateGrowthFoundationRecord({ ...foundation, unexpected: true })).toContain("record-fields");
     expect(validateGrowthFoundationRecord({ ...foundation, analytics: { ...foundation.analytics, activation: "enabled" } })).toContain("analytics-active");
     expect(validateGrowthFoundationRecord({})).toContain("record-fields");
 
-    expect(validateDashboardDefinitions([{ ...dashboard[0], unexpected: true }])).toContain("metric-fields:organic-landing-sessions");
-    expect(validateDashboardDefinitions([{ ...dashboard[0], source: "Unknown" }])).toContain("source:organic-landing-sessions");
+    expect(validateDashboardDefinitions([{ ...organicLandingSessions, unexpected: true }])).toContain("metric-fields:organic-landing-sessions");
+    expect(validateDashboardDefinitions([{ ...organicLandingSessions, source: "Unknown" }])).toContain("source:organic-landing-sessions");
 
     expect(validateGrowthMonitoring({ ...monitoring, unexpected: true })).toContain("monitoring-fields");
     expect(validateGrowthMonitoring({ ...monitoring, checks: [...monitoring.checks, "unknown"] })).toContain("unexpected-check:unknown");

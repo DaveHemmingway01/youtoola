@@ -1,0 +1,120 @@
+{
+  "recordVersion": 1,
+  "owner": "Youtoola owner",
+  "reviewedDate": "2026-07-15",
+  "activationState": "legally-approved",
+  "legalPrivacy": {
+    "status": "approved",
+    "approvalReference": "YT-PRIV-2026-07-15-01 / PT99T0-1300-BG",
+    "jurisdictions": ["PT", "EU/EEA"]
+  },
+  "privacyContact": {
+    "status": "operational",
+    "address": "privacy@youtoola.com"
+  },
+  "analytics": {
+    "provider": "Google Analytics 4",
+    "status": "partially-configured",
+    "measurementIdStatus": "configured",
+    "productionVariables": "not-configured",
+    "configuration": {
+      "accountDisplayName": "Youtoola",
+      "propertyDisplayName": "Youtoola Production",
+      "propertyId": "545783566",
+      "streamDisplayName": "Youtoola",
+      "streamId": "15263953983",
+      "streamUrl": "https://www.youtoola.com",
+      "reportingTimeZone": "Europe/Lisbon",
+      "reportingCurrency": "EUR",
+      "measurementIdFingerprint": "sha256:96718192b2e08dc78eec82cd444dbdf359b3d6bbcf550c1ae0a96f81b10fe67b",
+      "evidenceReference": "Owner-supplied GA4 Admin screenshots dated 2026-07-15; Stream details SHA-256 7a684274b68f8bf0b56d74ce47791e7a369bb0e400627a328ffac04628743ee4; settings evidence hashes are recorded in docs/operations/growth-infrastructure.md"
+    },
+    "retention": {
+      "eventDataMonths": 2,
+      "userDataMonths": 2,
+      "resetOnNewUserActivity": false
+    },
+    "settingsVerification": "verified",
+    "sanitizedPageView": "build-ready",
+    "keyEvents": ["tool_complete"],
+    "keyEventConfiguration": "not-configured",
+    "customDimensions": [],
+    "customDimensionConfiguration": "not-configured",
+    "debugView": "pending",
+    "settings": {
+      "adsLinks": false,
+      "advertisingFeatures": false,
+      "automaticPageViews": false,
+      "browserHistoryPageViews": false,
+      "crossDomainMeasurement": false,
+      "dataSharing": false,
+      "enhancedMeasurementStatus": "page-view-category-google-locked-on-optional-events-off",
+      "googleSignals": false,
+      "measurementProtocol": false,
+      "optionalEnhancedMeasurementEvents": {
+        "fileDownloads": false,
+        "formInteractions": false,
+        "outboundClicks": false,
+        "scrolls": false,
+        "siteSearch": false,
+        "videoEngagement": false
+      },
+      "userId": false
+    }
+  },
+  "searchConsole": {
+    "status": "verified",
+    "property": "youtoola.com",
+    "propertyType": "domain",
+    "verificationMethod": "dns-txt",
+    "urlInspections": [
+      { "url": "https://www.youtoola.com/", "liveTest": "passed", "technicallyIndexable": true, "indexingRequest": "submitted-where-needed", "indexStatus": "pending" },
+      { "url": "https://www.youtoola.com/tools", "liveTest": "passed", "technicallyIndexable": true, "indexingRequest": "submitted-where-needed", "indexStatus": "pending" },
+      { "url": "https://www.youtoola.com/about", "liveTest": "passed", "technicallyIndexable": true, "indexingRequest": "submitted-where-needed", "indexStatus": "pending" },
+      { "url": "https://www.youtoola.com/methodology", "liveTest": "passed", "technicallyIndexable": true, "indexingRequest": "submitted-where-needed", "indexStatus": "pending" },
+      { "url": "https://www.youtoola.com/privacy", "liveTest": "passed", "technicallyIndexable": true, "indexingRequest": "submitted-where-needed", "indexStatus": "pending" }
+    ]
+  },
+  "bing": {
+    "status": "verified",
+    "site": "youtoola.com",
+    "verificationMethod": "imported-from-google-search-console",
+    "urlInspections": [
+      { "url": "https://www.youtoola.com/", "liveTest": "passed", "technicallyIndexable": true, "indexingRequest": "submitted-where-needed", "indexStatus": "pending" },
+      { "url": "https://www.youtoola.com/tools", "liveTest": "passed", "technicallyIndexable": true, "indexingRequest": "submitted-where-needed", "indexStatus": "pending" },
+      { "url": "https://www.youtoola.com/about", "liveTest": "passed", "technicallyIndexable": true, "indexingRequest": "submitted-where-needed", "indexStatus": "pending" },
+      { "url": "https://www.youtoola.com/methodology", "liveTest": "passed", "technicallyIndexable": true, "indexingRequest": "submitted-where-needed", "indexStatus": "pending" },
+      { "url": "https://www.youtoola.com/privacy", "liveTest": "passed", "technicallyIndexable": true, "indexingRequest": "submitted-where-needed", "indexStatus": "pending" }
+    ]
+  },
+  "sitemapSubmission": {
+    "status": "accepted",
+    "url": "https://www.youtoola.com/sitemap.xml",
+    "google": {
+      "status": "submitted",
+      "processingStatus": "successfully-processed",
+      "discoveredUrls": 5
+    },
+    "bing": {
+      "status": "submitted",
+      "processingStatus": "successfully-processed",
+      "discoveredUrls": 5
+    }
+  },
+  "dashboard": {
+    "status": "definition-only",
+    "owner": "Youtoola owner"
+  },
+  "monitoring": {
+    "status": "definition-only",
+    "owner": "Youtoola owner",
+    "schedule": "0 7 * * 1"
+  },
+  "evidence": {
+    "externalConfiguration": "pending",
+    "previewProviderFree": "complete",
+    "productionActivation": "pending",
+    "immediateReview": "pending",
+    "twentyFourHourReview": "pending"
+  }
+}

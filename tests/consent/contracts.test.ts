@@ -1,7 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { parseConsentCookie, serializeConsentCookie } from "@/lib/consent/cookie";
-import { resolveConsentRuntime, withdrawAnalyticsConsent } from "@/lib/consent/runtime";
+import {
+  deleteGoogleAnalyticsCookies,
+  resolveConsentRuntime,
+  withdrawAnalyticsConsent,
+} from "@/lib/consent/runtime";
 
 describe("consent cookie contract", () => {
   it.each([
@@ -36,6 +40,22 @@ describe("consent cookie contract", () => {
 });
 
 describe("consent runtime", () => {
+  it("deletes only Google Analytics cookies for the host and canonical domain", () => {
+    const writeCookie = vi.fn();
+    expect(deleteGoogleAnalyticsCookies({
+      cookieHeader: "other=value; _ga=GA1.1.1.1; _ga_ABC123=value; _gac_test=kept",
+      secure: true,
+      writeCookie,
+    })).toBe(2);
+    expect(writeCookie).toHaveBeenCalledTimes(4);
+    const output = writeCookie.mock.calls.flat().join("\n");
+    expect(output).toContain("_ga=");
+    expect(output).toContain("_ga_ABC123=");
+    expect(output).toContain("Domain=youtoola.com");
+    expect(output).not.toContain("other=");
+    expect(output).not.toContain("_gac_test=");
+  });
+
   it("preserves all states while keeping marketing unavailable", () => {
     for (const consentState of ["unknown", "denied", "analytics-granted", "marketing-granted"] as const) {
       const decision = resolveConsentRuntime({ analyticsAvailable: true, consentState, environment: "production" });
@@ -57,12 +77,21 @@ describe("consent runtime", () => {
       clearAnalyticsDeduplication: dependency("dedup"),
       clearPageViewState: dependency("page-view"),
       clearProviderLifecycle: dependency("lifecycle"),
+      deleteProviderCookies: dependency("provider-cookies"),
       disableAdapter: dependency("disable"),
       providerLoaded: true,
       updateProviderDenied: dependency("provider-denied"),
       writeDeniedCookie: dependency("cookie"),
     };
     expect(withdrawAnalyticsConsent(dependencies)).toBe("denied");
-    expect(order).toEqual(["cookie", "disable", "provider-denied", "dedup", "lifecycle", "page-view"]);
+    expect(order).toEqual([
+      "cookie",
+      "disable",
+      "provider-denied",
+      "provider-cookies",
+      "dedup",
+      "lifecycle",
+      "page-view",
+    ]);
   });
 });

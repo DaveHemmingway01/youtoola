@@ -51,3 +51,131 @@ export interface GrowthMonitoringDefinition {
   schedule: "0 7 * * 1";
   status: "definition-only";
 }
+
+export type GrowthActivationState =
+  | "dormant"
+  | "legally-approved"
+  | "externally-configured"
+  | "activation-ready"
+  | "active"
+  | "disabled"
+  | "incident-disabled";
+
+type PendingOrComplete = "complete" | "pending";
+type ExternalServiceStatus = "configured" | "error" | "not-configured" | "verified";
+type PublicUrlInspection = Readonly<{
+  indexStatus: "pending";
+  indexingRequest: "submitted-where-needed";
+  liveTest: "passed";
+  technicallyIndexable: true;
+  url: string;
+}>;
+
+export interface GrowthActivationRecord {
+  activationState: GrowthActivationState;
+  analytics: Readonly<{
+    configuration: Readonly<{
+      accountDisplayName: "Youtoola";
+      evidenceReference: string;
+      measurementIdFingerprint: string;
+      propertyDisplayName: "Youtoola Production";
+      propertyId: "545783566";
+      reportingCurrency: "EUR";
+      reportingTimeZone: "Europe/Lisbon";
+      streamDisplayName: string;
+      streamId: string;
+      streamUrl: "https://www.youtoola.com";
+    }>;
+    customDimensions: readonly string[];
+    customDimensionConfiguration: "not-configured" | "verified";
+    debugView: "pending" | "verified";
+    keyEvents: readonly ["tool_complete"];
+    keyEventConfiguration: "not-configured" | "verified";
+    measurementIdStatus: "configured" | "not-configured";
+    productionVariables: "configured" | "not-configured";
+    provider: "Google Analytics 4";
+    retention: Readonly<{
+      eventDataMonths: 2;
+      resetOnNewUserActivity: false;
+      userDataMonths: 2;
+    }>;
+    sanitizedPageView: "approved" | "build-ready" | "verified";
+    settingsVerification: "pending" | "verified";
+    settings: Readonly<{
+      adsLinks: false;
+      advertisingFeatures: false;
+      automaticPageViews: false;
+      browserHistoryPageViews: false;
+      crossDomainMeasurement: false;
+      dataSharing: false;
+      enhancedMeasurementStatus: "page-view-category-google-locked-on-optional-events-off";
+      googleSignals: false;
+      measurementProtocol: false;
+      optionalEnhancedMeasurementEvents: Readonly<{
+        fileDownloads: false;
+        formInteractions: false;
+        outboundClicks: false;
+        scrolls: false;
+        siteSearch: false;
+        videoEngagement: false;
+      }>;
+      userId: false;
+    }>;
+    status: "configured" | "disabled" | "not-configured" | "partially-configured" | "verified";
+  }>;
+  bing: Readonly<{
+    site: string | null;
+    status: ExternalServiceStatus;
+    urlInspections?: readonly PublicUrlInspection[];
+    verificationMethod?: "imported-from-google-search-console";
+  }>;
+  dashboard: Readonly<{
+    owner: "Youtoola owner";
+    status: "definition-only" | "operational";
+  }>;
+  evidence: Readonly<{
+    externalConfiguration: PendingOrComplete;
+    immediateReview: PendingOrComplete;
+    previewProviderFree: PendingOrComplete;
+    productionActivation: PendingOrComplete;
+    twentyFourHourReview: PendingOrComplete;
+  }>;
+  legalPrivacy: Readonly<{
+    approvalReference: string | null;
+    jurisdictions: readonly string[];
+    status: "approved" | "pending";
+  }>;
+  monitoring: Readonly<{
+    owner: "Youtoola owner";
+    schedule: "0 7 * * 1";
+    status: "definition-only" | "operational";
+  }>;
+  owner: "Youtoola owner";
+  privacyContact: Readonly<{
+    address: string | null;
+    status: "operational" | "pending";
+  }>;
+  recordVersion: 1;
+  reviewedDate: string;
+  searchConsole: Readonly<{
+    property: string | null;
+    propertyType?: "domain";
+    status: ExternalServiceStatus;
+    urlInspections?: readonly PublicUrlInspection[];
+    verificationMethod?: "dns-txt";
+  }>;
+  sitemapSubmission: Readonly<{
+    bing?: Readonly<{
+      discoveredUrls: 5;
+      processingStatus: "successfully-processed";
+      status: "submitted";
+    }>;
+    google?: Readonly<{
+      discoveredUrls: 5;
+      processingStatus: "successfully-processed";
+      status: "submitted";
+    }>;
+    status: "accepted" | "error" | "not-submitted" | "submitted";
+    url: "https://www.youtoola.com/sitemap.xml";
+  }>;
+}

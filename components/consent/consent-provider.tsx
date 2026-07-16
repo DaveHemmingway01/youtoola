@@ -10,13 +10,21 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { usePathname } from "next/navigation";
 
 import type { AnalyticsConsentState } from "@/lib/analytics/contracts";
 import type { Ga4Adapter } from "@/lib/analytics/ga4-adapter";
 import type { ClientGrowthConfiguration } from "@/lib/analytics/ga4-configuration";
-import { createSanitizedPageView, PageViewDeduplicator } from "@/lib/analytics/page-view";
+import {
+  createSanitizedPageView,
+  PageViewDeduplicator,
+  sendDeduplicatedPageView,
+} from "@/lib/analytics/page-view";
 import { parseConsentCookie, serializeConsentCookie } from "@/lib/consent/cookie";
-import { withdrawAnalyticsConsent } from "@/lib/consent/runtime";
+import {
+  deleteGoogleAnalyticsCookies,
+  withdrawAnalyticsConsent,
+} from "@/lib/consent/runtime";
 
 interface ConsentContextValue {
   analyticsAvailable: boolean;
@@ -52,6 +60,7 @@ export function ConsentProvider({
   const [hydrated, setHydrated] = useState(false);
   const [preferencesOpen, setPreferencesOpen] = useState(false);
   const [announcement, setAnnouncement] = useState("");
+  const pathname = usePathname();
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const adapterRef = useRef<Ga4Adapter | null>(null);
   const pageViews = useRef(new PageViewDeduplicator());
@@ -70,8 +79,13 @@ export function ConsentProvider({
 
   const emitCurrentPage = useCallback(() => {
     const pageView = createSanitizedPageView(window.location.href);
-    if (!pageView || !pageViews.current.accept(pageView)) return;
-    adapterRef.current?.trackPageView(pageView);
+    const adapter = adapterRef.current;
+    if (!pageView || !adapter) return;
+    sendDeduplicatedPageView(
+      pageViews.current,
+      pageView,
+      (value) => adapter.trackPageView(value),
+    );
   }, []);
 
   useEffect(() => {
@@ -95,7 +109,7 @@ export function ConsentProvider({
 
   useEffect(() => {
     if (state === "analytics-granted") emitCurrentPage();
-  }, [emitCurrentPage, state]);
+  }, [emitCurrentPage, pathname, state]);
 
   const save = useCallback((next: "denied" | "analytics-granted") => {
     if (!configuration.analyticsAvailable) return;
@@ -107,6 +121,15 @@ export function ConsentProvider({
         clearProviderLifecycle: () => {
           adapter?.clear();
           adapterRef.current = null;
+        },
+        deleteProviderCookies: () => {
+          deleteGoogleAnalyticsCookies({
+            cookieHeader: document.cookie,
+            secure: configuration.secureCookie,
+            writeCookie: (value) => {
+              document.cookie = value;
+            },
+          });
         },
         disableAdapter: () => adapter?.disable(),
         providerLoaded: adapter?.lifecycle === "ready",

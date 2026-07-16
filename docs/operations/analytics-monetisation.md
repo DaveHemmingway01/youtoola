@@ -1,6 +1,6 @@
 # Analytics and Monetisation Operations
 
-## Phase 11 Unit 2 operating state
+## Phase 11 Unit 3 BUILD state
 
 - Local: provider absent, transmission blocked, protected in-memory inspector allowed.
 - Preview: Production provider and measurement ID absent, transmission blocked, protected noindexed inspector allowed.
@@ -12,7 +12,9 @@ Run `npm run architecture:validate` for the contract suite. It is offline and is
 
 ## Provider activation boundary
 
-Only Phase 11 may add GA4 after owner approval of the property and stream, jurisdictions and consent policy, final parameters, retention, dashboard, monitoring, failure thresholds, and rollback. Provider activation must preserve the first-party envelope, load only in Production after permission, remain outside calculations, tolerate offline/failure/timeout states, and prove Local and Preview send nothing.
+Unit 3 may prepare GA4 activation only after owner approval of the property and stream, jurisdictions and consent policy, final parameters, retention, dashboard, monitoring, failure thresholds, and rollback. Runtime activation remains prohibited until the legal reference, external evidence, Production-only variables and a separate exact-head SHIP approval exist. Provider activation must preserve the first-party envelope, load only in Production after permission, remain outside calculations, tolerate offline/failure/timeout states, and prove Local and Preview send nothing.
+
+Sanitized provider page views observe known App Router paths with `usePathname`. A location is deduplicated only after the ready adapter confirms successful delivery. Loading, offline, failed and timed-out attempts are dropped without being marked delivered, queued or replayed.
 
 The dispatcher and provider boundary must return immediately. UI code must never await analytics. A provider reports a bounded delivery outcome; offline, failure and timeout outcomes are dropped without synchronous retry, buffering, persistence or later replay.
 

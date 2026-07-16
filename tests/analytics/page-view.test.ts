@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { createSanitizedPageView, PageViewDeduplicator } from "@/lib/analytics/page-view";
+import {
+  createSanitizedPageView,
+  PageViewDeduplicator,
+  sendDeduplicatedPageView,
+} from "@/lib/analytics/page-view";
 
 describe("sanitized provider page views", () => {
   it("accepts known routes and strips query, fragment and referrer", () => {
@@ -17,12 +21,23 @@ describe("sanitized provider page views", () => {
     expect(createSanitizedPageView("http://[invalid")).toBeNull();
   });
 
-  it("deduplicates only the current recognized transition and clears without replay", () => {
+  it("records only successfully sent recognized transitions and clears without replay", () => {
     const pageView = createSanitizedPageView("/")!;
     const deduplicator = new PageViewDeduplicator();
-    expect(deduplicator.accept(pageView)).toBe(true);
-    expect(deduplicator.accept(pageView)).toBe(false);
+    expect(deduplicator.has(pageView)).toBe(false);
+    expect(deduplicator.has(pageView)).toBe(false);
+    deduplicator.record(pageView);
+    expect(deduplicator.has(pageView)).toBe(true);
     deduplicator.clear();
-    expect(deduplicator.accept(pageView)).toBe(true);
+    expect(deduplicator.has(pageView)).toBe(false);
+  });
+
+  it("does not deduplicate a page view until the provider reports a successful send", () => {
+    const pageView = createSanitizedPageView("/tools")!;
+    const deduplicator = new PageViewDeduplicator();
+    expect(sendDeduplicatedPageView(deduplicator, pageView, () => false)).toBe(false);
+    expect(deduplicator.has(pageView)).toBe(false);
+    expect(sendDeduplicatedPageView(deduplicator, pageView, () => true)).toBe(true);
+    expect(sendDeduplicatedPageView(deduplicator, pageView, () => true)).toBe(false);
   });
 });

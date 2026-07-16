@@ -2,10 +2,12 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 
 import foundation from "../data/growth/foundation.json" with { type: "json" };
+import activation from "../data/growth/activation.json" with { type: "json" };
 import dashboard from "../data/growth/dashboard.json" with { type: "json" };
 import monitoring from "../data/growth/monitoring.json" with { type: "json" };
 import {
   validateDashboardDefinitions,
+  validateGrowthActivationRecord,
   validateGrowthFoundationRecord,
   validateGrowthMonitoring,
 } from "../lib/growth/validation.ts";
@@ -22,6 +24,7 @@ function sourceFiles(directory) {
 
 const issues = [
   ...validateGrowthFoundationRecord(foundation),
+  ...validateGrowthActivationRecord(activation),
   ...validateDashboardDefinitions(dashboard),
   ...validateGrowthMonitoring(monitoring),
 ];
@@ -44,5 +47,5 @@ if (issues.length > 0) {
   console.error(`Growth validation failed:\n  - ${issues.join("\n  - ")}`);
   process.exitCode = 1;
 } else {
-  console.log("Growth validation: PASS (dormant configuration, dashboard and monitoring definitions)");
+  console.log(`Growth validation: PASS (${activation.activationState} activation record, frozen foundation, dashboard and monitoring definitions)`);
 }
