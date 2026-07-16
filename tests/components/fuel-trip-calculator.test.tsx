@@ -65,4 +65,19 @@ describe("Fuel Trip Calculator form", () => {
     expect((screen.getByLabelText("One-way trip distance") as HTMLInputElement).value).toBe("");
     await waitFor(() => expect(document.activeElement).toBe(screen.getByLabelText("One-way trip distance")));
   });
+
+  it("accepts zero consumption and zero tolls while keeping the result deterministic", async () => {
+    const user = userEvent.setup();
+    render(<FuelTripCalculatorForm />);
+    await user.type(screen.getByLabelText("One-way trip distance"), "50");
+    await user.type(screen.getByLabelText("Fuel consumption"), "0");
+    await user.type(screen.getByLabelText("Fuel price per litre"), "1.5");
+    await user.click(screen.getByLabelText("One-way"));
+    await user.type(screen.getByLabelText("Total toll cost"), "0");
+    await user.type(screen.getByLabelText("People sharing the cost"), "1");
+    await user.click(screen.getByRole("button", { name: "Calculate trip cost" }));
+
+    expect(screen.getByText("0 L")).toBeTruthy();
+    expect(screen.getAllByText("0.00")).toHaveLength(3);
+  });
 });

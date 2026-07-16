@@ -42,8 +42,8 @@ export function calculateFuelTrip(input: FuelTripCalculationInput): FuelTripCalc
   if (!finite(input.distanceKm) || input.distanceKm <= 0) {
     return failure("invalid-distance", "Distance must be a finite number greater than zero.");
   }
-  if (!finite(input.fuelConsumptionLitresPer100Km) || input.fuelConsumptionLitresPer100Km <= 0) {
-    return failure("invalid-consumption", "Fuel consumption must be a finite number greater than zero.");
+  if (!finite(input.fuelConsumptionLitresPer100Km) || input.fuelConsumptionLitresPer100Km < 0) {
+    return failure("invalid-consumption", "Fuel consumption must be a finite number that is zero or greater.");
   }
   if (!finite(input.fuelPricePerLitre) || input.fuelPricePerLitre < 0) {
     return failure("invalid-price", "Fuel price must be a finite number that is zero or greater.");

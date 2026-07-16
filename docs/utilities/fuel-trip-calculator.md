@@ -76,7 +76,7 @@ Let `m = 1` for one-way and `m = 2` for return.
 
 Tolls are never doubled automatically because return tolls can differ. The user enters the total for the complete journey. Passenger count includes the driver. Raw arithmetic is retained internally; displayed fuel, distance and costs round to at most two decimal places. All costs remain in the same unspecified currency unit entered by the user.
 
-Distance and consumption must be greater than zero. Price and tolls must be zero or greater. Passenger count must be a positive whole number. Values and derived results must be finite. Empty optional tolls mean no toll amount is included. Actual consumption can vary with traffic, speed, terrain, weather, load and driving style.
+Distance must be greater than zero. Consumption, price and tolls must be zero or greater. Passenger count must be a positive whole number. Values and derived results must be finite. Empty optional tolls mean no toll amount is included. Actual consumption can vary with traffic, speed, terrain, weather, load and driving style.
 
 ## UX, privacy and acceptance
 

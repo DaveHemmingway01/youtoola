@@ -13,14 +13,14 @@ export const fuelTripInputs = {
   consumption: {
     errorMessages: {
       invalid: "Enter a valid fuel consumption.",
-      min: "Fuel consumption must be greater than zero.",
+      min: "Fuel consumption cannot be negative.",
       required: "Enter your vehicle's fuel consumption.",
     },
     helpText: "Use your vehicle's expected consumption for this journey.",
     id: "fuel-trip-consumption",
     inputMode: "decimal",
     label: "Fuel consumption",
-    min: 0.01,
+    min: 0,
     required: true,
     step: 0.01,
     type: "number",

@@ -67,6 +67,18 @@ test("has no serious accessibility violations", async ({ page }) => {
   expect(results.violations.filter(({ impact }) => impact === "serious" || impact === "critical")).toEqual([]);
 });
 
+test("supports 200 percent text without overflow or serious accessibility violations", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(reviewPath);
+  await page.evaluate(() => {
+    document.documentElement.style.fontSize = "200%";
+  });
+
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)).toBe(false);
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(results.violations.filter(({ impact }) => impact === "serious" || impact === "critical")).toEqual([]);
+});
+
 test("keeps the canonical public route unavailable and out of the sitemap", async ({ request }) => {
   expect((await request.get("/fuel-trip-calculator")).status()).toBe(404);
   const sitemap = await (await request.get("/sitemap.xml")).text();

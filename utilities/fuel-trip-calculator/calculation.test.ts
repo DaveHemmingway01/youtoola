@@ -38,16 +38,17 @@ describe("Fuel Trip Calculator", () => {
     });
   });
 
-  it("accepts zero price and zero toll without inventing a cost", () => {
+  it("accepts zero consumption, price, and toll without inventing a cost", () => {
     expect(calculateFuelTrip({
       ...validInput,
+      fuelConsumptionLitresPer100Km: 0,
       fuelPricePerLitre: 0,
       passengerCount: 1,
       tollCost: 0,
       tripType: "one-way",
     })).toMatchObject({
       ok: true,
-      value: { costPerPassenger: 0, fuelCost: 0, totalTripCost: 0 },
+      value: { costPerPassenger: 0, fuelCost: 0, fuelRequiredLitres: 0, totalTripCost: 0 },
     });
   });
 
