@@ -16,9 +16,9 @@
     "approver": "Youtoola owner",
     "reference": "START RAPID PUBLIC RELEASE"
   },
-  "pullRequest": "pending",
+  "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/23",
   "provenance": {
-    "pullRequest": "pending",
+    "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/23",
     "sourceBranch": "origin/main",
     "sourceCommit": "714e001370adee8f1a0fb7cc7c0f7e4e3bc1bdf6",
     "reviewedHeadCommit": "pending-review",
