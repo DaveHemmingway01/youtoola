@@ -1,0 +1,248 @@
+{
+  "recordVersion": 3,
+  "recordKind": "release",
+  "recordId": "2026-07-16-consent-copy",
+  "status": "candidate",
+  "phaseOrUtility": "Analytics consent copy",
+  "summary": "Owner-approved plain-language consent-notice copy change with no analytics, consent-lifecycle or provider behavior change.",
+  "riskTags": [
+    "public-content",
+    "analytics-consent"
+  ],
+  "planApproval": {
+    "approvedDate": "2026-07-16",
+    "approver": "Youtoola owner",
+    "reference": "Owner instruction: let's just say We don’t collect your calculator inputs or results."
+  },
+  "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/24",
+  "provenance": {
+    "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/24",
+    "sourceBranch": "origin/main",
+    "sourceCommit": "cabd9a1cafe7e27b57c0d5f02396027c118612be",
+    "reviewedHeadCommit": "pending-review",
+    "reviewedHeadRef": "platform/consent-copy",
+    "reviewedDate": null,
+    "mergeMethod": null,
+    "mergeCommit": null,
+    "durableReleaseCommit": null,
+    "mergedAt": null
+  },
+  "delivery": {
+    "branch": "platform/consent-copy",
+    "releaseKind": "normal",
+    "preview": null,
+    "productionUnchangedBeforeMerge": true,
+    "requiredChecks": [
+      {
+        "name": "Quality",
+        "status": "pending",
+        "reference": null
+      },
+      {
+        "name": "End-to-end",
+        "status": "pending",
+        "reference": null
+      },
+      {
+        "name": "Vercel",
+        "status": "pending",
+        "reference": null
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "id": "accessibility-review",
+      "reference": "The notice structure, heading, link and equal consent choices are unchanged; Preview review remains pending.",
+      "reviewedDate": "2026-07-16",
+      "status": "pending"
+    },
+    {
+      "id": "analytics-contract-tests",
+      "reference": "No analytics contract or payload implementation changed; selected validation remains required before merge.",
+      "reviewedDate": "2026-07-16",
+      "status": "pending"
+    },
+    {
+      "id": "clean-diff",
+      "reference": "Local diff inspection and git diff --check passed for the copy, focused test and required candidate record.",
+      "reviewedDate": "2026-07-16",
+      "status": "passed"
+    },
+    {
+      "id": "consent-fail-closed-tests",
+      "reference": "The consent lifecycle is unchanged; selected validation remains required before merge.",
+      "reviewedDate": "2026-07-16",
+      "status": "pending"
+    },
+    {
+      "id": "content-review",
+      "reference": "The public sentence exactly follows the owner-approved wording and retains the Privacy link.",
+      "reviewedDate": "2026-07-16",
+      "status": "approved"
+    },
+    {
+      "id": "environment-transmission-tests",
+      "reference": "Preview remains Production-provider-free; fresh Vercel evidence is pending.",
+      "reviewedDate": "2026-07-16",
+      "status": "pending"
+    },
+    {
+      "id": "normal-ci",
+      "reference": "Fresh GitHub Quality, End-to-end and Vercel checks are pending.",
+      "reviewedDate": "2026-07-16",
+      "status": "pending"
+    },
+    {
+      "id": "owner-plan-approval",
+      "reference": "Owner approved the exact replacement sentence on 2026-07-16.",
+      "reviewedDate": "2026-07-16",
+      "status": "approved"
+    },
+    {
+      "id": "preview-verification",
+      "reference": "Fresh authenticated noindexed Vercel Preview verification is pending.",
+      "reviewedDate": "2026-07-16",
+      "status": "pending"
+    },
+    {
+      "id": "privacy-review",
+      "reference": "The sentence describes the existing sensitive-data boundary; the Privacy link and approved privacy policy remain unchanged.",
+      "reviewedDate": "2026-07-16",
+      "status": "approved"
+    },
+    {
+      "id": "provider-boundary-review",
+      "reference": "No provider, identifier, environment, consent-state or delivery code changed.",
+      "reviewedDate": "2026-07-16",
+      "status": "passed"
+    },
+    {
+      "id": "release-report",
+      "reference": "Final head, checks, Preview and Production status remain pending until REVIEW and SHIP.",
+      "reviewedDate": "2026-07-16",
+      "status": "pending"
+    },
+    {
+      "id": "rollback-plan",
+      "reference": "If the copy release fails, restore Ready Production deployment dpl_7np2i5X3ssaDvPfYQBhFdHXzvd89.",
+      "reviewedDate": "2026-07-16",
+      "status": "approved"
+    },
+    {
+      "id": "sensitive-data-tests",
+      "reference": "The existing analytics allowlist continues to exclude calculator inputs and results; selected validation remains pending.",
+      "reviewedDate": "2026-07-16",
+      "status": "pending"
+    },
+    {
+      "id": "seo-validation",
+      "reference": "No metadata, canonical, sitemap, crawler or indexability behavior changed.",
+      "reviewedDate": "2026-07-16",
+      "status": "passed"
+    },
+    {
+      "id": "storage-and-replay-tests",
+      "reference": "No storage, buffering, retry or replay behavior changed; selected validation remains pending.",
+      "reviewedDate": "2026-07-16",
+      "status": "pending"
+    }
+  ],
+  "exceptions": [],
+  "rollbackPlan": {
+    "method": "Restore Ready Production deployment dpl_7np2i5X3ssaDvPfYQBhFdHXzvd89 if the consent notice or analytics boundary regresses.",
+    "owner": "Youtoola owner",
+    "target": "dpl_7np2i5X3ssaDvPfYQBhFdHXzvd89"
+  },
+  "gateEvidence": {
+    "plan": {
+      "status": "approved",
+      "approver": "Youtoola owner",
+      "evidence": [
+        "Owner-approved exact consent-notice sentence"
+      ]
+    },
+    "build": {
+      "status": "complete",
+      "approver": null,
+      "evidence": [
+        "Focused consent copy and component assertion"
+      ]
+    },
+    "review": {
+      "status": "pending",
+      "approver": null,
+      "evidence": []
+    },
+    "ship": {
+      "status": "pending",
+      "approver": null,
+      "evidence": []
+    },
+    "post-deployment": {
+      "status": "pending",
+      "approver": null,
+      "evidence": []
+    },
+    "post-launch-review": {
+      "status": "pending",
+      "approver": null,
+      "evidence": []
+    }
+  },
+  "versions": {
+    "releaseSchema": 3,
+    "analyticsSchema": 1
+  },
+  "production": null,
+  "followUpReviews": {
+    "immediate": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "24-hour": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "7-day": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "28-day": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "monthly": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    },
+    "quarterly": {
+      "dueDate": null,
+      "status": "pending",
+      "owner": "Youtoola owner",
+      "completedDate": null,
+      "evidence": [],
+      "notApplicableReason": null
+    }
+  }
+}

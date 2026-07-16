@@ -61,6 +61,7 @@ describe("consent interface", () => {
     const accept = await screen.findByRole("button", { name: "Accept analytics" });
     const reject = screen.getByRole("button", { name: "Reject" });
     expect(accept.className).toBe(reject.className);
+    expect(screen.getByText("We don’t collect your calculator inputs or results.", { exact: false })).toBeTruthy();
     expect(screen.getByRole("link", { name: "Read Privacy" }).getAttribute("href")).toBe("/privacy");
     await user.click(reject);
     expect(screen.getByText("Optional analytics rejected.")).toBeTruthy();

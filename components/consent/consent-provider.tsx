@@ -242,8 +242,7 @@ export function ConsentProvider({
           <div>
             <h2 id="consent-notice-title">Optional analytics</h2>
             <p>
-              Help Youtoola understand how its tools are used. Optional analytics stays
-              off unless you accept. <a href="/privacy">Read Privacy</a>.
+              We don’t collect your calculator inputs or results. <a href="/privacy">Read Privacy</a>.
             </p>
           </div>
           <ConsentChoices onAccept={() => save("analytics-granted")} onReject={() => save("denied")} />
