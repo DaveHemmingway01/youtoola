@@ -4,4 +4,4 @@ Each approved utility receives a reviewed specification here before BUILD. A She
 
 A specification must record its source coordinates and hash, search and competitor research, commercial scorecard, calculation contract, assumptions, validation, accessibility, SEO, related-tool and measurement requirements. Released source changes require owner impact review.
 
-Fuel Trip Calculator remains an `idea` only and has no specification file in Phase 3.
+Fuel Trip Calculator remains unreleased in the registry. Its RAPID implementation candidate may be reviewed only through a private, noindexed Preview until Growth Infrastructure and SHIP gates are complete.

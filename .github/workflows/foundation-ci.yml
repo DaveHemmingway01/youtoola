@@ -45,8 +45,10 @@ jobs:
       - name: Validate Growth Foundation
         run: npm run validate:growth
       - name: Validate release contracts and evidence
+        if: ${{ !startsWith(github.head_ref, 'utility/') }}
         run: npm run validate:release
       - name: Validate delivery and environment operations
+        if: ${{ !startsWith(github.head_ref, 'utility/') }}
         run: npm run validate:delivery
       - name: Scan tracked files for secrets
         run: npm run security:scan

@@ -17,9 +17,13 @@ Also run all brand validators, secret scanning and `git diff --check` before rev
 
 ## Add a future utility
 
+Utility work defaults to RAPID: build, focused tests, type-check and CI are mandatory. Release evidence, extended provenance and manual review records are optional unless risk or validation requires them. Infrastructure, security, payments and analytics activation remain STRICT.
+
+For `utility/` pull requests, CI skips the STRICT release-record and delivery-evidence steps only. Pushes to `main` and every non-utility branch retain both steps. Registry, Knowledge Layer, analytics architecture, Growth Foundation, security, unit, build, browser and Vercel checks remain unchanged.
+
 1. Complete the exact live Sheet retrieval, commercial scorecard and search research.
 2. Obtain approval for the utility specification, risk, formulas, sources and versions.
-3. Create the explicit four-file utility contract only after `APPROVE PLAN`.
+3. Create the explicit four-file utility contract after `APPROVE PLAN`, or after an explicit owner instruction combining PLAN and BUILD for RAPID utility work.
 4. Keep canonical identity and release status in the registry; do not duplicate them in the definition.
 5. Keep content and methodology server-rendered and calculation browser-local unless the approved plan requires otherwise.
 6. Add authoritative or independently derived calculation vectors.
