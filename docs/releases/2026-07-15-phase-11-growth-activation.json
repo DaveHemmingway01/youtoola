@@ -4,7 +4,7 @@
   "recordId": "2026-07-15-phase-11-growth-activation",
   "status": "candidate",
   "phaseOrUtility": "Phase 11 Unit 3",
-  "summary": "Growth Activation readiness controls with route-aware successful-send page-view tracking; legal, search ownership, sitemap and GA4 configuration evidence are recorded while custom dimensions, key-event configuration, DebugView and Production activation remain pending.",
+  "summary": "Growth Activation delivery hotfix after the first Production activation was contained: corrected gtag command delivery requires fresh exact-head review and SHIP approval before any Production reactivation or DebugView claim.",
   "riskTags": [
     "analytics-consent",
     "security-privacy",
@@ -12,40 +12,40 @@
     "public-content"
   ],
   "planApproval": {
-    "approvedDate": "2026-07-15",
+    "approvedDate": "2026-07-16",
     "approver": "Youtoola owner",
-    "reference": "APPROVE PLAN: Phase 11 Unit 3 Growth Activation with clarifications"
+    "reference": "START PARALLEL EXECUTION: Track A STRICT GA4 delivery correction"
   },
-  "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/19",
+  "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/21",
   "provenance": {
-    "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/19",
+    "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/21",
     "sourceBranch": "origin/main",
-    "sourceCommit": "2163f1b77ace3971eb87f677616965402f73f3a8",
-    "reviewedHeadCommit": "b07d5f7ec2f60b7e4aaaa597ffda6d39d06b555f",
-    "reviewedHeadRef": "platform/growth-activation",
-    "reviewedDate": "2026-07-15",
+    "sourceCommit": "f2434d0e6e063df40a56b6219a67981c24d774ed",
+    "reviewedHeadCommit": "pending-review",
+    "reviewedHeadRef": "hotfix/ga4-consented-delivery",
+    "reviewedDate": null,
     "mergeMethod": null,
     "mergeCommit": null,
     "durableReleaseCommit": null,
     "mergedAt": null
   },
   "delivery": {
-    "branch": "platform/growth-activation",
-    "releaseKind": "normal",
+    "branch": "hotfix/ga4-consented-delivery",
+    "releaseKind": "hotfix",
     "preview": {
-      "deploymentId": "dpl_A4FQp7TgRZ83fLnFv42q7n5eXsGp",
-      "deploymentCommit": "b07d5f7ec2f60b7e4aaaa597ffda6d39d06b555f",
-      "uniqueUrl": "https://youtoola-bfo2rp8gp-davincistudio.vercel.app/",
-      "branchAlias": "https://youtoola-git-platform-growth-activation-davincistudio.vercel.app/",
+      "deploymentId": "dpl_2ZipcxrSRS5efhK7nZy5XWaezcBL",
+      "deploymentCommit": "3a1a76359b221c1ce0c79394cb23746a07dc434f",
+      "uniqueUrl": "https://youtoola-k3dvi87va-davincistudio.vercel.app/",
+      "branchAlias": "https://youtoola-git-hotfix-ga4-consented-delivery-davincistudio.vercel.app/",
       "ready": true,
       "protected": true,
       "noindex": true
     },
     "productionUnchangedBeforeMerge": true,
     "requiredChecks": [
-      { "name": "Quality", "status": "passed", "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29453444874/job/87481151931" },
-      { "name": "End-to-end", "status": "passed", "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29453444874/job/87481151917" },
-      { "name": "Vercel", "status": "passed", "reference": "https://vercel.com/davincistudio/youtoola/A4FQp7TgRZ83fLnFv42q7n5eXsGp" }
+      { "name": "Quality", "status": "passed", "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29477975954/job/87555048193" },
+      { "name": "End-to-end", "status": "passed", "reference": "https://github.com/DaveHemmingway01/youtoola/actions/runs/29477975954/job/87555047995" },
+      { "name": "Vercel", "status": "passed", "reference": "https://vercel.com/davincistudio/youtoola/2ZipcxrSRS5efhK7nZy5XWaezcBL" }
     ]
   },
   "evidence": [
@@ -61,17 +61,17 @@
     { "id": "environment-transmission-tests", "reference": "Local E2E and protected Preview inspection showed no Measurement ID or Google provider request.", "reviewedDate": "2026-07-15", "status": "passed" },
     { "id": "environment-validation", "reference": "Production-only analytics configuration and Local/Preview rejection contracts remain validated.", "reviewedDate": "2026-07-15", "status": "passed" },
     { "id": "negative-tests", "reference": "Activation validation rejects unknown fields, unsupported state transitions, readiness without Measurement ID evidence, dormant DebugView success, unsupported custom-dimension or key-event success, unfounded indexing claims and accepted sitemap claims without provider evidence.", "reviewedDate": "2026-07-15", "status": "passed" },
-    { "id": "normal-ci", "reference": "Local lint, strict type-check, 308 unit tests, 63 Chromium tests and Production build passed; Quality, End-to-end and Vercel passed against reviewed head b07d5f7ec2f60b7e4aaaa597ffda6d39d06b555f.", "reviewedDate": "2026-07-15", "status": "passed" },
-    { "id": "owner-plan-approval", "reference": "APPROVE PLAN: Phase 11 Unit 3 Growth Activation with clarifications", "reviewedDate": "2026-07-15", "status": "approved" },
+    { "id": "normal-ci", "reference": "The hotfix adds a transport-shaped regression test that rejects Array commands and requires one sanitized page_view after provider readiness. Local validation passed with 309 unit tests and 63 Chromium E2E tests; Quality, End-to-end and Vercel passed against implementation head 3a1a76359b221c1ce0c79394cb23746a07dc434f.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "owner-plan-approval", "reference": "START PARALLEL EXECUTION: Track A STRICT GA4 delivery correction", "reviewedDate": "2026-07-16", "status": "approved" },
     { "id": "payload-limit-tests", "reference": "Existing bounded analytics payload contracts remain green; Unit 3 creates no utility event.", "reviewedDate": "2026-07-15", "status": "passed" },
-    { "id": "preview-verification", "reference": "Draft PR #19 deployment dpl_A4FQp7TgRZ83fLnFv42q7n5eXsGp matched reviewed head b07d5f7ec2f60b7e4aaaa597ffda6d39d06b555f, was Ready and authentication-protected, returned noindex, nofollow, and exposed no Measurement ID or Google provider origin.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "preview-verification", "reference": "Draft PR #21 deployment dpl_2ZipcxrSRS5efhK7nZy5XWaezcBL matched implementation head 3a1a76359b221c1ce0c79394cb23746a07dc434f, was Ready and authentication-protected, returned X-Robots-Tag noindex, and all Vercel environments remained provider-variable-free.", "reviewedDate": "2026-07-16", "status": "passed" },
     { "id": "privacy-review", "reference": "Owner accepts qualified review YT-PRIV-2026-07-15-01 / envelope PT99T0-1300-BG dated 2026-07-15 for Portugal and the EU/EEA. The accepted policy requires future-provider blocking plus _ga and _ga_* cookie expiry on withdrawal; no privileged reasoning or personal reviewer detail is stored.", "reviewedDate": "2026-07-15", "status": "approved" },
     { "id": "prototype-pollution-tests", "reference": "Existing analytics plain-object and unknown-field validation remains in the passing suite.", "reviewedDate": "2026-07-15", "status": "passed" },
-    { "id": "provider-boundary-review", "reference": "Direct gtag.js remains isolated to the existing adapter. GA4 keeps its Page views category locked on, while browser-history and all optional Enhanced Measurement events are off. Youtoola separately sets send_page_view false and may send only its approved sanitized consented page view after provider readiness. A verified Measurement ID fingerprint is evidence only; the exact identifier is not committed or wired into any environment.", "reviewedDate": "2026-07-15", "status": "passed" },
+    { "id": "provider-boundary-review", "reference": "The first consented Production test loaded gtag.js but delivered no collection request because the bootstrap shim queued Arrays instead of the Arguments objects consumed by gtag.js. The hotfix changes only that queue shape and adds focused transport regression coverage; reactivation requires fresh exact-head review and SHIP approval.", "reviewedDate": "2026-07-16", "status": "passed" },
     { "id": "public-boundary-regression", "reference": "No utility, registry, public route, sitemap, crawler, brand or monetisation boundary changed.", "reviewedDate": "2026-07-15", "status": "passed" },
     { "id": "redirect-allowlist-tests", "reference": "Existing redirect and canonical allowlist tests remain green.", "reviewedDate": "2026-07-15", "status": "passed" },
-    { "id": "release-report", "reference": "BUILD report records a legally-approved candidate with verified search ownership, processed sitemap evidence and GA4 account, property, stream and governance evidence. Custom dimensions, key-event configuration, DebugView, Vercel variables, complete external configuration, owner REVIEW and SHIP remain pending.", "reviewedDate": "2026-07-15", "status": "passed" },
-    { "id": "rollback-plan", "reference": "Disable both Production analytics variables, verify provider silence and align source through protected main; current Ready Production remains the target until SHIP evidence exists.", "reviewedDate": "2026-07-15", "status": "approved" },
+    { "id": "release-report", "reference": "PR #19 merged as f2434d0e6e063df40a56b6219a67981c24d774ed, but the consented page-view delivery test failed. Both Production analytics variables were removed and provider-free deployment dpl_Ak9nEPGikZMZ7i25swdJpQt6gPRB was restored. Draft PR #21 is the hotfix candidate and contains no Production-completion or DebugView claim.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "rollback-plan", "reference": "Containment completed by removing both Production analytics variables and restoring provider-free deployment dpl_Ak9nEPGikZMZ7i25swdJpQt6gPRB. Keep Production dormant until this hotfix receives fresh exact-head review and SHIP approval.", "reviewedDate": "2026-07-16", "status": "approved" },
     { "id": "safe-serialization-tests", "reference": "Sanitized page views retain canonical allowlisted URLs, authored titles and no query, fragment or referrer.", "reviewedDate": "2026-07-15", "status": "passed" },
     { "id": "secret-leakage-tests", "reference": "A SHA-256 fingerprint of the owner-supplied GA4 Measurement ID is recorded as factual evidence. Activation records contain no exact Measurement ID, login email, credential, token, recovery material or DNS verification value; the approved non-secret property and stream identifiers are recorded.", "reviewedDate": "2026-07-15", "status": "passed" },
     { "id": "secret-scan", "reference": "Repository secret scan passed across 272 tracked files after the GA4 evidence update.", "reviewedDate": "2026-07-15", "status": "passed" },
@@ -83,14 +83,14 @@
   ],
   "exceptions": [],
   "rollbackPlan": {
-    "method": "Disable both Production analytics variables, verify provider silence, then revert the Unit 3 merge through protected main if activation defects occur.",
+    "method": "Keep both Production analytics variables absent and retain the restored provider-free deployment until the gtag command-delivery hotfix passes fresh exact-head review and SHIP approval.",
     "owner": "Youtoola owner",
     "target": "current-production"
   },
   "gateEvidence": {
-    "plan": { "status": "approved", "approver": "Youtoola owner", "evidence": ["APPROVE PLAN: Phase 11 Unit 3 Growth Activation with clarifications"] },
-    "build": { "status": "complete", "approver": null, "evidence": ["Two scoped implementation commits and complete local validation"] },
-    "review": { "status": "approved", "approver": "Youtoola owner", "evidence": ["APPROVE REVIEW: exact-head Unit 3 Growth Activation review at b07d5f7ec2f60b7e4aaaa597ffda6d39d06b555f"] },
+    "plan": { "status": "approved", "approver": "Youtoola owner", "evidence": ["START PARALLEL EXECUTION: Track A STRICT GA4 delivery correction"] },
+    "build": { "status": "complete", "approver": null, "evidence": ["Narrow gtag command-queue correction and focused provider-transport regression test"] },
+    "review": { "status": "pending", "approver": null, "evidence": [] },
     "ship": { "status": "pending", "approver": null, "evidence": [] },
     "post-deployment": { "status": "pending", "approver": null, "evidence": [] },
     "post-launch-review": { "status": "pending", "approver": null, "evidence": [] }
