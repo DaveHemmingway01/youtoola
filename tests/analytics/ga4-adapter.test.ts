@@ -48,6 +48,39 @@ describe("first-party provider adapter", () => {
     expect(adapter.track(event)).toBe("provider-failure");
   });
 
+  it("reaches the provider transport with one sanitized page view after readiness", async () => {
+    vi.spyOn(window.navigator, "onLine", "get").mockReturnValue(true);
+    const adapter = createGa4Adapter({ measurementId: "provider-id", timeoutMilliseconds: 1000 });
+    const loading = adapter.load();
+    const dataLayer = window.dataLayer!;
+    const providerTransport = vi.fn();
+    const originalPush = dataLayer.push.bind(dataLayer);
+
+    vi.spyOn(dataLayer, "push").mockImplementation((...commands: unknown[]) => {
+      for (const queuedCommand of commands) {
+        if (Array.isArray(queuedCommand)) continue;
+        const [commandName, eventName, parameters] = Array.from(queuedCommand as IArguments);
+        if (commandName === "event") providerTransport(eventName, parameters);
+      }
+      return originalPush(...commands);
+    });
+
+    document.querySelector("script#youtoola-ga4")!.dispatchEvent(new Event("load"));
+    expect(await loading).toBe("ready");
+    expect(adapter.trackPageView({
+      page_location: "https://www.youtoola.com/tools",
+      page_title: "Practical Online Tools",
+    })).toBe(true);
+
+    expect(providerTransport).toHaveBeenCalledOnce();
+    expect(providerTransport).toHaveBeenCalledWith("page_view", {
+      page_location: "https://www.youtoola.com/tools",
+      page_title: "Practical Online Tools",
+    });
+    expect(JSON.stringify(providerTransport.mock.calls)).not.toMatch(/query|fragment|referrer|raw|identity/i);
+    expect(dataLayer.every((command) => !Array.isArray(command))).toBe(true);
+  });
+
   it("deduplicates concurrent and repeated provider loads", async () => {
     vi.spyOn(window.navigator, "onLine", "get").mockReturnValue(true);
     const adapter = createGa4Adapter({ measurementId: "provider-id", timeoutMilliseconds: 1000 });
