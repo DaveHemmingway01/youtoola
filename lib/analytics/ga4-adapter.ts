@@ -82,7 +82,11 @@ export function createGa4Adapter({
 
       lifecycle = "loading";
       window.dataLayer = window.dataLayer ?? [];
-      window.gtag = window.gtag ?? ((...args: GtagCommand) => window.dataLayer?.push(args));
+      window.gtag = window.gtag ?? function gtag() {
+        // gtag.js requires each queued command to be an Arguments object, not an Array.
+        // eslint-disable-next-line prefer-rest-params
+        window.dataLayer?.push(arguments);
+      };
       command("consent", "default", {
         ad_personalization: "denied",
         ad_storage: "denied",

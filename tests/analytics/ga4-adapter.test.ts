@@ -48,6 +48,28 @@ describe("first-party provider adapter", () => {
     expect(adapter.track(event)).toBe("provider-failure");
   });
 
+  it("queues commands with the arguments object required by gtag.js", async () => {
+    vi.spyOn(window.navigator, "onLine", "get").mockReturnValue(true);
+    const adapter = createGa4Adapter({ measurementId: "provider-id", timeoutMilliseconds: 1000 });
+    const loading = adapter.load();
+
+    const firstCommand = window.dataLayer?.[0];
+    expect(Array.isArray(firstCommand)).toBe(false);
+    expect(Array.from(firstCommand as IArguments)).toEqual([
+      "consent",
+      "default",
+      {
+        ad_personalization: "denied",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        analytics_storage: "denied",
+      },
+    ]);
+
+    document.querySelector("script#youtoola-ga4")!.dispatchEvent(new Event("load"));
+    expect(await loading).toBe("ready");
+  });
+
   it("deduplicates concurrent and repeated provider loads", async () => {
     vi.spyOn(window.navigator, "onLine", "get").mockReturnValue(true);
     const adapter = createGa4Adapter({ measurementId: "provider-id", timeoutMilliseconds: 1000 });
