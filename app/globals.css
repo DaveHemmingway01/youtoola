@@ -276,6 +276,20 @@ h3 {
   margin: 0;
 }
 
+.consent-notice > *,
+.consent-preferences > * {
+  min-width: 0;
+}
+
+.consent-notice h2,
+.consent-notice p,
+.consent-notice .button,
+.consent-preferences h2,
+.consent-preferences p,
+.consent-preferences .button {
+  overflow-wrap: anywhere;
+}
+
 .consent-preferences {
   display: grid;
   gap: var(--space-4);
@@ -809,6 +823,11 @@ select {
   .mobile-navigation { display: block; }
   .site-header__inner, .site-footer__inner, .site-main {
     width: min(calc(100% - 1.25rem), var(--content-width));
+  }
+  .consent-notice, .consent-preferences {
+    inset-inline: var(--space-2);
+    width: calc(100% - (2 * var(--space-2)));
+    padding: var(--space-4);
   }
 }
 
