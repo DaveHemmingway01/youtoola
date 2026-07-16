@@ -71,6 +71,11 @@ test("keeps dormant privacy preferences usable at 320px and 200% text", async ({
   expect(bounds.top).toBeGreaterThanOrEqual(0);
   expect(bounds.bottom).toBeLessThanOrEqual(bounds.viewportHeight);
   expect(bounds.width).toBeLessThanOrEqual(bounds.viewportWidth);
+  // Next.js development issue chrome is not part of the application and can
+  // expand the document at 200% text on Linux CI. Production has no portal.
+  await page.locator("nextjs-portal").evaluateAll((portals) =>
+    portals.forEach((portal) => portal.remove()),
+  );
   expect(await page.evaluate(
     () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
   )).toBe(false);
