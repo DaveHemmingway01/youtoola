@@ -7,7 +7,7 @@ import { fuelTripFrameworkFixture } from "@/tests/fixtures/utilities/fuel-trip-f
 import type { UtilityResult } from "@/lib/utilities/contracts";
 
 describe("utility framework boundaries", () => {
-  it("keeps related tools empty when the source utility is unreleased", () => {
+  it("keeps related tools empty when no released relationship is eligible", () => {
     expect(getPublicRelatedToolsForUtility("fuel-trip-calculator")).toEqual([]);
   });
 

@@ -20,7 +20,7 @@ describe("Repository Knowledge Layer selectors", () => {
   it("returns stable internal entity and fixture views", () => {
     expect(getEntityById("utility:fuel-trip-calculator")).toMatchObject({
       utilityId: "fuel-trip-calculator",
-      status: "idea",
+      status: "released",
     });
     expect(getEntitiesByType("concept")).toHaveLength(7);
     expect(getJourneysForUtility("fuel-trip-calculator")).toHaveLength(1);
@@ -39,8 +39,10 @@ describe("Repository Knowledge Layer selectors", () => {
     expect(conceptIds).toEqual([...conceptIds].sort());
   });
 
-  it("exposes no idea, provisional journey or future slot through public selectors", () => {
-    expect(getPublicEligibleUtilities()).toEqual([]);
+  it("exposes the released utility but no provisional journey or future slot", () => {
+    expect(getPublicEligibleUtilities()).toEqual([
+      expect.objectContaining({ utilityId: "fuel-trip-calculator", status: "released" }),
+    ]);
     expect(getPublicEligibleJourneys()).toEqual([]);
     expect(getPublicRelationshipsForUtility("fuel-trip-calculator")).toEqual([]);
     expect(getPublicJourneysForUtility("fuel-trip-calculator")).toEqual([]);

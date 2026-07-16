@@ -17,7 +17,10 @@ describe("sanitized provider page views", () => {
   });
 
   it("fails closed for unknown and malformed routes", () => {
-    expect(createSanitizedPageView("/fuel-trip-calculator")).toBeNull();
+    expect(createSanitizedPageView("/fuel-trip-calculator?distance=private#result")).toEqual({
+      page_location: "https://www.youtoola.com/fuel-trip-calculator",
+      page_title: "Fuel Trip Calculator",
+    });
     expect(createSanitizedPageView("http://[invalid")).toBeNull();
   });
 

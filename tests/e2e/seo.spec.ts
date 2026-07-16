@@ -3,6 +3,13 @@ import { expect, test } from "@playwright/test";
 
 const pageExpectations = [
   {
+    canonical: "https://www.youtoola.com/fuel-trip-calculator",
+    description:
+      "Calculate fuel required, fuel cost, tolls, return journeys and cost per passenger for a road trip.",
+    path: "/fuel-trip-calculator",
+    title: "Fuel Trip Calculator | Youtoola",
+  },
+  {
     canonical: "https://www.youtoola.com",
     description:
       "Youtoola is a collection of free, practical online tools for everyday calculations, decisions and tasks, without requiring an account.",
@@ -83,7 +90,7 @@ test("homepage entity schema contains only approved visible facts", async ({ pag
   expect(JSON.stringify(data)).not.toContain("Fuel Trip Calculator");
 });
 
-for (const expected of pageExpectations.slice(1)) {
+for (const expected of pageExpectations.filter(({ path }) => path !== "/")) {
   test(`${expected.path} visible and structured breadcrumbs agree`, async ({ page }) => {
     await page.goto(expected.path);
     const visible = await page.locator(".breadcrumbs li").allTextContents();

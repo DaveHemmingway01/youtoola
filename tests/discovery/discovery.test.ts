@@ -50,23 +50,30 @@ function model(toolFixtures: readonly UtilityRegistryEntry[] = []) {
 }
 
 describe("public discovery model", () => {
-  it("fails closed for the current zero-release repository", () => {
-    expect(getPublicDiscoveryTools()).toEqual([]);
+  it("publishes exactly the released calculator while thresholds stay closed", () => {
+    expect(getPublicDiscoveryTools()).toEqual([
+      expect.objectContaining({
+        categoryName: "Travel & Mobility",
+        slug: "fuel-trip-calculator",
+        utilityId: "fuel-trip-calculator",
+      }),
+    ]);
     expect(getPublicCategories()).toEqual([]);
     expect(getPublicJourneys()).toEqual([]);
-    expect(getHomepageTools()).toEqual([]);
+    expect(getHomepageTools()).toEqual(getPublicDiscoveryTools());
     expect(getPublicCategoryBySlug("travel-mobility")).toBeUndefined();
     expect(getPublicJourneyBySlug("road-trip-planning")).toBeUndefined();
     expect(getPublicDiscoveryUrls()).toEqual([
       "https://www.youtoola.com",
       "https://www.youtoola.com/tools",
+      "https://www.youtoola.com/fuel-trip-calculator",
     ]);
     expect(Object.isFrozen(getPublicDiscoveryUrls())).toBe(true);
   });
 
   it("filters idea, paused, retired, malformed and incomplete utilities", () => {
     const result = model([
-      tools[0],
+      { ...tools[0], releaseDate: undefined, status: "idea" },
       releasedTool("paused-tool", "Paused Tool", "2026-07-11", "paused"),
       releasedTool("retired-tool", "Retired Tool", "2026-07-11", "retired"),
       { ...alphaTool, releaseDate: undefined },

@@ -38,7 +38,11 @@
     "sanitizedPageView": "build-ready",
     "keyEvents": ["tool_complete"],
     "keyEventConfiguration": "not-configured",
-    "customDimensions": [],
+    "customDimensions": [
+      "utility_id",
+      "error_code",
+      "time_to_result_bucket"
+    ],
     "customDimensionConfiguration": "not-configured",
     "debugView": "pending",
     "settings": {

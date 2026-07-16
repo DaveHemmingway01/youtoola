@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { JsonLd } from "@/components/seo/json-ld";
 import { Card, TextLink } from "@/components/ui";
 import { PLATFORM_PAGE_DEFINITIONS, PLATFORM_SEO } from "@/data/seo/platform";
-import { PUBLIC_DISCOVERY_ROUTES } from "@/lib/discovery";
+import { getHomepageTools, PUBLIC_DISCOVERY_ROUTES } from "@/lib/discovery";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { createHomeStructuredData } from "@/lib/seo/structured-data";
 
@@ -37,6 +38,8 @@ const trustPrinciples = [
 ];
 
 export default function HomePage() {
+  const availableTools = getHomepageTools();
+
   return (
     <div className={styles.page}>
       <JsonLd data={createHomeStructuredData()} id="youtoola-entities" />
@@ -80,14 +83,19 @@ export default function HomePage() {
         </ul>
       </section>
 
-      <section className={styles.statusPanel} aria-labelledby="platform-status">
-        <p className="eyebrow">Platform status</p>
-        <h2 id="platform-status">The first tools are on the way</h2>
-        <p>
-          Our first tools are being prepared and reviewed. We’ll publish them here
-          when they’re ready.
-        </p>
-        <TextLink href={PUBLIC_DISCOVERY_ROUTES.tools}>Visit the tool directory</TextLink>
+      <section className={styles.statusPanel} aria-labelledby="available-tools-heading">
+        <p className="eyebrow">Available tool</p>
+        <h2 id="available-tools-heading">Start with a practical calculation</h2>
+        <div className={styles.directoryList}>
+          {availableTools.map((tool) => (
+            <Card className={styles.directoryItem} key={tool.utilityId}>
+              <p className={styles.categoryLabel}>{tool.categoryName}</p>
+              <h3><Link href={`/${tool.slug}`}>{tool.name}</Link></h3>
+              <p>{tool.description}</p>
+            </Card>
+          ))}
+        </div>
+        <TextLink href={PUBLIC_DISCOVERY_ROUTES.tools}>Browse all available tools</TextLink>
       </section>
     </div>
   );

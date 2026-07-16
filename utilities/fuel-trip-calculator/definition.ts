@@ -103,14 +103,14 @@ export const fuelTripInputs = {
 
 export const fuelTripDefinition = {
   analyticsEligibility: {
-    allowResultClassification: false,
+    allowResultClassification: true,
     allowedCommercialCapabilityIds: [],
-    allowedErrorCodes: [],
-    allowedEvents: [],
-    allowedFieldIds: [],
-    allowedInteractionSources: [],
-    allowedResultTypes: [],
-    ownerApprovalReference: "rapid-plan-build-2026-07-16",
+    allowedErrorCodes: ["invalid-number", "minimum", "required", "whole-number"],
+    allowedEvents: ["tool_view", "tool_start", "tool_validation_error", "tool_complete"],
+    allowedFieldIds: [...fuelTripInputOrder],
+    allowedInteractionSources: ["input-change", "primary-action"],
+    allowedResultTypes: ["trip-cost-estimate"],
+    ownerApprovalReference: "rapid-public-release-2026-07-16",
     reviewedDate: "2026-07-16",
   },
   assumptions: [

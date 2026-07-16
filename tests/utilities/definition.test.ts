@@ -6,7 +6,8 @@ import { fuelTripFrameworkFixture } from "@/tests/fixtures/utilities/fuel-trip-f
 
 describe("utility definition validation", () => {
   it("accepts the unclassified idea-stage framework fixture", () => {
-    expect(validateUtilityDefinition(fuelTripFrameworkFixture)).toEqual([]);
+    const ideaLookup = () => ({ status: "idea" }) as UtilityRegistryEntry;
+    expect(validateUtilityDefinition(fuelTripFrameworkFixture, ideaLookup)).toEqual([]);
   });
 
   it("rejects unknown registry references", () => {

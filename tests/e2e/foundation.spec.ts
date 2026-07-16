@@ -71,9 +71,12 @@ test("keeps dormant privacy preferences usable at 320px and 200% text", async ({
   expect(bounds.top).toBeGreaterThanOrEqual(0);
   expect(bounds.bottom).toBeLessThanOrEqual(bounds.viewportHeight);
   expect(bounds.width).toBeLessThanOrEqual(bounds.viewportWidth);
-  expect(await page.evaluate(
-    () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
-  )).toBe(false);
+  // Next.js development issue chrome is not part of the application and can
+  // expand the document at 200% text on Linux CI. Production has no portal.
+  expect(await page.evaluate(() => {
+    document.querySelectorAll("nextjs-portal").forEach((portal) => portal.remove());
+    return document.documentElement.scrollWidth > document.documentElement.clientWidth;
+  })).toBe(false);
 });
 
 test("returns the custom not-found page with a 404 status", async ({ page }) => {
@@ -127,6 +130,9 @@ test("serves non-production crawler controls and the minimal sitemap", async ({
       "</url>\n" +
       "<url>\n" +
       "<loc>https://www.youtoola.com/tools</loc>\n" +
+      "</url>\n" +
+      "<url>\n" +
+      "<loc>https://www.youtoola.com/fuel-trip-calculator</loc>\n" +
       "</url>\n" +
       "<url>\n" +
       "<loc>https://www.youtoola.com/about</loc>\n" +

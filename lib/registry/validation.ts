@@ -91,6 +91,15 @@ export function validateRegistry(
       if (!tool.specificationPath) {
         errors.push(`Released tool ${tool.utilityId} requires a specification path.`);
       }
+      if (!Number.isSafeInteger(tool.calculationVersion) || (tool.calculationVersion ?? 0) < 1) {
+        errors.push(`Released tool ${tool.utilityId} requires a calculation version.`);
+      }
+      if (!Number.isSafeInteger(tool.methodologyVersion) || (tool.methodologyVersion ?? 0) < 1) {
+        errors.push(`Released tool ${tool.utilityId} requires a methodology version.`);
+      }
+      if (!tool.riskProfile || tool.riskProfile === "unclassified") {
+        errors.push(`Released tool ${tool.utilityId} requires a classified risk profile.`);
+      }
     } else if (tool.releaseDate) {
       errors.push(`Unreleased tool ${tool.utilityId} must not have a release date.`);
     }

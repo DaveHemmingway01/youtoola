@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Prepare the RAPID public release of Fuel Trip Calculator with released-only discovery, canonical SEO and sitemap membership, browser-local calculation, and consent-gated allowlisted utility analytics. Public SHIP remains blocked by the Growth Infrastructure operational gate.
 - Prepare Phase 11 Growth Activation with fail-closed activation records, route-aware successful-send page-view deduplication, browser smoke coverage and explicit legal/external/SHIP gates. Analytics remains dormant and Production configuration is unchanged.
 - Add the dormant Phase 11 Growth Foundation: fail-closed consent and provider contracts, privacy preferences, frozen Open Graph metadata, report-only CSP, configuration records, validation and package-free monitoring. Analytics and external provider configuration remain disabled.
 

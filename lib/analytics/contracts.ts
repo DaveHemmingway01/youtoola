@@ -84,6 +84,22 @@ export interface AnalyticsEventEnvelope {
   timeToResultBucket?: AnalyticsTimeToResultBucket;
 }
 
+export type UtilityAnalyticsEventInput = Readonly<
+  Pick<AnalyticsEventEnvelope, "eventName"> &
+    Partial<
+      Pick<
+        AnalyticsEventEnvelope,
+        | "errorCode"
+        | "errorCountBucket"
+        | "fieldId"
+        | "interactionSource"
+        | "nonSensitiveResultType"
+        | "resultClassification"
+        | "timeToResultBucket"
+      >
+    >
+>;
+
 export type AnalyticsDataClassification = "public" | "operational" | "sensitive" | "prohibited";
 
 export const ANALYTICS_FIELD_CLASSIFICATIONS = Object.freeze({

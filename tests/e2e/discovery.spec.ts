@@ -9,7 +9,7 @@ const sizes = [
   { width: 1440, height: 900 },
 ];
 
-test("renders the honest zero-inventory homepage and links to the directory", async ({
+test("renders the released calculator on the homepage and links to the directory", async ({
   page,
 }) => {
   const response = await page.goto("/");
@@ -22,7 +22,7 @@ test("renders the honest zero-inventory homepage and links to the directory", as
       name: "Useful tools. No account. No nonsense.",
     }),
   ).toBeVisible();
-  await expect(page.getByText(/Our first tools are being prepared and reviewed/)).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Start with a practical calculation" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Browse the tool directory" })).toHaveAttribute(
     "href",
     "/tools",
@@ -31,10 +31,15 @@ test("renders the honest zero-inventory homepage and links to the directory", as
     "href",
     "https://www.youtoola.com",
   );
-  await expect(page.getByText("Fuel Trip Calculator")).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Fuel Trip Calculator" })).toHaveAttribute(
+    "href",
+    "/fuel-trip-calculator",
+  );
+  await expect(page.getByText("Travel & Mobility")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Travel & Mobility" })).toHaveCount(0);
 });
 
-test("keeps the permanent tools directory useful and empty at zero releases", async ({
+test("lists exactly the released calculator in the permanent tools directory", async ({
   page,
 }) => {
   const response = await page.goto("/tools");
@@ -48,30 +53,30 @@ test("keeps the permanent tools directory useful and empty at zero releases", as
       name: "Practical tools, reviewed before release",
     }),
   ).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Public tools are being prepared" })).toBeVisible();
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
     "href",
     "https://www.youtoola.com/tools",
   );
   await expect(page.getByRole("searchbox")).toHaveCount(0);
-  await expect(page.getByText("Fuel Trip Calculator")).toHaveCount(0);
-  await expect(page.getByRole("link", { name: "Return to the homepage" })).toHaveAttribute(
+  await expect(page.getByRole("link", { name: "Fuel Trip Calculator" })).toHaveAttribute(
     "href",
-    "/",
+    "/fuel-trip-calculator",
   );
+  await expect(page.getByText("Travel & Mobility")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Travel & Mobility" })).toHaveCount(0);
 });
 
 test("publishes only the approved discovery URLs in the sitemap", async ({ request }) => {
   const sitemap = await (await request.get("/sitemap.xml")).text();
 
-  expect(sitemap.match(/<loc>/g)).toHaveLength(5);
+  expect(sitemap.match(/<loc>/g)).toHaveLength(6);
   expect(sitemap).toContain("<loc>https://www.youtoola.com</loc>");
   expect(sitemap).toContain("<loc>https://www.youtoola.com/tools</loc>");
   expect(sitemap).toContain("<loc>https://www.youtoola.com/about</loc>");
   expect(sitemap).toContain("<loc>https://www.youtoola.com/methodology</loc>");
   expect(sitemap).toContain("<loc>https://www.youtoola.com/privacy</loc>");
+  expect(sitemap).toContain("<loc>https://www.youtoola.com/fuel-trip-calculator</loc>");
   expect(sitemap).not.toContain("accessibility");
-  expect(sitemap).not.toContain("fuel-trip-calculator");
   expect(sitemap).not.toContain("categories/");
   expect(sitemap).not.toContain("journeys/");
   expect(sitemap).not.toContain("search");
@@ -79,7 +84,6 @@ test("publishes only the approved discovery URLs in the sitemap", async ({ reque
 });
 
 for (const path of [
-  "/fuel-trip-calculator",
   "/categories/travel-mobility",
   "/journeys/road-trip-planning",
   "/search",

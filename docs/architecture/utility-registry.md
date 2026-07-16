@@ -28,7 +28,7 @@ Before release, a changed hash creates a warning for the next approved planning 
 
 Registry records are hand-reviewed TypeScript objects using `satisfies`. Stable IDs, canonical slugs, sources, status, categories and relationships are validated without a database. Unknown idea-stage research fields remain absent rather than invented.
 
-The initial `fuel-trip-calculator` entry is `idea`. It has no release date, utility implementation or public route. The `Travel & Mobility` tab maps to category `travel-mobility` by explicit owner decision, not by an explicit row field.
+The `fuel-trip-calculator` entry is the first released registry record. It retains its original source coordinates and hash, records standard risk, calculation and methodology version 1, its specification path, and the factual release date. The `Travel & Mobility` tab maps to category `travel-mobility` by explicit owner decision, not by an explicit row field.
 
 Internal selectors may inspect all records. Future public consumers must use `getReleasedTools()` or apply the released-only boundary. Unreleased records are prohibited from navigation, search, sitemap and public category output.
 

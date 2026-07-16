@@ -86,6 +86,12 @@ export function validateUtilitySeoDefinitions(
     if (definition.indexable !== definition.sitemapEligible) {
       errors.push(`Utility SEO definition ${definition.utilityId} has conflicting indexability.`);
     }
+    if (tool && definition.canonicalPath !== `/${tool.slug}`) {
+      errors.push(`Utility SEO definition ${definition.utilityId} has a mismatched canonical path.`);
+    }
+    if (tool && definition.methodologyVersion !== tool.methodologyVersion) {
+      errors.push(`Utility SEO definition ${definition.utilityId} has a mismatched methodology version.`);
+    }
     if (utilityIds.has(definition.utilityId)) {
       errors.push(`Duplicate utility SEO definition: ${definition.utilityId}.`);
     }

@@ -1,12 +1,16 @@
 "use client";
 
-import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 
+import { useConsentPreferences } from "@/components/consent/consent-provider";
 import { CurrencyInput, ErrorMessage, ErrorSummary, Field, NumberInput } from "@/components/forms";
 import { UtilityResultPanel } from "@/components/tools/utility-result-panel";
 import { Button } from "@/components/ui";
 import { formatNumber } from "@/lib/formatting/numbers";
 import { roundToDecimalPlaces } from "@/lib/calculations/rounding";
+import { resolveCanonicalAnalyticsContext } from "@/lib/analytics/canonical-context";
+import type { UtilityAnalyticsEventInput } from "@/lib/analytics/contracts";
+import type { AnalyticsDeduplicationToken } from "@/lib/analytics/runtime";
 import type { UtilityResult } from "@/lib/utilities/contracts";
 import {
   parseNumberField,
@@ -34,6 +38,22 @@ const emptyForm: RawFuelTripForm = {
   tolls: "",
   tripType: "",
 };
+
+const canonicalAnalyticsContext = resolveCanonicalAnalyticsContext("fuel-trip-calculator");
+
+function errorCountBucket(count: number) {
+  if (count === 1) return "one" as const;
+  if (count <= 3) return "two-to-three" as const;
+  return "four-or-more" as const;
+}
+
+function timeToResultBucket(milliseconds: number) {
+  if (milliseconds < 10_000) return "under-10-seconds" as const;
+  if (milliseconds < 31_000) return "10-to-30-seconds" as const;
+  if (milliseconds < 61_000) return "31-to-60-seconds" as const;
+  if (milliseconds < 181_000) return "one-to-three-minutes" as const;
+  return "over-three-minutes" as const;
+}
 
 function issueFor(issues: readonly UtilityValidationIssue[], fieldId: string) {
   return issues.find((issue) => issue.fieldId === fieldId)?.message;
@@ -157,12 +177,54 @@ function parseForm(raw: RawFuelTripForm) {
 }
 
 export function FuelTripCalculatorForm() {
+  const { analyticsReady, trackUtilityEvent } = useConsentPreferences();
   const [raw, setRaw] = useState<RawFuelTripForm>(emptyForm);
   const [issues, setIssues] = useState<readonly UtilityValidationIssue[]>([]);
   const [result, setResult] = useState<UtilityResult>();
   const [submitted, setSubmitted] = useState(false);
   const summaryRef = useRef<HTMLDivElement>(null);
   const distanceRef = useRef<HTMLInputElement>(null);
+  const attemptCycle = useRef(0);
+  const interactionCycle = useRef(0);
+  const interactionStarted = useRef(false);
+  const interactionStartedAt = useRef<number | undefined>(undefined);
+
+  const track = useCallback((
+    event: UtilityAnalyticsEventInput,
+    deduplicationToken: AnalyticsDeduplicationToken,
+  ) => {
+    if (!canonicalAnalyticsContext) return;
+    trackUtilityEvent({
+      canonicalContext: canonicalAnalyticsContext,
+      deduplicationToken,
+      eligibility: fuelTripDefinition.analyticsEligibility,
+      event,
+      lifecycleEligible: true,
+    });
+  }, [trackUtilityEvent]);
+
+  useEffect(() => {
+    if (!analyticsReady) return;
+    track(
+      { eventName: "tool_view" },
+      { action: 0, cycle: 0, eventName: "tool_view", scope: "route" },
+    );
+  }, [analyticsReady, track]);
+
+  function startInteraction(source: "input-change" | "primary-action", timestamp: number) {
+    if (interactionStarted.current) return;
+    interactionStarted.current = true;
+    interactionStartedAt.current = timestamp;
+    track(
+      { eventName: "tool_start", interactionSource: source },
+      {
+        action: 0,
+        cycle: interactionCycle.current,
+        eventName: "tool_start",
+        scope: "interaction",
+      },
+    );
+  }
 
   function update(next: RawFuelTripForm) {
     setRaw(next);
@@ -170,22 +232,43 @@ export function FuelTripCalculatorForm() {
     if (submitted) setIssues(parseForm(next).issues);
   }
 
-  function changeNumber(field: Exclude<keyof RawFuelTripForm, "tripType">) {
-    return (event: ChangeEvent<HTMLInputElement>) => {
-      update({ ...raw, [field]: event.currentTarget.value });
-    };
+  function changeNumber(event: ChangeEvent<HTMLInputElement>) {
+    const field = event.currentTarget.name as Exclude<keyof RawFuelTripForm, "tripType">;
+    startInteraction("input-change", event.timeStamp);
+    update({ ...raw, [field]: event.currentTarget.value });
   }
 
   function changeTripType(event: ChangeEvent<HTMLInputElement>) {
+    startInteraction("input-change", event.timeStamp);
     update({ ...raw, tripType: event.currentTarget.value as FuelTripType });
   }
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    startInteraction("primary-action", event.timeStamp);
+    const currentAttempt = attemptCycle.current;
+    attemptCycle.current += 1;
     setSubmitted(true);
     const parsed = parseForm(raw);
     setIssues(parsed.issues);
     if (!parsed.ok) {
+      const firstIssue = parsed.issues[0];
+      if (firstIssue?.fieldId) {
+        track(
+          {
+            errorCode: firstIssue.code,
+            errorCountBucket: errorCountBucket(parsed.issues.length),
+            eventName: "tool_validation_error",
+            fieldId: firstIssue.fieldId,
+          },
+          {
+            action: 0,
+            cycle: currentAttempt,
+            eventName: "tool_validation_error",
+            scope: "attempt",
+          },
+        );
+      }
       requestAnimationFrame(() => summaryRef.current?.focus());
       return;
     }
@@ -196,6 +279,22 @@ export function FuelTripCalculatorForm() {
       return;
     }
     setResult(createResult(outcome.value));
+    track(
+      {
+        eventName: "tool_complete",
+        nonSensitiveResultType: "trip-cost-estimate",
+        resultClassification: "estimate",
+        timeToResultBucket: timeToResultBucket(
+          Math.max(0, event.timeStamp - (interactionStartedAt.current ?? event.timeStamp)),
+        ),
+      },
+      {
+        action: 0,
+        cycle: currentAttempt,
+        eventName: "tool_complete",
+        scope: "attempt",
+      },
+    );
   }
 
   function reset() {
@@ -203,6 +302,9 @@ export function FuelTripCalculatorForm() {
     setIssues([]);
     setResult(undefined);
     setSubmitted(false);
+    interactionCycle.current += 1;
+    interactionStarted.current = false;
+    interactionStartedAt.current = undefined;
     requestAnimationFrame(() => distanceRef.current?.focus());
   }
 
@@ -227,7 +329,7 @@ export function FuelTripCalculatorForm() {
           <NumberInput
             min={fuelTripInputs.distance.min}
             name="distance"
-            onChange={changeNumber("distance")}
+            onChange={changeNumber}
             ref={distanceRef}
             step={fuelTripInputs.distance.step}
             value={raw.distance}
@@ -244,7 +346,7 @@ export function FuelTripCalculatorForm() {
           <NumberInput
             min={fuelTripInputs.consumption.min}
             name="consumption"
-            onChange={changeNumber("consumption")}
+            onChange={changeNumber}
             step={fuelTripInputs.consumption.step}
             value={raw.consumption}
           />
@@ -260,7 +362,7 @@ export function FuelTripCalculatorForm() {
           <CurrencyInput
             min={fuelTripInputs.price.min}
             name="price"
-            onChange={changeNumber("price")}
+            onChange={changeNumber}
             step={fuelTripInputs.price.step}
             value={raw.price}
           />
@@ -305,7 +407,7 @@ export function FuelTripCalculatorForm() {
           <CurrencyInput
             min={fuelTripInputs.tolls.min}
             name="tolls"
-            onChange={changeNumber("tolls")}
+            onChange={changeNumber}
             step={fuelTripInputs.tolls.step}
             value={raw.tolls}
           />
@@ -321,7 +423,7 @@ export function FuelTripCalculatorForm() {
           <NumberInput
             min={fuelTripInputs.passengers.min}
             name="passengers"
-            onChange={changeNumber("passengers")}
+            onChange={changeNumber}
             step={fuelTripInputs.passengers.step}
             value={raw.passengers}
           />

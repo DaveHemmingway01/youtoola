@@ -55,6 +55,8 @@ export interface UtilityRegistryEntry {
   status: RegistryStatus;
   priority?: string;
   complexity?: string;
+  calculationVersion?: number;
+  methodologyVersion?: number;
   riskProfile?: string;
   monetisationTypes?: readonly string[];
   premiumOpportunity?: string;

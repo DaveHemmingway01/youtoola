@@ -1,0 +1,108 @@
+{
+  "recordVersion": 3,
+  "recordKind": "release",
+  "recordId": "2026-07-16-fuel-trip-calculator",
+  "status": "candidate",
+  "phaseOrUtility": "Fuel Trip Calculator",
+  "summary": "RAPID public-release candidate for Youtoola Utility #1 with released registry state, public discovery, factual SEO and consent-gated allowlisted utility analytics.",
+  "riskTags": [
+    "public-content",
+    "utility-logic",
+    "metadata-indexing",
+    "analytics-consent"
+  ],
+  "planApproval": {
+    "approvedDate": "2026-07-16",
+    "approver": "Youtoola owner",
+    "reference": "START RAPID PUBLIC RELEASE"
+  },
+  "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/23",
+  "provenance": {
+    "pullRequest": "https://github.com/DaveHemmingway01/youtoola/pull/23",
+    "sourceBranch": "origin/main",
+    "sourceCommit": "714e001370adee8f1a0fb7cc7c0f7e4e3bc1bdf6",
+    "reviewedHeadCommit": "pending-review",
+    "reviewedHeadRef": "utility/fuel-trip-calculator-release",
+    "reviewedDate": null,
+    "mergeMethod": null,
+    "mergeCommit": null,
+    "durableReleaseCommit": null,
+    "mergedAt": null
+  },
+  "delivery": {
+    "branch": "utility/fuel-trip-calculator-release",
+    "releaseKind": "normal",
+    "preview": null,
+    "productionUnchangedBeforeMerge": true,
+    "requiredChecks": [
+      { "name": "Quality", "status": "pending", "reference": null },
+      { "name": "End-to-end", "status": "pending", "reference": null },
+      { "name": "Vercel", "status": "pending", "reference": null }
+    ]
+  },
+  "evidence": [
+    { "id": "accessibility-review", "reference": "Automated and manual Preview accessibility evidence is required before REVIEW approval.", "reviewedDate": "2026-07-16", "status": "pending" },
+    { "id": "analytics-contract-tests", "reference": "Allowlisted utility-event and canonical analytics-context tests pass locally.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "analytics-payload-tests", "reference": "Focused tests reject raw inputs, exact results, free text and unsupported fields.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "boundary-tests", "reference": "Calculation boundary tests cover zero values, negative values and passenger integer requirements.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "calculation-version", "reference": "Registry and utility definition record calculation version 1.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "clean-diff", "reference": "Complete diff inspection and git diff --check remain required before BUILD completion.", "reviewedDate": "2026-07-16", "status": "pending" },
+    { "id": "consent-fail-closed-tests", "reference": "Utility events use the existing Production-only consent provider and do not buffer or replay.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "content-review", "reference": "Owner RAPID REVIEW of factual public copy remains pending.", "reviewedDate": "2026-07-16", "status": "pending" },
+    { "id": "crawler-validation", "reference": "Sitemap, canonical host and Preview noindex tests pass locally.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "environment-transmission-tests", "reference": "Local and Preview provider-transmission checks remain required before REVIEW approval.", "reviewedDate": "2026-07-16", "status": "pending" },
+    { "id": "fixture-isolation", "reference": "Public selectors expose only the released calculator and no fixture or future slot.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "invalid-input-tests", "reference": "Invalid numeric and whole-number inputs are rejected deterministically.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "methodology-review", "reference": "Methodology version 1 preserves the owner-approved formula and display-only rounding boundary.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "normal-ci", "reference": "GitHub Quality, End-to-end and Vercel checks are pending.", "reviewedDate": "2026-07-16", "status": "pending" },
+    { "id": "owner-plan-approval", "reference": "START RAPID PUBLIC RELEASE", "reviewedDate": "2026-07-16", "status": "approved" },
+    { "id": "preview-verification", "reference": "Authenticated noindexed Vercel Preview verification is pending.", "reviewedDate": "2026-07-16", "status": "pending" },
+    { "id": "privacy-review", "reference": "The event allowlist excludes input values, results, identity, free text and URL state; owner REVIEW remains pending.", "reviewedDate": "2026-07-16", "status": "pending" },
+    { "id": "production-smoke-plan", "reference": "Verify route, metadata, sitemap, analytics consent boundaries and rollback target after separate SHIP approval.", "reviewedDate": "2026-07-16", "status": "approved" },
+    { "id": "provider-boundary-review", "reference": "Utility tracking calls only the existing provider-neutral consent boundary; no provider or dependency is added.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "pure-logic-tests", "reference": "Pure calculation vectors retain raw precision and preserve toll and return-trip semantics.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "registry-status", "reference": "Registry validation passes with Fuel Trip Calculator as the sole released utility.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "release-report", "reference": "BUILD report will record factual branch, commit, Preview, Production and blocker status.", "reviewedDate": "2026-07-16", "status": "pending" },
+    { "id": "released-relationship-tests", "reference": "Related-tool selectors remain empty and future journeys remain unpublished.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "responsive-review", "reference": "Required viewport and 200-percent text Preview review is pending.", "reviewedDate": "2026-07-16", "status": "pending" },
+    { "id": "risk-profile", "reference": "Standard risk is the lowest accurate classification for a user-supplied, non-authoritative trip-cost estimate.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "rollback-plan", "reference": "If live verification fails, restore Ready Production deployment dpl_4qD7VRwjfrUetcajCzQiBdFVavSv and remove the released route through the normal rollback workflow.", "reviewedDate": "2026-07-16", "status": "approved" },
+    { "id": "rounding-tests", "reference": "Calculation tests retain raw precision and round only formatted presentation values.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "sensitive-data-tests", "reference": "Negative analytics tests reject raw values, exact results and unsupported payload keys.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "seo-validation", "reference": "Unique metadata, canonical, Open Graph, Twitter and breadcrumb tests pass locally.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "sitemap-eligibility", "reference": "The sitemap includes exactly the canonical calculator URL in addition to the existing five URLs.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "source-review", "reference": "Registry source coordinates and approved content hash are unchanged; the Sheet is provenance, not calculation authority.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "storage-and-replay-tests", "reference": "The calculator uses no cookies, localStorage, sessionStorage, URL state, event buffer or replay.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "structured-data-validation", "reference": "BreadcrumbList is the only truthful approved structured-data contract used; unsupported utility schema is omitted.", "reviewedDate": "2026-07-16", "status": "passed" },
+    { "id": "unit-tests", "reference": "Focused unit and component suite passes locally.", "reviewedDate": "2026-07-16", "status": "passed" }
+  ],
+  "exceptions": [],
+  "rollbackPlan": {
+    "method": "Restore Ready Production deployment dpl_4qD7VRwjfrUetcajCzQiBdFVavSv and revert the public release if live route, indexing, consent or calculation verification fails.",
+    "owner": "Youtoola owner",
+    "target": "dpl_4qD7VRwjfrUetcajCzQiBdFVavSv"
+  },
+  "gateEvidence": {
+    "plan": { "status": "approved", "approver": "Youtoola owner", "evidence": ["START RAPID PUBLIC RELEASE"] },
+    "build": { "status": "complete", "approver": null, "evidence": ["Focused public route, registry, discovery, SEO, sitemap and analytics implementation"] },
+    "review": { "status": "pending", "approver": null, "evidence": [] },
+    "ship": { "status": "pending", "approver": null, "evidence": [] },
+    "post-deployment": { "status": "pending", "approver": null, "evidence": [] },
+    "post-launch-review": { "status": "pending", "approver": null, "evidence": [] }
+  },
+  "versions": {
+    "releaseSchema": 3,
+    "analyticsSchema": 1,
+    "calculation": 1,
+    "methodology": 1
+  },
+  "production": null,
+  "followUpReviews": {
+    "immediate": { "dueDate": null, "status": "pending", "owner": "Youtoola owner", "completedDate": null, "evidence": [], "notApplicableReason": null },
+    "24-hour": { "dueDate": null, "status": "pending", "owner": "Youtoola owner", "completedDate": null, "evidence": [], "notApplicableReason": null },
+    "7-day": { "dueDate": null, "status": "pending", "owner": "Youtoola owner", "completedDate": null, "evidence": [], "notApplicableReason": null },
+    "28-day": { "dueDate": null, "status": "pending", "owner": "Youtoola owner", "completedDate": null, "evidence": [], "notApplicableReason": null },
+    "monthly": { "dueDate": null, "status": "pending", "owner": "Youtoola owner", "completedDate": null, "evidence": [], "notApplicableReason": null },
+    "quarterly": { "dueDate": null, "status": "pending", "owner": "Youtoola owner", "completedDate": null, "evidence": [], "notApplicableReason": null }
+  }
+}

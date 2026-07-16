@@ -2,13 +2,31 @@
 
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { validateUtilityDefinition } from "@/lib/utilities/definition-validation";
 import { fuelTripDefinition } from "@/utilities/fuel-trip-calculator/definition";
 import { FuelTripCalculatorForm } from "@/utilities/fuel-trip-calculator/form";
 
+const { trackUtilityEvent } = vi.hoisted(() => ({
+  trackUtilityEvent: vi.fn((request: { event: { eventName: string } }) => {
+    void request;
+    return { status: "accepted" as const };
+  }),
+}));
+
+vi.mock("@/components/consent/consent-provider", () => ({
+  useConsentPreferences: () => ({
+    analyticsAvailable: true,
+    analyticsReady: true,
+    openPreferences: vi.fn(),
+    state: "analytics-granted",
+    trackUtilityEvent,
+  }),
+}));
+
 afterEach(cleanup);
+beforeEach(() => trackUtilityEvent.mockClear());
 
 async function fillValidForm(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText("One-way trip distance"), "200");
@@ -22,7 +40,12 @@ async function fillValidForm(user: ReturnType<typeof userEvent.setup>) {
 describe("Fuel Trip Calculator form", () => {
   it("has a valid standard definition while registry publication remains separate", () => {
     expect(validateUtilityDefinition(fuelTripDefinition)).toEqual([]);
-    expect(fuelTripDefinition.analyticsEligibility.allowedEvents).toEqual([]);
+    expect(fuelTripDefinition.analyticsEligibility.allowedEvents).toEqual([
+      "tool_view",
+      "tool_start",
+      "tool_validation_error",
+      "tool_complete",
+    ]);
     expect(fuelTripDefinition.commercialEligibility).toEqual([]);
   });
 
@@ -38,6 +61,14 @@ describe("Fuel Trip Calculator form", () => {
     expect(screen.getByText("16.00")).toBeTruthy();
     expect(screen.getByText("Result: 48.00 in your input currency.").getAttribute("aria-live")).toBe("polite");
     expect(document.querySelectorAll("[aria-live='polite']")).toHaveLength(1);
+    expect(trackUtilityEvent.mock.calls.map(([request]) => request.event.eventName)).toEqual([
+      "tool_view",
+      "tool_start",
+      "tool_complete",
+    ]);
+    expect(JSON.stringify(trackUtilityEvent.mock.calls)).not.toMatch(
+      /"200"|"6"|"1\.5"|"12"|"3"|"48\.00"/,
+    );
   });
 
   it("focuses the linked error summary and revalidates edited fields", async () => {
@@ -47,6 +78,15 @@ describe("Fuel Trip Calculator form", () => {
     await waitFor(() => expect(document.activeElement).toBe(screen.getByText("Check the form").parentElement));
     expect(screen.getByLabelText("One-way trip distance").getAttribute("aria-invalid")).toBe("true");
     expect(screen.getAllByText("Choose one-way or return.")).toHaveLength(2);
+    expect(trackUtilityEvent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        event: expect.objectContaining({
+          errorCode: "required",
+          eventName: "tool_validation_error",
+          fieldId: "fuel-trip-distance",
+        }),
+      }),
+    );
 
     await user.type(screen.getByLabelText("One-way trip distance"), "50");
     expect(screen.getByLabelText("One-way trip distance").getAttribute("aria-invalid")).toBeNull();

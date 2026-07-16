@@ -92,13 +92,13 @@ test("supports 200 percent text and has no serious accessibility violations", as
   expect(results.violations.filter(({ impact }) => impact === "serious" || impact === "critical")).toEqual([]);
 });
 
-test("keeps the framework review private and Fuel Trip unavailable", async ({ page, request }) => {
+test("keeps the framework review private while Fuel Trip is released separately", async ({ page, request }) => {
   const response = await page.goto("/design-system-review");
   expect(response?.status()).toBe(200);
   expect(response?.headers()["x-robots-tag"]).toBe("noindex, nofollow");
   await expect(page.getByText("Fuel Trip Calculator")).toHaveCount(0);
-  expect((await request.get("/fuel-trip-calculator")).status()).toBe(404);
+  expect((await request.get("/fuel-trip-calculator")).status()).toBe(200);
   const sitemap = await (await request.get("/sitemap.xml")).text();
-  expect(sitemap.match(/<loc>/g)).toHaveLength(5);
-  expect(sitemap).not.toContain("fuel-trip-calculator");
+  expect(sitemap.match(/<loc>/g)).toHaveLength(6);
+  expect(sitemap).toContain("fuel-trip-calculator");
 });
